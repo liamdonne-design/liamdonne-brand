@@ -1,0 +1,62 @@
+{
+  "Meta": {
+    "title": "Liam Donne — Brand & Visual Designer",
+    "description": "Franco-British brand & visual designer based in Bordeaux. Brand systems, visual identity and motion for health & tech."
+  },
+  "Nav": {
+    "work": "Work",
+    "about": "About",
+    "contact": "Contact",
+    "hint": "press / to jump",
+    "menu": "Menu",
+    "close": "Close"
+  },
+  "Home": {
+    "status": "Available for select projects",
+    "role": "Brand & Visual Designer",
+    "location": "Bordeaux, FR",
+    "intro": "Brand & visual designer with 5+ years of experience. Surfboards and sketchbooks are my go-to side gigs. Currently @Synapse Medicine.",
+    "selectedWork": "Selected Work",
+    "viewProject": "View project",
+    "allWork": "All work",
+    "scroll": "Scroll"
+  },
+  "Work": {
+    "title": "Work",
+    "subtitle": "Selected brand systems, identities and campaigns.",
+    "count": "{count} projects",
+    "role": "Role",
+    "year": "Year",
+    "client": "Client"
+  },
+  "Project": {
+    "back": "Back to work",
+    "overview": "Overview",
+    "challenge": "Challenge",
+    "approach": "Approach",
+    "outcome": "Outcome",
+    "results": "Results",
+    "role": "Role",
+    "year": "Year",
+    "client": "Client",
+    "next": "Next project",
+    "index": "Project"
+  },
+  "About": {
+    "title": "About",
+    "experience": "Experience",
+    "tools": "Everyday tools",
+    "skills": "Main skills",
+    "present": "Present"
+  },
+  "Contact": {
+    "title": "Let's talk",
+    "subtitle": "For projects, collaborations or a coffee in Bordeaux.",
+    "email": "Email",
+    "elsewhere": "Elsewhere"
+  },
+  "Footer": {
+    "built": "Designed & built in Bordeaux",
+    "backToTop": "Back to top"
+  }
+}

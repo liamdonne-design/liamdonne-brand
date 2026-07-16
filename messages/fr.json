@@ -1,0 +1,62 @@
+{
+  "Meta": {
+    "title": "Liam Donne — Directeur Artistique & Designer de Marque",
+    "description": "Designer de marque franco-britannique basé à Bordeaux. Systèmes de marque, identité visuelle et motion pour la santé & la tech."
+  },
+  "Nav": {
+    "work": "Projets",
+    "about": "À propos",
+    "contact": "Contact",
+    "hint": "appuyez sur / pour naviguer",
+    "menu": "Menu",
+    "close": "Fermer"
+  },
+  "Home": {
+    "status": "Disponible pour projets sélectionnés",
+    "role": "Designer de marque & visuel",
+    "location": "Bordeaux, FR",
+    "intro": "Designer de marque & visuel avec 5+ ans d'expérience. Les planches de surf et les carnets de croquis sont mes activités de prédilection. Actuellement @Synapse Medicine.",
+    "selectedWork": "Projets sélectionnés",
+    "viewProject": "Voir le projet",
+    "allWork": "Tous les projets",
+    "scroll": "Défiler"
+  },
+  "Work": {
+    "title": "Projets",
+    "subtitle": "Systèmes de marque, identités et campagnes sélectionnés.",
+    "count": "{count} projets",
+    "role": "Rôle",
+    "year": "Année",
+    "client": "Client"
+  },
+  "Project": {
+    "back": "Retour aux projets",
+    "overview": "Aperçu",
+    "challenge": "Enjeu",
+    "approach": "Approche",
+    "outcome": "Résultat",
+    "results": "Résultats",
+    "role": "Rôle",
+    "year": "Année",
+    "client": "Client",
+    "next": "Projet suivant",
+    "index": "Projet"
+  },
+  "About": {
+    "title": "À propos",
+    "experience": "Expérience",
+    "tools": "Outils du quotidien",
+    "skills": "Compétences clés",
+    "present": "Aujourd'hui"
+  },
+  "Contact": {
+    "title": "Parlons-en",
+    "subtitle": "Pour des projets, collaborations ou un café à Bordeaux.",
+    "email": "Email",
+    "elsewhere": "Ailleurs"
+  },
+  "Footer": {
+    "built": "Conçu & développé à Bordeaux",
+    "backToTop": "Haut de page"
+  }
+}

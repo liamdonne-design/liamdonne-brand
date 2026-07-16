@@ -36,6 +36,12 @@ yarn-error.log*
 # vercel
 .vercel
 
+# working asset intake (source files; deployed copies live in public/work)
+/assets-intake
+
+# local editor / agent tooling
+/.claude
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts
