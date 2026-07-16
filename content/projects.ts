@@ -55,7 +55,7 @@ const rawProjects: Project[] = [
       "A living motion language for a medical AI platform.",
       "Un langage de motion vivant pour une plateforme d'IA médicale."
     ),
-    cover: { type: "video", src: "/work/synapse-motion-identity/cover.mp4", ratio: "16/9" },
+    cover: { type: "video", src: "/work/synapse-motion-identity/cover.mp4", ratio: "1440/852" },
     gallery: [],
     ready: true,
   },
