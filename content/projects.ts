@@ -178,7 +178,7 @@ const rawProjects: Project[] = [
       "A bold event identity for a health-tech gathering.",
       "Une identité d'événement affirmée pour un rassemblement health-tech."
     ),
-    cover: { type: "image", src: "/work/synapse-manifestation-event/cover.jpg", ratio: "16/9" },
+    cover: { type: "video", src: "/work/synapse-manifestation-event/cover.mp4", ratio: "16/9" },
     gallery: [],
     ready: true,
   },
