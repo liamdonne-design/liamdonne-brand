@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import LandingProjects, { type LandingItem } from "./LandingProjects";
-import SpiralView from "./SpiralView";
+import SpiralStage from "./SpiralStage";
 
 export default function LandingViews({ items }: { items: LandingItem[] }) {
   const [view, setView] = useState<"spiral" | "list">("spiral");
@@ -28,7 +28,7 @@ export default function LandingViews({ items }: { items: LandingItem[] }) {
       </div>
 
       {view === "spiral" ? (
-        <SpiralView items={items} />
+        <SpiralStage items={items} />
       ) : (
         <LandingProjects items={items} />
       )}
