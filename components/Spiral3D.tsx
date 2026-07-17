@@ -66,13 +66,14 @@ const FRAG_BLUR = /* glsl */ `
 
 /* ------------------------------------------------------------- geometry cfg */
 const N = 12; // card instances (covers repeat to fill the infinite loop)
-const AMPX = 3.7; // horizontal wave amplitude (wider spiral)
+const AMPX = 4.0; // horizontal wave amplitude (wider spiral)
 const AMPZ = 1.9; // depth wave amplitude
-const HEIGHT = 12; // vertical span → more space between cards + seamless recycle
-const TURNS = 1.5;
+const HEIGHT = 13; // vertical span → more space between cards + seamless recycle
+const TURNS = 2; // EVEN → a card lands dead-centre (x=0,y=0,facing) each half-loop
 const MAXROT = 0.6; // max card tilt in radians (keeps cards face-on, not edge-on)
-const CARD_W = 2.25;
-const CARD_H = 1.3;
+const AUTO_SPEED = 0.04; // idle auto-rotation speed (~25s per full loop)
+const CARD_W = 2.9; // bigger cards
+const CARD_H = 1.7;
 
 function makeMaterial(tex: THREE.Texture | null, mirror: boolean) {
   return new THREE.ShaderMaterial({
@@ -280,7 +281,9 @@ function Scene({
     };
   }, []);
 
-  useFrame(() => {
+  useFrame((_, delta) => {
+    // continuous idle auto-rotation; scroll/drag adds on top
+    targetRef.current += Math.min(delta, 0.05) * AUTO_SPEED;
     progressRef.current += (targetRef.current - progressRef.current) * 0.08;
   });
 
