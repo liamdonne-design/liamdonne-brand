@@ -66,13 +66,13 @@ const FRAG_BLUR = /* glsl */ `
 
 /* ------------------------------------------------------------- geometry cfg */
 const N = 12; // card instances (covers repeat to fill the infinite loop)
-const AMPX = 2.3; // horizontal wave amplitude
-const AMPZ = 1.7; // depth wave amplitude
-const HEIGHT = 8; // vertical span (taller than viewport → seamless recycle)
+const AMPX = 3.7; // horizontal wave amplitude (wider spiral)
+const AMPZ = 1.9; // depth wave amplitude
+const HEIGHT = 12; // vertical span → more space between cards + seamless recycle
 const TURNS = 1.5;
 const MAXROT = 0.6; // max card tilt in radians (keeps cards face-on, not edge-on)
-const CARD_W = 2.5;
-const CARD_H = 1.5;
+const CARD_W = 2.25;
+const CARD_H = 1.3;
 
 function makeMaterial(tex: THREE.Texture | null, mirror: boolean) {
   return new THREE.ShaderMaterial({
@@ -314,7 +314,7 @@ export default function Spiral3D({ items }: { items: LandingItem[] }) {
   return (
     <div className="absolute inset-0 z-10 touch-none select-none">
       <Canvas
-        camera={{ position: [0, 0, 6.2], fov: 42 }}
+        camera={{ position: [0, 0, 7.4], fov: 44 }}
         gl={{ antialias: true, alpha: true }}
         dpr={[1, 2]}
       >
