@@ -65,15 +65,13 @@ const FRAG_BLUR = /* glsl */ `
 `;
 
 /* ------------------------------------------------------------- geometry cfg */
-const N = 12; // card instances (covers repeat to fill the infinite loop)
-const AMPX = 4.0; // horizontal wave amplitude (wider spiral)
-const AMPZ = 1.9; // depth wave amplitude
-const HEIGHT = 13; // vertical span → more space between cards + seamless recycle
-const TURNS = 2; // EVEN → a card lands dead-centre (x=0,y=0,facing) each half-loop
-const MAXROT = 0.6; // max card tilt in radians (keeps cards face-on, not edge-on)
-const AUTO_SPEED = 0.04; // idle auto-rotation speed (~25s per full loop)
-const CARD_W = 2.9; // bigger cards
-const CARD_H = 1.7;
+const N = 16; // 8 per strand → double helix; covers repeat to fill the loop
+const R = 2.4; // orbit radius (smaller = cards closer together)
+const HEIGHT = 9.5; // vertical span of the helix
+const TURNS = 2; // EVEN → highlight card lands dead-centre; 2 turns per loop
+const AUTO_SPEED = 0.015; // very slow, gentle idle drift (~65s per loop)
+const CARD_W = 2.7;
+const CARD_H = 1.6;
 
 function makeMaterial(tex: THREE.Texture | null, mirror: boolean) {
   return new THREE.ShaderMaterial({
@@ -81,6 +79,7 @@ function makeMaterial(tex: THREE.Texture | null, mirror: boolean) {
     fragmentShader: mirror ? FRAG_BLUR : FRAG_SHARP,
     transparent: true,
     depthWrite: !mirror,
+    side: THREE.DoubleSide, // show the card's back when it orbits behind
     uniforms: {
       uTex: { value: tex },
       uOpacity: { value: mirror ? 0.32 : 1 },
@@ -180,19 +179,22 @@ function Spiral({
     for (let i = 0; i < N; i++) {
       const m = refs.current[i];
       if (!m) continue;
-      const p = (((i / N + prog * dir) % 1) + 1) % 1; // 0..1 looping
-      const phase = p * Math.PI * 2 * TURNS;
-      const y = (0.5 - p) * HEIGHT;
-      const x = Math.sin(phase) * AMPX * (mirror ? 1.5 : 1);
-      const z = (Math.cos(phase) - 1) * AMPZ - (mirror ? 2.4 : 0);
-      const ry = Math.sin(phase) * MAXROT * (mirror ? 1.7 : 1);
-      m.position.set(x, y, z);
-      m.rotation.set(
-        0,
-        ry,
-        mirror ? Math.sin(phase * 2 + i) * 0.45 : Math.sin(phase) * 0.08
+      const strand = i % 2; // two intertwined strands (double helix)
+      const j = (i - strand) / 2;
+      const u = (((j / (N / 2) + prog * dir) % 1) + 1) % 1; // 0..1 looping
+      // full orbit around the central Y axis + π offset for the 2nd strand
+      const theta =
+        u * Math.PI * 2 * TURNS + strand * Math.PI + (mirror ? 0.5 : 0);
+      const y = (0.5 - u) * HEIGHT;
+      const r = mirror ? R * 1.3 : R;
+      m.position.set(
+        Math.sin(theta) * r,
+        y,
+        Math.cos(theta) * r - (mirror ? 2.2 : 0)
       );
-      m.renderOrder = mirror ? -1 : Math.round(z * 10);
+      // face outward: front card faces camera, rear card shows its back
+      m.rotation.set(0, theta, mirror ? Math.sin(prog + i) * 0.3 : 0);
+      m.renderOrder = mirror ? -1 : Math.round(Math.cos(theta) * 100);
     }
   });
 
@@ -284,7 +286,7 @@ function Scene({
   useFrame((_, delta) => {
     // continuous idle auto-rotation; scroll/drag adds on top
     targetRef.current += Math.min(delta, 0.05) * AUTO_SPEED;
-    progressRef.current += (targetRef.current - progressRef.current) * 0.08;
+    progressRef.current += (targetRef.current - progressRef.current) * 0.06;
   });
 
   const onSelect = (it: LandingItem) => {
@@ -317,7 +319,7 @@ export default function Spiral3D({ items }: { items: LandingItem[] }) {
   return (
     <div className="absolute inset-0 z-10 touch-none select-none">
       <Canvas
-        camera={{ position: [0, 0, 7.4], fov: 44 }}
+        camera={{ position: [0, 0, 6.3], fov: 42 }}
         gl={{ antialias: true, alpha: true }}
         dpr={[1, 2]}
       >
