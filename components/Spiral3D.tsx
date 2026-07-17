@@ -14,22 +14,22 @@ const VERT = /* glsl */ `
   void main() {
     vUv = uv;
     vec3 p = position;
-    // twist around Y as a function of height
     float ang = uTwist * p.y;
     float s = sin(ang);
     float c = cos(ang);
     p = vec3(c * p.x + s * p.z, p.y, -s * p.x + c * p.z);
-    // cylindrical wrap: edges curve back
-    p.z -= uBend * p.x * p.x;
+    p.z -= uBend * p.x * p.x; // cylindrical wrap
     gl_Position = projectionMatrix * modelViewMatrix * vec4(p, 1.0);
   }
 `;
 
-const FRAG_SHARP = /* glsl */ `
+// Sharp by default; blurs when uBlur > 0 (used for rear-facing cards).
+const FRAG = /* glsl */ `
   precision highp float;
   uniform sampler2D uTex;
   uniform float uOpacity;
   uniform float uRadius;
+  uniform float uBlur;
   varying vec2 vUv;
   float rr(vec2 uv, float r) {
     vec2 q = abs(uv - 0.5) - (0.5 - r);
@@ -37,56 +37,49 @@ const FRAG_SHARP = /* glsl */ `
     return 1.0 - smoothstep(0.0, 0.006, d);
   }
   void main() {
-    vec4 col = texture2D(uTex, vUv);
+    vec3 col;
+    if (uBlur > 0.0002) {
+      vec3 acc = vec3(0.0);
+      for (int x = -2; x <= 2; x++) {
+        for (int y = -2; y <= 2; y++) {
+          acc += texture2D(uTex, vUv + vec2(float(x), float(y)) * uBlur).rgb;
+        }
+      }
+      col = acc / 25.0;
+    } else {
+      col = texture2D(uTex, vUv).rgb;
+    }
     float a = rr(vUv, uRadius) * uOpacity;
     if (a <= 0.001) discard;
-    gl_FragColor = vec4(col.rgb, a);
+    gl_FragColor = vec4(col, a);
   }
 `;
 
-const FRAG_BLUR = /* glsl */ `
-  precision highp float;
-  uniform sampler2D uTex;
-  uniform float uOpacity;
-  uniform vec2 uBlur;
-  varying vec2 vUv;
-  void main() {
-    vec3 col = vec3(0.0);
-    float tot = 0.0;
-    for (int x = -2; x <= 2; x++) {
-      for (int y = -2; y <= 2; y++) {
-        col += texture2D(uTex, vUv + vec2(float(x), float(y)) * uBlur).rgb;
-        tot += 1.0;
-      }
-    }
-    col /= tot;
-    gl_FragColor = vec4(col, uOpacity);
-  }
-`;
-
-/* ------------------------------------------------------------- geometry cfg */
-const N = 16; // 8 per strand → double helix; covers repeat to fill the loop
-const R = 2.4; // orbit radius (smaller = cards closer together)
-const HEIGHT = 9.5; // vertical span of the helix
-const TURNS = 2; // EVEN → highlight card lands dead-centre; 2 turns per loop
+/* -------------------------------------------------------------- geometry cfg */
+const N = 6; // one strand, one card per project (no repeats)
+const R = 2.2; // orbit radius (tighter → cards closer)
+const HEIGHT = 7; // vertical span of the helix (less spacing)
+const TURNS = 2; // EVEN → highlight card lands dead-centre
 const AUTO_SPEED = 0.015; // very slow, gentle idle drift (~65s per loop)
-const CARD_W = 2.7;
-const CARD_H = 1.6;
+const MAX_BLUR = 0.01; // blur at the edges (far from centre)
+const MIN_OPACITY = 0.12; // opacity at the edges (far from centre)
+const CARD_W = 2.4;
+const CARD_H = 1.45;
 
-function makeMaterial(tex: THREE.Texture | null, mirror: boolean) {
+function makeMaterial(tex: THREE.Texture | null) {
   return new THREE.ShaderMaterial({
     vertexShader: VERT,
-    fragmentShader: mirror ? FRAG_BLUR : FRAG_SHARP,
+    fragmentShader: FRAG,
     transparent: true,
-    depthWrite: !mirror,
-    side: THREE.DoubleSide, // show the card's back when it orbits behind
+    depthWrite: true,
+    side: THREE.DoubleSide, // show the back when a card orbits behind
     uniforms: {
       uTex: { value: tex },
-      uOpacity: { value: mirror ? 0.32 : 1 },
-      uBend: { value: mirror ? 0.5 : 0.28 },
-      uTwist: { value: mirror ? 0.6 : 0.06 },
+      uOpacity: { value: 1 },
+      uBend: { value: 0.28 },
+      uTwist: { value: 0.06 },
       uRadius: { value: 0.06 },
-      uBlur: { value: new THREE.Vector2(0.007, 0.011) },
+      uBlur: { value: 0 },
     },
   });
 }
@@ -146,18 +139,16 @@ function useCovers(items: LandingItem[]) {
   return textures;
 }
 
-/* --------------------------------------------------------------- one spiral */
+/* --------------------------------------------------------------- the strand */
 function Spiral({
   items,
   textures,
   progressRef,
-  mirror,
   onSelect,
 }: {
   items: LandingItem[];
   textures: (THREE.Texture | null)[];
   progressRef: React.RefObject<number>;
-  mirror: boolean;
   onSelect: (it: LandingItem) => void;
 }) {
   const geo = useMemo(
@@ -167,34 +158,31 @@ function Spiral({
   const mats = useMemo(
     () =>
       Array.from({ length: N }, (_, i) =>
-        makeMaterial(textures[i % Math.max(1, items.length)] ?? null, mirror)
+        makeMaterial(textures[i % Math.max(1, items.length)] ?? null)
       ),
-    [textures, mirror, items.length]
+    [textures, items.length]
   );
   const refs = useRef<(THREE.Mesh | null)[]>([]);
 
   useFrame(() => {
     const prog = progressRef.current ?? 0;
-    const dir = mirror ? -1 : 1;
     for (let i = 0; i < N; i++) {
       const m = refs.current[i];
       if (!m) continue;
-      const strand = i % 2; // two intertwined strands (double helix)
-      const j = (i - strand) / 2;
-      const u = (((j / (N / 2) + prog * dir) % 1) + 1) % 1; // 0..1 looping
-      // full orbit around the central Y axis + π offset for the 2nd strand
-      const theta =
-        u * Math.PI * 2 * TURNS + strand * Math.PI + (mirror ? 0.5 : 0);
+      const u = (((i / N + prog) % 1) + 1) % 1;
+      const theta = -u * Math.PI * 2 * TURNS; // left-handed circular helix
       const y = (0.5 - u) * HEIGHT;
-      const r = mirror ? R * 1.3 : R;
-      m.position.set(
-        Math.sin(theta) * r,
-        y,
-        Math.cos(theta) * r - (mirror ? 2.2 : 0)
-      );
-      // face outward: front card faces camera, rear card shows its back
-      m.rotation.set(0, theta, mirror ? Math.sin(prog + i) * 0.3 : 0);
-      m.renderOrder = mirror ? -1 : Math.round(Math.cos(theta) * 100);
+      m.position.set(Math.sin(theta) * R, y, Math.cos(theta) * R);
+      m.rotation.set(0, theta, 0); // face outward
+      m.renderOrder = Math.round(Math.cos(theta) * 100);
+      // progressive: sharpest + fully opaque at centre (u=0.5),
+      // blurrier + more transparent the further a card drifts away
+      const t = Math.min(1, 2 * Math.abs(u - 0.5));
+      const mat = mats[i];
+      if (mat) {
+        mat.uniforms.uBlur.value = t * MAX_BLUR;
+        mat.uniforms.uOpacity.value = 1 - t * (1 - MIN_OPACITY);
+      }
     }
   });
 
@@ -208,28 +196,16 @@ function Spiral({
           }}
           geometry={geo}
           material={mats[i]}
-          onClick={
-            mirror
-              ? undefined
-              : (e: ThreeEvent<MouseEvent>) => {
-                  e.stopPropagation();
-                  onSelect(items[i % Math.max(1, items.length)]);
-                }
-          }
-          onPointerOver={
-            mirror
-              ? undefined
-              : () => {
-                  document.body.style.cursor = "pointer";
-                }
-          }
-          onPointerOut={
-            mirror
-              ? undefined
-              : () => {
-                  document.body.style.cursor = "";
-                }
-          }
+          onClick={(e: ThreeEvent<MouseEvent>) => {
+            e.stopPropagation();
+            onSelect(items[i % Math.max(1, items.length)]);
+          }}
+          onPointerOver={() => {
+            document.body.style.cursor = "pointer";
+          }}
+          onPointerOut={() => {
+            document.body.style.cursor = "";
+          }}
         />
       ))}
     </group>
@@ -252,7 +228,7 @@ function Scene({
   useEffect(() => {
     const onWheel = (e: WheelEvent) => {
       e.preventDefault();
-      targetRef.current += e.deltaY * 0.0009;
+      targetRef.current += e.deltaY * 0.0007;
     };
     let dragging = false;
     let lastY = 0;
@@ -265,7 +241,7 @@ function Scene({
       if (!dragging) return;
       const dy = e.clientY - lastY;
       movedRef.current += Math.abs(dy);
-      targetRef.current -= dy * 0.0018;
+      targetRef.current -= dy * 0.0015;
       lastY = e.clientY;
     };
     const onUp = () => {
@@ -284,7 +260,7 @@ function Scene({
   }, []);
 
   useFrame((_, delta) => {
-    // continuous idle auto-rotation; scroll/drag adds on top
+    // continuous, very gentle idle drift; scroll/drag adds on top
     targetRef.current += Math.min(delta, 0.05) * AUTO_SPEED;
     progressRef.current += (targetRef.current - progressRef.current) * 0.06;
   });
@@ -295,22 +271,12 @@ function Scene({
   };
 
   return (
-    <>
-      <Spiral
-        items={items}
-        textures={textures}
-        progressRef={progressRef}
-        mirror
-        onSelect={onSelect}
-      />
-      <Spiral
-        items={items}
-        textures={textures}
-        progressRef={progressRef}
-        mirror={false}
-        onSelect={onSelect}
-      />
-    </>
+    <Spiral
+      items={items}
+      textures={textures}
+      progressRef={progressRef}
+      onSelect={onSelect}
+    />
   );
 }
 
