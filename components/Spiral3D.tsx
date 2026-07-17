@@ -66,9 +66,11 @@ const FRAG_BLUR = /* glsl */ `
 
 /* ------------------------------------------------------------- geometry cfg */
 const N = 12; // card instances (covers repeat to fill the infinite loop)
-const R = 2.9; // helix radius
-const HEIGHT = 10; // vertical span (taller than viewport → seamless recycle)
-const TURNS = 1.0;
+const AMPX = 2.3; // horizontal wave amplitude
+const AMPZ = 1.7; // depth wave amplitude
+const HEIGHT = 8; // vertical span (taller than viewport → seamless recycle)
+const TURNS = 1.5;
+const MAXROT = 0.6; // max card tilt in radians (keeps cards face-on, not edge-on)
 const CARD_W = 2.5;
 const CARD_H = 1.5;
 
@@ -178,16 +180,18 @@ function Spiral({
       const m = refs.current[i];
       if (!m) continue;
       const p = (((i / N + prog * dir) % 1) + 1) % 1; // 0..1 looping
-      const theta = p * Math.PI * 2 * TURNS + (mirror ? prog * 0.7 : 0);
+      const phase = p * Math.PI * 2 * TURNS;
       const y = (0.5 - p) * HEIGHT;
-      const r = mirror ? R * 1.2 : R;
-      m.position.set(
-        Math.sin(theta) * r,
-        y,
-        Math.cos(theta) * r - (mirror ? 1.6 : 0)
+      const x = Math.sin(phase) * AMPX * (mirror ? 1.5 : 1);
+      const z = (Math.cos(phase) - 1) * AMPZ - (mirror ? 2.4 : 0);
+      const ry = Math.sin(phase) * MAXROT * (mirror ? 1.7 : 1);
+      m.position.set(x, y, z);
+      m.rotation.set(
+        0,
+        ry,
+        mirror ? Math.sin(phase * 2 + i) * 0.45 : Math.sin(phase) * 0.08
       );
-      m.rotation.set(0, theta, mirror ? Math.sin(prog + i) * 0.35 : 0);
-      m.renderOrder = mirror ? -1 : Math.round(m.position.z * 10);
+      m.renderOrder = mirror ? -1 : Math.round(z * 10);
     }
   });
 
