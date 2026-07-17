@@ -4,7 +4,8 @@ import type { Locale } from "@/i18n/routing";
 import Logo from "@/components/Logo";
 import CommandMenu from "@/components/CommandMenu";
 import LocaleSwitcher from "@/components/LocaleSwitcher";
-import LandingProjects, { type LandingItem } from "@/components/LandingProjects";
+import { type LandingItem } from "@/components/LandingProjects";
+import LandingViews from "@/components/LandingViews";
 import { LinkedInIcon } from "@/components/icons";
 
 export default async function Home({
@@ -36,8 +37,8 @@ export default async function Home({
         <LocaleSwitcher />
       </div>
 
-      {/* Centre — projects, the star element */}
-      <LandingProjects items={items} />
+      {/* Centre — projects: spiral (default) or list view */}
+      <LandingViews items={items} />
 
       {/* Bottom-left — year + LinkedIn */}
       <div className="absolute bottom-4 left-5 z-30 flex items-center gap-3 md:bottom-6 md:left-8">
