@@ -104,14 +104,16 @@ export default function LandingProjects({ items }: { items: LandingItem[] }) {
             onMouseLeave={() => setActive(null)}
             onFocus={() => setActive(i)}
             onBlur={() => setActive(null)}
-            className="group flex items-baseline gap-2 md:gap-4"
+            className="group relative flex items-baseline justify-center text-center"
             style={{
               opacity: active === null || active === i ? 1 : 0.12,
               transition: "opacity 0.3s ease",
             }}
           >
-            <span className="mono-label hidden sm:inline">{it.index}</span>
-            <span className="grade-hover font-display leading-[1] text-[9vw] md:text-[4.4vw]">
+            <span className="mono-label absolute right-full mr-3 hidden self-center sm:inline md:mr-5">
+              {it.index}
+            </span>
+            <span className="grade-hover font-display leading-[1.05] text-[7.5vw] md:text-[4.4vw]">
               {it.title}
             </span>
           </Link>
