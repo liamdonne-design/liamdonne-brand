@@ -11,14 +11,14 @@
 
 :root {
   /* Monochrome only. Colour comes exclusively from the project imagery. */
-  --paper: #f4f3ef; /* warm off-white */
-  --ink: #0c0c0c; /* near-black */
-  --grey-900: #1a1a1a;
-  --grey-600: #6b6b68;
-  --grey-400: #a8a8a3;
-  --grey-200: #dededa;
-  --hairline: color-mix(in srgb, var(--ink) 14%, transparent);
-  --grid-line: color-mix(in srgb, var(--ink) 6%, transparent);
+  --paper: #141412; /* dark background */
+  --ink: #ededE7; /* light primary text (soft off-white) */
+  --grey-900: #d6d6d0; /* strong secondary text */
+  --grey-600: #9a9a92; /* labels / tertiary text */
+  --grey-400: #6a6a63; /* dim */
+  --grey-200: #2a2a27; /* dark surface (tags, media placeholders) */
+  --hairline: color-mix(in srgb, var(--ink) 16%, transparent);
+  --grid-line: color-mix(in srgb, var(--ink) 8%, transparent);
 }
 
 @theme inline {
@@ -66,7 +66,7 @@ body {
 /* ---- Millimeter grid motif (echoes the MedGPT medical-grid language) ---- */
 .mm-grid {
   /* Dotted grid lines (tiled SVG): a dotted rule along the top + left of each cell */
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32'%3E%3Cpath d='M0 0H32M0 0V32' fill='none' stroke='%230c0c0c' stroke-opacity='0.3' stroke-width='1' stroke-dasharray='1 5'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32'%3E%3Cpath d='M0 0H32M0 0V32' fill='none' stroke='%23ffffff' stroke-opacity='0.12' stroke-width='1' stroke-dasharray='1 5'/%3E%3C/svg%3E");
   background-size: 32px 32px;
 }
 
@@ -150,6 +150,55 @@ body {
 @media (hover: none) {
   .pixel-cursor {
     display: none;
+  }
+}
+
+/* Strike-through line for the sound ON/OFF toggle transition.
+   Draws across the word when .active is set, then snaps away on removal. */
+.strike-line {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  height: 1.5px;
+  width: 0;
+  background: currentColor;
+  transform: translateY(-50%);
+}
+.strike-line.active {
+  width: 100%;
+  transition: width 0.4s ease;
+}
+
+/* Glitch hover for text CTAs */
+.glitch {
+  display: inline-block;
+}
+@keyframes glitch {
+  0%,
+  100% {
+    transform: translate(0);
+    text-shadow: none;
+  }
+  20% {
+    transform: translate(-1.5px, 1px);
+    text-shadow: 1.5px 0 var(--grey-400), -1.5px 0 var(--grey-600);
+  }
+  40% {
+    transform: translate(1.5px, -1px);
+    text-shadow: -1.5px 0 var(--grey-400), 1.5px 0 var(--grey-600);
+  }
+  60% {
+    transform: translate(-1px, -1px);
+    text-shadow: 1px 0 var(--grey-600);
+  }
+  80% {
+    transform: translate(1px, 1px);
+    text-shadow: -1px 0 var(--grey-400);
+  }
+}
+@media (hover: hover) {
+  .glitch:hover {
+    animation: glitch 0.4s steps(3) 1;
   }
 }
 

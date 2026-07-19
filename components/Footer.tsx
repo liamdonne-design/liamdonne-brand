@@ -1,5 +1,6 @@
 import { getTranslations } from "next-intl/server";
 import { contactEmail, socials } from "@/content/about";
+import GlitchText from "./GlitchText";
 
 export default async function Footer() {
   const t = await getTranslations("Footer");
@@ -25,7 +26,7 @@ export default async function Footer() {
                 rel="noopener noreferrer"
                 className="text-grey-600 transition-colors hover:text-ink"
               >
-                {s.label} ↗
+                <GlitchText text={`${s.label} ↗`} />
               </a>
             ))}
           </div>

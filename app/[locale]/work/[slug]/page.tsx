@@ -11,6 +11,7 @@ import {
 } from "@/content/projects";
 import { MediaBlock } from "@/components/Media";
 import Reveal from "@/components/Reveal";
+import GlitchText from "@/components/GlitchText";
 
 export function generateStaticParams() {
   return routing.locales.flatMap((locale) =>
@@ -51,8 +52,8 @@ export default async function ProjectPage({
     <article>
       {/* ---------------- HEADER ---------------- */}
       <header className="px-5 pt-10 pb-8 md:px-10 md:pt-14 md:pb-10">
-        <Link href="/work" className="mono-label transition-colors hover:text-ink">
-          ← {tp("back")}
+        <Link href="/" className="mono-label transition-colors hover:text-ink">
+          ← <GlitchText text={tp("back")} />
         </Link>
 
         <div className="mono-label mt-10 flex items-center gap-3">
@@ -85,9 +86,14 @@ export default async function ProjectPage({
           </div>
           <div className="min-w-0">
             <dt className="mono-label">Tags</dt>
-            <dd className="mt-1.5 flex flex-wrap gap-x-3 gap-y-1 text-base">
+            <dd className="mt-1.5 flex flex-wrap gap-2">
               {project.tags.map((tag) => (
-                <span key={tag.en}>{t(tag, locale)}</span>
+                <span
+                  key={tag.en}
+                  className="rounded-sm bg-grey-200 px-2 py-0.5 font-mono text-[11px] uppercase tracking-wide"
+                >
+                  {t(tag, locale)}
+                </span>
               ))}
             </dd>
           </div>

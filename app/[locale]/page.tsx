@@ -2,11 +2,10 @@ import { setRequestLocale } from "next-intl/server";
 import { projects, t } from "@/content/projects";
 import type { Locale } from "@/i18n/routing";
 import Logo from "@/components/Logo";
-import CommandMenu from "@/components/CommandMenu";
-import LocaleSwitcher from "@/components/LocaleSwitcher";
+import NavToggle from "@/components/NavToggle";
+import GlitchText from "@/components/GlitchText";
 import { type LandingItem } from "@/components/LandingProjects";
 import LandingViews from "@/components/LandingViews";
-import { LinkedInIcon } from "@/components/icons";
 
 export default async function Home({
   params,
@@ -16,12 +15,23 @@ export default async function Home({
   const { locale } = await params;
   setRequestLocale(locale);
 
+  // Short display tags (1–3, one/two words) shown on the spiral hover card
+  const SPIRAL_TAGS: Record<string, string[]> = {
+    "synapse-manifestation-event": ["EVENT", "BRANDING"],
+    "synapse-motion-identity": ["MOTION", "BRANDING"],
+    "synapse-medgpt-branding": ["BRANDING", "MOTION", "VISUAL SYSTEM"],
+    "synapse-corporate-refresh": ["BRANDING", "VISUAL SYSTEM"],
+    "cuidam-hearts-event": ["EVENT", "BRANDING", "MOTION"],
+    "cuidam-corporate-branding": ["BRANDING", "VISUAL SYSTEM"],
+  };
+
   const items: LandingItem[] = projects.map((p) => ({
     slug: p.slug,
     index: p.index,
     client: p.client,
     title: t(p.title, locale),
     cover: p.ready ? p.cover : null,
+    chips: SPIRAL_TAGS[p.slug] ?? [],
   }));
 
   return (
@@ -31,10 +41,9 @@ export default async function Home({
         <Logo />
       </div>
 
-      {/* Top-right — menu + language */}
-      <div className="absolute right-5 top-4 z-30 flex items-center gap-4 md:right-8 md:top-6 md:gap-6">
-        <CommandMenu />
-        <LocaleSwitcher />
+      {/* Top-right — About / Work toggle */}
+      <div className="absolute right-5 top-4 z-30 md:right-8 md:top-6">
+        <NavToggle />
       </div>
 
       {/* Centre — projects: spiral (default) or list view */}
@@ -50,9 +59,9 @@ export default async function Home({
           rel="noopener noreferrer"
           data-sfx
           aria-label="LinkedIn — Liam Donne"
-          className="text-ink transition-opacity hover:opacity-50"
+          className="mono-label transition-colors hover:text-ink"
         >
-          <LinkedInIcon className="h-4 w-4" />
+          <GlitchText text="Linkedin" />
         </a>
       </div>
 

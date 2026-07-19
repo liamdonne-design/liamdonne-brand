@@ -11,6 +11,7 @@ export type LandingItem = {
   client: string;
   title: string;
   cover: Media | null;
+  chips: string[];
 };
 
 export default function LandingProjects({ items }: { items: LandingItem[] }) {

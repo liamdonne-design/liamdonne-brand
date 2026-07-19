@@ -3,6 +3,7 @@
 import { Canvas, useFrame, type ThreeEvent } from "@react-three/fiber";
 import { useEffect, useMemo, useRef, useState } from "react";
 import * as THREE from "three";
+import { gsap } from "gsap";
 import { useRouter } from "@/i18n/navigation";
 import type { LandingItem } from "./LandingProjects";
 
@@ -56,13 +57,14 @@ const FRAG = /* glsl */ `
 `;
 
 /* -------------------------------------------------------------- geometry cfg */
-const N = 6; // one strand, one card per project (no repeats)
-const R = 2.2; // orbit radius (tighter → cards closer)
-const HEIGHT = 7; // vertical span of the helix (less spacing)
+const N = 8; // cards along the ribbon (covers repeat slightly to keep it flowing)
+const R = 1.8; // orbit radius → ~1rem horizontal gap between card sides
+const HEIGHT = 11; // taller vertical span → ~4rem vertical spacing between cards
 const TURNS = 2; // EVEN → highlight card lands dead-centre
 const AUTO_SPEED = 0.015; // very slow, gentle idle drift (~65s per loop)
 const MAX_BLUR = 0.01; // blur at the edges (far from centre)
 const MIN_OPACITY = 0.12; // opacity at the edges (far from centre)
+const CENTER_HOLD = 0.16; // band around centre kept 100% opaque + sharp
 const CARD_W = 2.4;
 const CARD_H = 1.45;
 
@@ -145,11 +147,13 @@ function Spiral({
   textures,
   progressRef,
   onSelect,
+  onHover,
 }: {
   items: LandingItem[];
   textures: (THREE.Texture | null)[];
   progressRef: React.RefObject<number>;
   onSelect: (it: LandingItem) => void;
+  onHover: React.Dispatch<React.SetStateAction<number | null>>;
 }) {
   const geo = useMemo(
     () => new THREE.PlaneGeometry(CARD_W, CARD_H, 40, 24),
@@ -175,9 +179,10 @@ function Spiral({
       m.position.set(Math.sin(theta) * R, y, Math.cos(theta) * R);
       m.rotation.set(0, theta, 0); // face outward
       m.renderOrder = Math.round(Math.cos(theta) * 100);
-      // progressive: sharpest + fully opaque at centre (u=0.5),
-      // blurrier + more transparent the further a card drifts away
-      const t = Math.min(1, 2 * Math.abs(u - 0.5));
+      // progressive: the centre card holds 100% opaque + sharp within a band,
+      // then blurs + fades the further it drifts away
+      const dist = Math.min(1, 2 * Math.abs(u - 0.5));
+      const t = Math.max(0, (dist - CENTER_HOLD) / (1 - CENTER_HOLD));
       const mat = mats[i];
       if (mat) {
         mat.uniforms.uBlur.value = t * MAX_BLUR;
@@ -202,9 +207,11 @@ function Spiral({
           }}
           onPointerOver={() => {
             document.body.style.cursor = "pointer";
+            onHover(i);
           }}
           onPointerOut={() => {
             document.body.style.cursor = "";
+            onHover((h) => (h === i ? null : h));
           }}
         />
       ))}
@@ -216,9 +223,11 @@ function Spiral({
 function Scene({
   items,
   textures,
+  onHover,
 }: {
   items: LandingItem[];
   textures: (THREE.Texture | null)[];
+  onHover: React.Dispatch<React.SetStateAction<number | null>>;
 }) {
   const progressRef = useRef(0);
   const targetRef = useRef(0);
@@ -276,12 +285,34 @@ function Scene({
       textures={textures}
       progressRef={progressRef}
       onSelect={onSelect}
+      onHover={onHover}
     />
   );
 }
 
 export default function Spiral3D({ items }: { items: LandingItem[] }) {
   const textures = useCovers(items);
+  const [hovered, setHovered] = useState<number | null>(null);
+  const cardRef = useRef<HTMLDivElement>(null);
+
+  // The info card follows the cursor (offset to the right), smoothly.
+  useEffect(() => {
+    const el = cardRef.current;
+    if (!el) return;
+    if (window.matchMedia("(hover: none)").matches) return;
+    gsap.set(el, { xPercent: 0, yPercent: -50 });
+    const xTo = gsap.quickTo(el, "x", { duration: 0.4, ease: "power3" });
+    const yTo = gsap.quickTo(el, "y", { duration: 0.4, ease: "power3" });
+    const move = (e: PointerEvent) => {
+      xTo(e.clientX + 28);
+      yTo(e.clientY);
+    };
+    window.addEventListener("pointermove", move);
+    return () => window.removeEventListener("pointermove", move);
+  }, []);
+
+  const item = hovered != null ? items[hovered] : null;
+
   return (
     <div className="absolute inset-0 z-10 touch-none select-none">
       <Canvas
@@ -289,8 +320,35 @@ export default function Spiral3D({ items }: { items: LandingItem[] }) {
         gl={{ antialias: true, alpha: true }}
         dpr={[1, 2]}
       >
-        <Scene items={items} textures={textures} />
+        <Scene items={items} textures={textures} onHover={setHovered} />
       </Canvas>
+
+      {/* Floating info card — follows the cursor when hovering a project */}
+      <div
+        ref={cardRef}
+        aria-hidden
+        className="pointer-events-none fixed left-0 top-0 z-20 w-max max-w-xs rounded-2xl border border-[#33332f] bg-[#1c1c1a] px-5 py-4 shadow-xl"
+        style={{ opacity: item ? 1 : 0, transition: "opacity 0.2s ease" }}
+      >
+        {item && (
+          <div>
+            <div className="font-display text-xl leading-tight">
+              {item.title}
+            </div>
+            <div className="mt-2.5 flex flex-wrap items-center gap-1.5">
+              <span className="mono-label mr-1">{item.index}</span>
+              {item.chips.map((c) => (
+                <span
+                  key={c}
+                  className="rounded-sm bg-grey-200 px-1.5 py-0.5 font-mono text-[10px] uppercase tracking-widest text-grey-600"
+                >
+                  {c}
+                </span>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

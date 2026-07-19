@@ -39,7 +39,7 @@ export default async function AboutPage({
               {tools.map((tool) => (
                 <li
                   key={tool}
-                  className="border border-hairline px-3 py-1.5 font-mono text-[12px]"
+                  className="rounded-sm bg-grey-200 px-3 py-1.5 font-mono text-[12px]"
                 >
                   {tool}
                 </li>
@@ -52,7 +52,7 @@ export default async function AboutPage({
               {skills.map((s) => (
                 <li
                   key={s.en}
-                  className="border border-hairline px-3 py-1.5 font-mono text-[12px]"
+                  className="rounded-sm bg-grey-200 px-3 py-1.5 font-mono text-[12px]"
                 >
                   {t(s, locale)}
                 </li>
