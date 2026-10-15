@@ -10,7 +10,6 @@ export default function NavToggle() {
   return (
     <Link
       href={onAbout ? "/" : "/about"}
-      data-sfx
       className="mono-label transition-colors hover:text-ink"
     >
       <GlitchText text={onAbout ? "WORK" : "ABOUT"} />

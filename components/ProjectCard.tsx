@@ -11,7 +11,7 @@ export function ProjectCard({
   locale: Locale;
 }) {
   return (
-    <Link href={`/work/${project.slug}`} data-sfx="project" className="group block">
+    <Link href={`/work/${project.slug}`} className="group block">
       <div className="relative overflow-hidden border border-hairline">
         {project.ready ? (
           <div className="overflow-hidden">

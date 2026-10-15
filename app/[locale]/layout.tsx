@@ -6,10 +6,9 @@ import { getMessages, getTranslations, setRequestLocale } from "next-intl/server
 import { routing, type Locale } from "@/i18n/routing";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
-import PixelCursor from "@/components/PixelCursor";
-import SoundProvider from "@/components/SoundProvider";
-import SoundToggle from "@/components/SoundToggle";
 import ChromeGate from "@/components/ChromeGate";
+import DotField from "@/components/DotField";
+import ContactTab from "@/components/ContactTab";
 import "../globals.css";
 
 const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
@@ -62,13 +61,11 @@ export default async function LocaleLayout({
       </head>
       <body className="flex min-h-full flex-col">
         <NextIntlClientProvider messages={messages}>
-          <SoundProvider>
-            <PixelCursor />
-            <ChromeGate nav={<Nav />} footer={<Footer />}>
-              <main className="flex-1">{children}</main>
-            </ChromeGate>
-            <SoundToggle />
-          </SoundProvider>
+          <DotField />
+          <ChromeGate nav={<Nav />} footer={<Footer />}>
+            <main className="flex-1">{children}</main>
+          </ChromeGate>
+          <ContactTab />
         </NextIntlClientProvider>
       </body>
     </html>

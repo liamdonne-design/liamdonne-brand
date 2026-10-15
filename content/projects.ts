@@ -5,6 +5,8 @@ export type MediaType = "image" | "video";
 export type Media = {
   type: MediaType;
   src: string;
+  /** still image for a video (thumbnails) */
+  poster?: string;
   /** aspect ratio "w/h" used to reserve layout space */
   ratio?: string;
   caption?: Localized;
@@ -162,7 +164,12 @@ const rawProjects: Project[] = [
       "An event identity with heart, from invite to stage.",
       "Une identité d'événement avec du cœur, de l'invitation à la scène."
     ),
-    cover: { type: "video", src: "/work/cuidam-hearts-event/cover.mp4", ratio: "16/9" },
+    cover: {
+      type: "video",
+      src: "/work/cuidam-hearts-event/cover.mp4",
+      poster: "/work/cuidam-hearts-event/poster.jpg",
+      ratio: "16/9",
+    },
     gallery: [],
     ready: true,
   },

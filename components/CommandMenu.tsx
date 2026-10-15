@@ -91,7 +91,6 @@ export default function CommandMenu() {
                 <button
                   key={p.slug}
                   onClick={() => go(`/work/${p.slug}`)}
-                  data-sfx="project"
                   className="group flex items-baseline gap-4 border-b border-hairline py-4 text-left md:py-5"
                 >
                   <span className="mono-label w-6 shrink-0">{`0${i + 1}`.slice(-2)}</span>

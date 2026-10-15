@@ -60,7 +60,7 @@ export const skills: Localized[] = [
 ];
 
 export const socials = [
-  { label: "LinkedIn", href: "https://www.linkedin.com/" },
+  { label: "LinkedIn", href: "https://www.linkedin.com/in/liam-donne/" },
   { label: "Instagram", href: "https://www.instagram.com/" },
 ];
 
