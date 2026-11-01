@@ -1,5 +1,6 @@
 import Image from "next/image";
 import type { Media } from "@/content/projects";
+import LazyVideo from "./LazyVideo";
 
 export function MediaBlock({
   media,
@@ -20,14 +21,10 @@ export function MediaBlock({
       style={{ aspectRatio: ratio.replace("/", " / ") }}
     >
       {media.type === "video" ? (
-        <video
+        <LazyVideo
           className="absolute inset-0 h-full w-full object-cover"
           src={media.src}
-          autoPlay
-          muted
-          loop
-          playsInline
-          preload="metadata"
+          poster={media.poster}
         />
       ) : (
         <Image

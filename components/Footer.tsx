@@ -1,6 +1,6 @@
 import { getTranslations } from "next-intl/server";
 import { contactEmail, socials } from "@/content/about";
-import GlitchText from "./GlitchText";
+import FluidLinkButton from "./FluidLinkButton";
 
 export default async function Footer() {
   const t = await getTranslations("Footer");
@@ -17,17 +17,11 @@ export default async function Footer() {
           </a>
         </div>
         <div className="flex flex-col gap-3 md:items-end">
-          <div className="flex gap-5 font-mono text-[12px]">
+          <div className="flex gap-1 md:-mr-3">
             {socials.map((s) => (
-              <a
-                key={s.label}
-                href={s.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-grey-600 transition-colors hover:text-ink"
-              >
-                <GlitchText text={`${s.label} ↗`} />
-              </a>
+              <FluidLinkButton key={s.label} href={s.href} variant="ghost" size="compact" trailingIcon="arrow-right">
+                {s.label}
+              </FluidLinkButton>
             ))}
           </div>
           <div className="mono-label">

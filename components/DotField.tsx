@@ -1,11 +1,13 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { usePathname } from "@/i18n/navigation";
 
-const GAP = 22; // grid spacing (px)
-const BASE_R = 0.9; // resting dot radius
+const GAP = 15; // grid spacing (px)
+const BASE_R = 0.6; // resting dot radius
 const BASE_A = 0.38; // resting dot opacity
-const DOT = "#9a9a95"; // grey dots
+const PEAK_A = 0.6; // opacity of a dot right under the cursor
+const DOT = "#9a9a95"; // fallback; the live colour is --dot-color (dark on Playground)
 const REACH = 170; // cursor influence radius (px)
 const PULL = 7; // max drift of a dot toward the cursor (px)
 
@@ -16,6 +18,8 @@ const PULL = 7; // max drift of a dot toward the cursor (px)
  */
 export default function DotField() {
   const ref = useRef<HTMLCanvasElement>(null);
+  const redraw = useRef<() => void>(() => {});
+  const pathname = usePathname();
 
   useEffect(() => {
     const canvas = ref.current;
@@ -45,6 +49,11 @@ export default function DotField() {
       draw();
     };
 
+    let dot = DOT;
+    const readColor = () => {
+      dot = getComputedStyle(document.documentElement).getPropertyValue("--dot-color").trim() || DOT;
+    };
+
     const draw = () => {
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       ctx.clearRect(0, 0, w, h);
@@ -59,10 +68,10 @@ export default function DotField() {
           k = k * k * energy; // eased falloff
           const px = d > 0 ? x + (dx / d) * PULL * k : x;
           const py = d > 0 ? y + (dy / d) * PULL * k : y;
-          ctx.globalAlpha = BASE_A + (1 - BASE_A) * k;
-          ctx.fillStyle = DOT;
+          ctx.globalAlpha = BASE_A + (PEAK_A - BASE_A) * k;
+          ctx.fillStyle = dot;
           ctx.beginPath();
-          ctx.arc(px, py, BASE_R + 1.1 * k, 0, Math.PI * 2);
+          ctx.arc(px, py, BASE_R + 0.8 * k, 0, Math.PI * 2);
           ctx.fill();
         }
       }
@@ -107,7 +116,12 @@ export default function DotField() {
       kick();
     };
 
+    readColor();
     resize();
+    redraw.current = () => {
+      readColor();
+      draw();
+    };
     window.addEventListener("resize", resize);
     if (!reduce) {
       window.addEventListener("pointermove", onMove, { passive: true });
@@ -123,6 +137,11 @@ export default function DotField() {
       if (idle) clearTimeout(idle);
     };
   }, []);
+
+  // the page theme (and so --dot-color) can change on navigation
+  useEffect(() => {
+    redraw.current();
+  }, [pathname]);
 
   return (
     <canvas

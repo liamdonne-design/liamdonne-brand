@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import { ArrowRight, ExportSquare } from "iconsax-react";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { routing, type Locale } from "@/i18n/routing";
@@ -6,12 +7,13 @@ import {
   getAdjacentProject,
   getProject,
   projects,
+  resolveStory,
   t,
-  type Localized,
 } from "@/content/projects";
 import { MediaBlock } from "@/components/Media";
+import { MediaGrid, StorySections } from "@/components/Story";
 import Reveal from "@/components/Reveal";
-import GlitchText from "@/components/GlitchText";
+import FluidLinkButton from "@/components/FluidLinkButton";
 
 export function generateStaticParams() {
   return routing.locales.flatMap((locale) =>
@@ -32,29 +34,15 @@ export default async function ProjectPage({
   const tp = await getTranslations("Project");
   const next = getAdjacentProject(slug);
 
-  const Section = ({
-    label,
-    body,
-  }: {
-    label: string;
-    body?: Localized;
-  }) =>
-    body ? (
-      <Reveal className="grid grid-cols-1 gap-3 border-t border-hairline py-8 md:grid-cols-[180px_1fr] md:gap-8 md:py-10">
-        <h2 className="mono-label pt-1">{label}</h2>
-        <p className="max-w-2xl text-lg leading-relaxed text-grey-900 md:text-xl">
-          {t(body, locale)}
-        </p>
-      </Reveal>
-    ) : null;
+  const story = resolveStory(project, locale, (k) => tp(k));
 
   return (
     <article>
       {/* ---------------- HEADER ---------------- */}
       <header className="px-5 pt-10 pb-8 md:px-10 md:pt-14 md:pb-10">
-        <Link href="/" className="mono-label transition-colors hover:text-ink">
-          ← <GlitchText text={tp("back")} />
-        </Link>
+        <FluidLinkButton href="/" variant="ghost" size="compact" leadingIcon="arrow-left" className="-ml-2">
+          {tp("back")}
+        </FluidLinkButton>
 
         <div className="mono-label mt-10 flex items-center gap-3">
           <span>
@@ -117,12 +105,11 @@ export default async function ProjectPage({
       </div>
 
       {/* ---------------- STORY ---------------- */}
-      <div className="px-5 pt-12 md:px-10 md:pt-16">
-        <Section label={tp("overview")} body={project.overview} />
-        <Section label={tp("challenge")} body={project.challenge} />
-        <Section label={tp("approach")} body={project.approach} />
-        <Section label={tp("outcome")} body={project.outcome} />
-      </div>
+      {story.length > 0 && (
+        <div className="px-5 pt-12 md:px-10 md:pt-16">
+          <StorySections sections={story} />
+        </div>
+      )}
 
       {/* ---------------- STATS ---------------- */}
       {project.stats && (
@@ -143,19 +130,28 @@ export default async function ProjectPage({
 
       {/* ---------------- GALLERY ---------------- */}
       {project.gallery.length > 0 && (
-        <div className="grid grid-cols-1 gap-4 px-5 py-16 md:grid-cols-2 md:px-10 md:py-24">
-          {project.gallery.map((m, i) => (
-            <Reveal
-              key={i}
-              className={m.span === "full" ? "md:col-span-2" : ""}
-              y={20}
-            >
-              <MediaBlock
-                media={m}
-                sizes={m.span === "full" ? "100vw" : "(max-width: 768px) 100vw, 50vw"}
-              />
-            </Reveal>
-          ))}
+        <div className="px-5 py-16 md:px-10 md:py-24">
+          <MediaGrid media={project.gallery} />
+        </div>
+      )}
+
+      {/* ---------------- BACKSTAGE (long read on Medium) ---------------- */}
+      {project.medium && (
+        <div className="px-5 pb-16 md:px-10">
+          <a
+            href={project.medium}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group flex items-center justify-between gap-6 rounded-xl border border-hairline px-6 py-5 transition-colors duration-80 hover:bg-hover active:bg-active md:px-8 md:py-6"
+          >
+            <span>
+              <span className="mono-label block">The backstage</span>
+              <span className="mt-1 block font-display text-2xl md:text-3xl">
+                The full story, on Medium
+              </span>
+            </span>
+            <ExportSquare aria-hidden color="currentColor" className="size-7 shrink-0 md:size-8" />
+          </a>
         </div>
       )}
 
@@ -170,7 +166,7 @@ export default async function ProjectPage({
             {t(next.title, locale)}
           </div>
         </div>
-        <span className="font-display text-3xl md:text-5xl">→</span>
+        <ArrowRight aria-hidden color="currentColor" className="size-8 shrink-0 md:size-12" />
       </Link>
     </article>
   );

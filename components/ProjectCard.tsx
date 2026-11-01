@@ -38,7 +38,7 @@ export function ProjectCard({
       </div>
 
       <div className="mt-3.5 flex items-baseline justify-between gap-4">
-        <h3 className="grade-hover font-display text-2xl leading-tight md:text-3xl">
+        <h3 className="font-display text-2xl leading-tight md:text-3xl">
           {t(project.title, locale)}
         </h3>
         <span className="mono-label shrink-0 whitespace-nowrap">

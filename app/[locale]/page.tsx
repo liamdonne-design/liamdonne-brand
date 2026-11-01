@@ -1,9 +1,17 @@
-import { getTranslations, setRequestLocale } from "next-intl/server";
-import { projects, t } from "@/content/projects";
+import { setRequestLocale } from "next-intl/server";
 import type { Locale } from "@/i18n/routing";
-import NavToggle from "@/components/NavToggle";
-import FolderDesk, { type DeskProject } from "@/components/FolderDesk";
+import { contactEmail, mediumProfile, socials } from "@/content/about";
+import HomeCards, { CompanyTag } from "@/components/HomeCards";
+import HomeLinks from "@/components/HomeLinks";
+import SiteMark from "@/components/SiteMark";
 
+const linkedin = socials.find((s) => s.label === "LinkedIn")?.href ?? "";
+
+/**
+ * Landing page (Figma "Home", 1440×882): signature + place/year on top, a
+ * three-line intro, the Work / Playground / Info cards, links at the bottom.
+ * The interactive dot field behind comes from the layout.
+ */
 export default async function Home({
   params,
 }: {
@@ -11,47 +19,37 @@ export default async function Home({
 }) {
   const { locale } = await params;
   setRequestLocale(locale);
-  const tp = await getTranslations("Project");
-
-  // Short display tags (1–3, one/two words) shown in the project window
-  const TAGS: Record<string, string[]> = {
-    "synapse-manifestation-event": ["EVENT", "BRANDING"],
-    "synapse-motion-identity": ["MOTION", "BRANDING"],
-    "synapse-medgpt-branding": ["BRANDING", "MOTION", "VISUAL SYSTEM"],
-    "synapse-corporate-refresh": ["BRANDING", "VISUAL SYSTEM"],
-    "cuidam-hearts-event": ["EVENT", "BRANDING", "MOTION"],
-    "cuidam-corporate-branding": ["BRANDING", "VISUAL SYSTEM"],
-  };
-
-  const items: DeskProject[] = projects
-    .filter((p) => p.ready)
-    .map((p) => ({
-      slug: p.slug,
-      index: p.index,
-      client: p.client,
-      title: t(p.title, locale),
-      year: p.year,
-      role: t(p.role, locale),
-      summary: t(p.summary, locale),
-      chips: TAGS[p.slug] ?? [],
-      cover: p.cover,
-      sections: (["overview", "challenge", "approach", "outcome"] as const).flatMap((k) => {
-        const body = p[k];
-        return body ? [{ label: tp(k), body: t(body, locale) }] : [];
-      }),
-      stats: (p.stats ?? []).map((s) => ({ value: s.value, label: t(s.label, locale) })),
-      gallery: p.gallery,
-    }));
 
   return (
-    <div className="relative h-[100dvh] w-full overflow-hidden">
-      {/* Top-right — About / Work toggle */}
-      <div className="absolute right-5 top-4 z-30 md:right-8 md:top-6">
-        <NavToggle />
+    <div className="flex min-h-[100dvh] w-full flex-col items-center px-4 pb-8 pt-8 text-[#1f1f1f]">
+      <header>
+        <SiteMark />
+      </header>
+
+      <div className="flex flex-1 flex-col items-center justify-center gap-[33px] py-12">
+        <h1 className="text-center text-[19px] leading-[1.3] tracking-[-0.02em] sm:text-[24px]">
+          <span className="font-medium text-[#999]">Hey, my name is</span>{" "}
+          <span className="font-semibold">Liam</span>.
+          <br />
+          <span className="font-medium text-[#999]">I’m currently at</span>{" "}
+          <CompanyTag />
+          <br />
+          <span className="font-medium text-[#999]">working as a</span>{" "}
+          <span className="font-semibold">Brand Designer</span>.
+        </h1>
+
+        <HomeCards />
       </div>
 
-      {/* Centre — the GIF + the folder that opens onto the projects */}
-      <FolderDesk items={items} />
+      <footer>
+        <HomeLinks
+          links={[
+            { label: "Email", href: `mailto:${contactEmail}` },
+            { label: "Linkedin", href: linkedin },
+            { label: "Medium", href: mediumProfile },
+          ]}
+        />
+      </footer>
     </div>
   );
 }

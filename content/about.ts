@@ -4,8 +4,8 @@ const L = (en: string, fr?: string): Localized => ({ en, fr: fr ?? en });
 
 export const bio = {
   short: L(
-    "Brand & visual designer with 5+ years of experience living in Bordeaux. Surfboards and sketchbooks are my go-to side gigs. Currently working @Synapse Medicine.",
-    "Designer de marque & visuel avec 5+ ans d'expérience, basé à Bordeaux. Les planches de surf et les carnets de croquis sont mes activités favorites. Actuellement @Synapse Medicine."
+    "Brand & visual designer with 6+ years of experience living in Bordeaux. Surfboards and sketchbooks are my go-to side gigs. Currently working @Synapse Medicine.",
+    "Designer de marque & visuel avec 6+ ans d'expérience, basé à Bordeaux. Les planches de surf et les carnets de croquis sont mes activités favorites. Actuellement @Synapse Medicine."
   ),
   long: [
     L(
@@ -47,11 +47,11 @@ export const tools = [
 ];
 
 export const skills: Localized[] = [
+  L("Health branding", "Branding santé"),
   L("Brand systems", "Systèmes de marque"),
+  L("Motion design"),
   L("Visual identity", "Identité visuelle"),
   L("Creative direction", "Direction créative"),
-  L("Health branding", "Branding santé"),
-  L("Motion design"),
   L("Video storytelling", "Storytelling vidéo"),
   L("Digital campaigns", "Campagnes digitales"),
   L("Generative AI", "IA générative"),
@@ -59,9 +59,24 @@ export const skills: Localized[] = [
   L("Scalable assets", "Assets scalables"),
 ];
 
+/** Brands Liam has worked for (Info page logo wall). `invert` = a white
+ *  logo file, flipped to dark so it reads on the light page. */
+export const clients: { name: string; logo: string; invert?: boolean }[] = [
+  { name: "Synapse Medicine", logo: "/clients/synapse.svg" },
+  { name: "Vocca", logo: "/clients/vocca.svg" },
+  { name: "Hôpital Suburbain du Bouscat", logo: "/clients/hopital-bouscat.png" },
+  { name: "E.Leclerc", logo: "/clients/leclerc.svg" },
+  { name: "Union Bordeaux Bègles", logo: "/clients/ubb.svg" },
+  { name: "Sup de Pub", logo: "/clients/supdepub.svg" },
+  { name: "Wellputt", logo: "/clients/wellputt.png", invert: true },
+  { name: "Billabong", logo: "/clients/billabong.svg" },
+];
+
 export const socials = [
   { label: "LinkedIn", href: "https://www.linkedin.com/in/liam-donne/" },
-  { label: "Instagram", href: "https://www.instagram.com/" },
 ];
 
 export const contactEmail = "liam@synapse-medicine.com";
+
+/** Medium profile — shown on the home footer. */
+export const mediumProfile = "https://medium.com/@liamdonne_59272";

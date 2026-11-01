@@ -2,7 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { contactEmail, socials } from "@/content/about";
-import GlitchText from "./GlitchText";
+import { usePathname } from "@/i18n/navigation";
+import FluidLinkButton from "./FluidLinkButton";
 
 const linkedin = socials.find((s) => s.label === "LinkedIn")?.href ?? "https://www.linkedin.com/";
 
@@ -20,10 +21,12 @@ function Sparkle({ className = "" }: { className?: string }) {
 /**
  * Site-wide contact drawer, Heidi-style: a bookmark tab sitting on a hairline
  * along the bottom edge. Clicking it slides the panel up (LinkedIn, email,
- * ©2026 Liam Donne) and dims the page behind.
+ * ©2026 Liam Donne) and dims the page behind. Not on the home page, which has
+ * its own chat dock.
  */
 export default function ContactTab() {
   const [open, setOpen] = useState(false);
+  const pathname = usePathname();
 
   useEffect(() => {
     if (!open) return;
@@ -33,6 +36,9 @@ export default function ContactTab() {
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [open]);
+
+  // the home, Work and Playground headers already link to Info and contact
+  if (pathname === "/" || pathname === "/work" || pathname === "/playground" || pathname === "/about") return null;
 
   return (
     <>
@@ -92,20 +98,12 @@ export default function ContactTab() {
           </p>
 
           <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
-            <a
-              href={linkedin}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex h-11 items-center gap-2 rounded-lg bg-ink px-5 font-sans text-[15px] font-medium text-paper transition-opacity hover:opacity-85"
-            >
-              <GlitchText text="LinkedIn" /> <span aria-hidden>↗</span>
-            </a>
-            <a
-              href={`mailto:${contactEmail}`}
-              className="flex h-11 items-center gap-2 rounded-lg border border-black/15 px-5 font-sans text-[15px] font-medium text-ink transition-colors hover:border-black/40"
-            >
-              <GlitchText text={contactEmail} />
-            </a>
+            <FluidLinkButton href={linkedin} variant="primary" trailingIcon="arrow-right">
+              LinkedIn
+            </FluidLinkButton>
+            <FluidLinkButton href={`mailto:${contactEmail}`} variant="tertiary" leadingIcon="mail">
+              {contactEmail}
+            </FluidLinkButton>
           </div>
 
           <p className="mono-label mt-10">©2026 Liam Donne</p>

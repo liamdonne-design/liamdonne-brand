@@ -1,4 +1,4 @@
-import { Link } from "@/i18n/navigation";
+import FluidLinkButton from "@/components/FluidLinkButton";
 
 export default function NotFound() {
   return (
@@ -7,12 +7,9 @@ export default function NotFound() {
         404
       </div>
       <p className="mono-label mt-4">page not found</p>
-      <Link
-        href="/"
-        className="mt-8 border border-hairline px-5 py-2.5 font-mono text-[12px] transition-colors hover:bg-ink hover:text-paper"
-      >
-        ← home
-      </Link>
+      <FluidLinkButton href="/" variant="tertiary" leadingIcon="arrow-left" className="mt-8">
+        Back home
+      </FluidLinkButton>
     </div>
   );
 }

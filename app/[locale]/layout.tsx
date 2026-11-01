@@ -1,23 +1,18 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Instrument_Serif } from "next/font/google";
+import { Geist, Geist_Mono } from "next/font/google";
 import { notFound } from "next/navigation";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { getMessages, getTranslations, setRequestLocale } from "next-intl/server";
 import { routing, type Locale } from "@/i18n/routing";
 import Nav from "@/components/Nav";
-import Footer from "@/components/Footer";
+import SiteFooter from "@/components/SiteFooter";
 import ChromeGate from "@/components/ChromeGate";
 import DotField from "@/components/DotField";
-import ContactTab from "@/components/ContactTab";
+import { FluidRoot } from "@/components/fluid-root";
 import "../globals.css";
 
 const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
 const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
-const instrument = Instrument_Serif({
-  variable: "--font-instrument",
-  weight: "400",
-  subsets: ["latin"],
-});
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
@@ -52,20 +47,20 @@ export default async function LocaleLayout({
   return (
     <html
       lang={locale}
-      className={`${geistSans.variable} ${geistMono.variable} ${instrument.variable} h-full`}
+      className={`${geistSans.variable} ${geistMono.variable} h-full`}
     >
       <head>
-        <link rel="preconnect" href="https://use.typekit.net" crossOrigin="" />
-        <link rel="preconnect" href="https://p.typekit.net" crossOrigin="" />
-        <link rel="stylesheet" href="https://use.typekit.net/kjj6fyr.css" />
       </head>
       <body className="flex min-h-full flex-col">
         <NextIntlClientProvider messages={messages}>
-          <DotField />
-          <ChromeGate nav={<Nav />} footer={<Footer />}>
-            <main className="flex-1">{children}</main>
-          </ChromeGate>
-          <ContactTab />
+          {/* Fluid Functionalism settings (shape, size, icons, reduced motion).
+              Light only: no theme provider — the site keeps its own palette. */}
+          <FluidRoot>
+            <DotField />
+            <ChromeGate nav={<Nav />} footer={<SiteFooter />}>
+              <main className="flex-1">{children}</main>
+            </ChromeGate>
+          </FluidRoot>
         </NextIntlClientProvider>
       </body>
     </html>

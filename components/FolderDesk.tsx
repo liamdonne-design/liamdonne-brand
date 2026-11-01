@@ -10,6 +10,7 @@ import {
 import Image from "next/image";
 import { gsap } from "gsap";
 import type { Media } from "@/content/projects";
+import type { ResolvedSection } from "./Story";
 import ProjectModal from "./ProjectModal";
 import Logo from "./Logo";
 
@@ -24,9 +25,10 @@ export type DeskProject = {
   summary: string;
   chips: string[];
   cover: Media;
-  sections: { label: string; body: string }[];
+  story: ResolvedSection[];
   stats: { value: string; label: string }[];
   gallery: Media[];
+  medium?: string;
 };
 
 /* Where each window lands when the folder opens. fx/fy are offsets from the
@@ -53,7 +55,7 @@ const MOBILE: Slot[] = [
 ];
 
 const TOP_SAFE = 112; // keep clear of logo / nav
-const BOTTOM_SAFE = 72; // keep clear of "2026 · Linkedin" / sound / contact tab
+const BOTTOM_SAFE = 150; // keep clear of the chat dock
 const HOLD_MS = 380; // touch: long-press before a window lifts (iPhone-style)
 
 type Geo = {

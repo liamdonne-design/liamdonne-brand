@@ -1,18 +1,15 @@
 "use client";
 
-import { Link, usePathname } from "@/i18n/navigation";
-import GlitchText from "./GlitchText";
+import { usePathname } from "@/i18n/navigation";
+import FluidLinkButton from "./FluidLinkButton";
 
-/** Top-right CTA: "ABOUT" everywhere, becomes "WORK" (→ home) on the About page. */
+/** Top-right CTA: "About" everywhere, becomes "Work" (→ home) on the About page. */
 export default function NavToggle() {
   const pathname = usePathname(); // locale-stripped
   const onAbout = pathname === "/about";
   return (
-    <Link
-      href={onAbout ? "/" : "/about"}
-      className="mono-label transition-colors hover:text-ink"
-    >
-      <GlitchText text={onAbout ? "WORK" : "ABOUT"} />
-    </Link>
+    <FluidLinkButton href={onAbout ? "/" : "/about"} variant="ghost" size="compact">
+      {onAbout ? "Work" : "About"}
+    </FluidLinkButton>
   );
 }

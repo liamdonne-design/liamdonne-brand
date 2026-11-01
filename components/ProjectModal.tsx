@@ -3,9 +3,10 @@
 import { useCallback, useEffect, useLayoutEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import { gsap } from "gsap";
-import { Link } from "@/i18n/navigation";
+import { Button } from "@/components/ui/button";
 import { MediaBlock } from "./Media";
-import GlitchText from "./GlitchText";
+import { MediaGrid, StorySections } from "./Story";
+import FluidLinkButton from "./FluidLinkButton";
 import type { DeskProject } from "./FolderDesk";
 
 /**
@@ -110,14 +111,9 @@ export default function ProjectModal({
           <span className="pointer-events-none absolute inset-x-24 truncate text-center font-sans text-[13px] text-[#3A3D42]">
             {fileName}
           </span>
-          <button
-            ref={closeRef}
-            type="button"
-            onClick={close}
-            className="mono-label ml-auto rounded-md px-2 py-1 transition-colors hover:bg-black/5 hover:text-ink"
-          >
-            <GlitchText text="CLOSE" />
-          </button>
+          <Button ref={closeRef} variant="ghost" size="compact" onClick={close} className="ml-auto">
+            Close
+          </Button>
         </div>
 
         {/* content */}
@@ -156,17 +152,9 @@ export default function ProjectModal({
             <MediaBlock media={project.cover} sizes="(max-width: 1080px) 100vw, 1000px" className="rounded-lg" />
           </div>
 
-          {project.sections.length > 0 && (
+          {project.story.length > 0 && (
             <div className="px-5 pt-10 md:px-10">
-              {project.sections.map((s) => (
-                <section
-                  key={s.label}
-                  className="grid grid-cols-1 gap-3 border-t border-hairline py-7 md:grid-cols-[160px_1fr] md:gap-8"
-                >
-                  <h3 className="mono-label pt-1">{s.label}</h3>
-                  <p className="max-w-2xl text-lg leading-relaxed text-grey-900">{s.body}</p>
-                </section>
-              ))}
+              <StorySections sections={project.story} />
             </div>
           )}
 
@@ -182,29 +170,23 @@ export default function ProjectModal({
           )}
 
           {project.gallery.length > 0 && (
-            <div className="grid grid-cols-1 gap-3 px-5 py-10 md:grid-cols-2 md:px-10">
-              {project.gallery.map((m, i) => (
-                <div key={i} className={m.span === "full" ? "md:col-span-2" : ""}>
-                  <MediaBlock
-                    media={m}
-                    sizes={m.span === "full" ? "1000px" : "(max-width: 768px) 100vw, 500px"}
-                    className="rounded-lg"
-                  />
-                </div>
-              ))}
+            <div className="px-5 py-10 md:px-10">
+              <MediaGrid media={project.gallery} />
             </div>
           )}
 
-          <div className="flex items-center justify-between gap-4 border-t border-hairline px-5 py-6 md:px-10">
-            <Link
-              href={`/work/${project.slug}`}
-              className="mono-label transition-colors hover:text-ink"
-            >
-              <GlitchText text="Full case study" /> →
-            </Link>
-            <button type="button" onClick={close} className="mono-label transition-colors hover:text-ink">
-              <GlitchText text="CLOSE" />
-            </button>
+          <div className="flex flex-wrap items-center gap-2 border-t border-hairline px-5 py-6 md:px-10">
+            <FluidLinkButton href={`/work/${project.slug}`} variant="primary" trailingIcon="arrow-right">
+              Full case study
+            </FluidLinkButton>
+            {project.medium && (
+              <FluidLinkButton href={project.medium} variant="ghost">
+                Backstage on Medium
+              </FluidLinkButton>
+            )}
+            <Button variant="tertiary" onClick={close} className="ml-auto">
+              Close
+            </Button>
           </div>
         </div>
       </div>

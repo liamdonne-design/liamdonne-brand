@@ -45,3 +45,11 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# case-study drafts and interview notes (internal Synapse material)
+/drafts
+
+# client source files and raw renders (not part of the site; web copies live in public/)
+/Vocca
+/Ann*e du cheval 2026 chinois.mp4
+/exports

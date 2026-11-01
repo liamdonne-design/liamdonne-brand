@@ -1,4 +1,7 @@
 import type { Locale } from "@/i18n/routing";
+import { medgptStory } from "./stories/medgpt";
+import { motionStory } from "./stories/motion";
+import { refreshStory } from "./stories/refresh";
 
 export type MediaType = "image" | "video";
 
@@ -10,8 +13,15 @@ export type Media = {
   /** aspect ratio "w/h" used to reserve layout space */
   ratio?: string;
   caption?: Localized;
-  /** layout width on desktop grid: "full" (default) or "half" */
-  span?: "full" | "half";
+  /** layout width on desktop grid: "full" (default), "half" or "third" */
+  span?: "full" | "half" | "third";
+};
+
+/** One titled part of a long-form case study, with the visuals that follow it. */
+export type StorySection = {
+  title: Localized;
+  body: Localized[]; // paragraphs
+  media?: Media[];
 };
 
 /** A string available in both languages. */
@@ -31,6 +41,10 @@ export type Project = {
   approach?: Localized;
   outcome?: Localized;
   stats?: { value: string; label: Localized }[];
+  /** long-form case study; when set it replaces overview/challenge/approach/outcome + gallery */
+  story?: StorySection[];
+  /** link to the long-form "backstage" article on Medium (shown when set) */
+  medium?: string;
   cover: Media;
   gallery: Media[];
   /** true when real assets are wired up; false = placeholder */
@@ -58,6 +72,7 @@ const rawProjects: Project[] = [
       "Un langage de motion vivant pour une plateforme d'IA médicale."
     ),
     cover: { type: "video", src: "/work/synapse-motion-identity/cover.mp4", ratio: "1440/852" },
+    story: motionStory,
     gallery: [],
     ready: true,
   },
@@ -78,46 +93,15 @@ const rawProjects: Project[] = [
       "Branding a medical AI assistant to feel rigorous, sovereign and trustworthy.",
       "Une identité pour un assistant d'IA médicale : rigueur, souveraineté et confiance."
     ),
-    overview: L(
-      "MedGPT is an AI assistant designed to support healthcare professionals in clinical decision-making. Developed by Synapse Medicine as a standalone product, it launched in a highly sensitive context where AI, trust and medical rigor intersect.",
-      "MedGPT est un assistant d'IA conçu pour accompagner les professionnels de santé dans la décision clinique. Développé par Synapse Medicine comme produit à part entière, il a été lancé dans un contexte sensible, à la croisée de l'IA, de la confiance et de la rigueur médicale."
-    ),
-    challenge: L(
-      "Introduce a tool that clearly differentiates itself from generalist AI solutions, while reassuring physicians about reliability, sovereignty and scientific credibility.",
-      "Introduire un outil qui se distingue clairement des solutions d'IA généralistes, tout en rassurant les médecins sur la fiabilité, la souveraineté et la crédibilité scientifique."
-    ),
-    approach: L(
-      "I led the creative direction and visual identity of MedGPT, working closely with product teams to build a coherent brand and product system, and oversaw launch assets across motion, web, social and physical touchpoints. The visual system draws from familiar medical codes — millimeter grids, structured text blocks inspired by healthcare forms and a restrained tricolor gradient — creating an environment that feels professional and reassuring. Typography and motion express the balance between scientific rigor and modern technology.",
-      "J'ai dirigé la direction créative et l'identité visuelle de MedGPT, en étroite collaboration avec les équipes produit pour bâtir un système de marque et de produit cohérent, et j'ai supervisé les assets de lancement en motion, web, social et supports physiques. Le système visuel puise dans des codes médicaux familiers — papier millimétré, blocs de texte inspirés des feuilles de soins et un dégradé tricolore mesuré — pour créer un environnement professionnel et rassurant. La typographie et le motion expriment l'équilibre entre rigueur scientifique et modernité technologique."
-    ),
-    outcome: L(
-      "The launch combined digital communication with strong field activation — a product launch video, social templates, newsletters, press visibility and guerilla marketing in medical universities and specialized bookstores.",
-      "Le lancement a combiné communication digitale et activation terrain — vidéo de lancement, templates social, newsletters, visibilité presse et marketing guérilla dans les facultés de médecine et les librairies spécialisées."
-    ),
     stats: [
       { value: "+20k", label: L("video views", "vues vidéo") },
-      { value: "+110k", label: L("social impressions", "impressions social") },
+      { value: "+108k", label: L("social impressions", "impressions social") },
       { value: "25", label: L("press articles", "articles de presse") },
       { value: "+21.5k", label: L("visitors in month one", "visiteurs le premier mois") },
     ],
     cover: { type: "video", src: "/work/medgpt/cover.mp4", ratio: "16/9" },
-    gallery: [
-      { type: "image", src: "/work/medgpt/01.jpg", ratio: "1080/1373", span: "half" },
-      { type: "image", src: "/work/medgpt/02.jpg", ratio: "1080/1373", span: "half" },
-      { type: "video", src: "/work/medgpt/03.mp4", ratio: "16/9", span: "full" },
-      { type: "image", src: "/work/medgpt/04.jpg", ratio: "4/3", span: "full" },
-      { type: "video", src: "/work/medgpt/05.mp4", ratio: "16/9", span: "half" },
-      { type: "video", src: "/work/medgpt/06.mp4", ratio: "16/9", span: "half" },
-      { type: "image", src: "/work/medgpt/07.jpg", ratio: "2098/1373", span: "full" },
-      { type: "image", src: "/work/medgpt/08.jpg", ratio: "4/3", span: "half" },
-      { type: "image", src: "/work/medgpt/09.jpg", ratio: "4/3", span: "half" },
-      { type: "image", src: "/work/medgpt/10.jpg", ratio: "4/3", span: "full" },
-      { type: "image", src: "/work/medgpt/11.jpg", ratio: "4/3", span: "half" },
-      { type: "image", src: "/work/medgpt/12.jpg", ratio: "4/3", span: "half" },
-      { type: "image", src: "/work/medgpt/13.jpg", ratio: "2000/1029", span: "full" },
-      { type: "image", src: "/work/medgpt/14.jpg", ratio: "4/3", span: "half" },
-      { type: "image", src: "/work/medgpt/15.jpg", ratio: "4/3", span: "half" },
-    ],
+    story: medgptStory,
+    gallery: [],
     ready: true,
   },
   {
@@ -132,7 +116,14 @@ const rawProjects: Project[] = [
       "Modernizing a health-tech brand for clarity and trust at scale.",
       "Moderniser une marque health-tech pour la clarté et la confiance à grande échelle."
     ),
+    stats: [
+      { value: "40+", label: L("colleagues surveyed in 2 days", "collègues interrogés en 2 jours") },
+      { value: "6/7", label: L("votes for the chosen route", "votes pour la piste retenue") },
+      { value: "3", label: L("product suites, one colour each", "suites produit, une couleur chacune") },
+      { value: "50–100", label: L("people using the self-service tools", "personnes utilisant les outils self-service") },
+    ],
     cover: { type: "image", src: "/work/synapse-corporate-refresh/cover.jpg", ratio: "1400/720" },
+    story: refreshStory,
     gallery: [],
     ready: true,
   },
@@ -158,7 +149,7 @@ const rawProjects: Project[] = [
     client: "Cuidam",
     title: L("Cuidam Hearts"),
     role: L("Founding Designer", "Designer fondateur"),
-    year: "2022",
+    year: "2023",
     tags: [L("Event branding", "Identité d'événement"), L("Visual identity", "Identité visuelle"), L("Campaign", "Campagne")],
     summary: L(
       "An event identity with heart, from invite to stage.",
@@ -196,6 +187,28 @@ const rawProjects: Project[] = [
 export const projects: Project[] = [...rawProjects]
   .sort((a, b) => Number(b.year) - Number(a.year))
   .map((p, i) => ({ ...p, index: String(i + 1).padStart(2, "0") }));
+
+/**
+ * A project's case study as plain, locale-resolved sections: the long-form
+ * `story` when there is one, otherwise the short overview/challenge/approach/
+ * outcome blocks (labels come from the caller's translations).
+ */
+export function resolveStory(
+  p: Project,
+  locale: Locale,
+  label: (k: "overview" | "challenge" | "approach" | "outcome") => string
+): { title: string; paras: string[]; media: Media[] }[] {
+  if (p.story)
+    return p.story.map((s) => ({
+      title: t(s.title, locale),
+      paras: s.body.map((b) => t(b, locale)),
+      media: s.media ?? [],
+    }));
+  return (["overview", "challenge", "approach", "outcome"] as const).flatMap((k) => {
+    const body = p[k];
+    return body ? [{ title: label(k), paras: [t(body, locale)], media: [] }] : [];
+  });
+}
 
 export function getProject(slug: string): Project | undefined {
   return projects.find((p) => p.slug === slug);
