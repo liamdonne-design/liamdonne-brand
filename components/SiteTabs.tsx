@@ -6,7 +6,6 @@ import { FluidHoverHighlight } from "@/components/fluid-hover-highlight";
 import { useFluidHover, useRegisterFluidHoverItem } from "@/hooks/use-fluid-hover";
 
 const TABS = [
-  { label: "Home", href: "/" },
   { label: "Work", href: "/work" },
   { label: "Playground", href: "/playground" },
   { label: "Info", href: "/about" },
@@ -42,7 +41,7 @@ function Tab({
 }
 
 /**
- * Home / Work / Playground / Info tabs (Figma "Work" page). The current section sits
+ * Work / Playground / Info tabs (Figma "Work" page). The current section sits
  * on a grey pill; a Fluid hover highlight glides between tabs under the cursor.
  */
 export default function SiteTabs() {
@@ -60,7 +59,7 @@ export default function SiteTabs() {
             registerItem={hover.registerItem}
             href={t.href}
             label={t.label}
-            active={t.href === "/" ? pathname === "/" : pathname === t.href || pathname.startsWith(`${t.href}/`)}
+            active={pathname === t.href || pathname.startsWith(`${t.href}/`)}
           />
         ))}
       </div>
