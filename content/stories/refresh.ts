@@ -11,13 +11,6 @@ const M = "/work/synapse-motion-identity";
 
 export const refreshStory: StorySection[] = [
   {
-    title: p("Overview"),
-    body: [
-      p("By 2024, Synapse Medicine had become an AI and data company, with new products, new markets and acquisitions. Its brand still looked like the start-up it used to be, and there were no brand guidelines."),
-      p("The job: make the brand scalable, turn one brand into a family of product brands, and speak to both the software publishers who integrate Synapse and the healthcare professionals who use it."),
-    ],
-  },
-  {
     title: p("My role"),
     body: [
       p("Sole brand designer, from May 2024 to the official launch in March 2025.\nI wrote the brief, ran the research, designed the identity, the brand book and the website (content and copy by Victoire, Product Marketing Manager)."),

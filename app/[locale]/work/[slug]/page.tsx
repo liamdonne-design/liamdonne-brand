@@ -9,11 +9,11 @@ import {
   projects,
   resolveStory,
   t,
+  type Localized,
 } from "@/content/projects";
 import { MediaBlock } from "@/components/Media";
-import { MediaGrid, StorySections } from "@/components/Story";
+import { MediaGrid, Paragraphs, StorySections } from "@/components/Story";
 import Reveal from "@/components/Reveal";
-import FluidLinkButton from "@/components/FluidLinkButton";
 
 export function generateStaticParams() {
   return routing.locales.flatMap((locale) =>
@@ -21,6 +21,29 @@ export function generateStaticParams() {
   );
 }
 
+const LABEL = "font-mono text-[11px] uppercase tracking-[0.14em] text-[#999]";
+
+/** One header fact: a mono label over a stack of lines. */
+function Fact({ label, lines }: { label: string; lines: string[] }) {
+  return (
+    <div>
+      <dt className={LABEL}>{label}</dt>
+      <dd className="mt-3 text-[15px] leading-[1.45] text-[#1f1f1f]">
+        {lines.map((l) => (
+          <span key={l} className="block">
+            {l}
+          </span>
+        ))}
+      </dd>
+    </div>
+  );
+}
+
+/**
+ * Case study: title top-left, then Role / Scope / Industry / Type, one big
+ * visual that sums the project up, the overview, and the story section by
+ * section (mono label left, text right, visuals under it).
+ */
 export default async function ProjectPage({
   params,
 }: {
@@ -33,140 +56,101 @@ export default async function ProjectPage({
 
   const tp = await getTranslations("Project");
   const next = getAdjacentProject(slug);
-
-  const story = resolveStory(project, locale, (k) => tp(k));
+  const story = resolveStory(project, locale);
+  const lines = (xs: Localized[]) => xs.map((x) => t(x, locale));
 
   return (
-    <article>
+    <article className="mx-auto w-full max-w-[1376px] px-4 pt-[64px] sm:px-[71px] md:pt-[88px]">
       {/* ---------------- HEADER ---------------- */}
-      <header className="px-5 pt-10 pb-8 md:px-10 md:pt-14 md:pb-10">
-        <FluidLinkButton href="/" variant="ghost" size="compact" leadingIcon="arrow-left" className="-ml-2">
-          {tp("back")}
-        </FluidLinkButton>
-
-        <div className="mono-label mt-10 flex items-center gap-3">
-          <span>
-            {tp("index")} {project.index}
-          </span>
-          <span className="text-grey-400">/</span>
-          <span>{project.client}</span>
-        </div>
-
-        <h1 className="display-lg mt-4">{t(project.title, locale)}</h1>
-        <p className="mt-5 max-w-xl text-lg text-grey-600 md:text-xl">
-          {t(project.summary, locale)}
-        </p>
-
-        <dl className="mt-10 flex flex-wrap gap-x-14 gap-y-6 border-t border-hairline pt-6">
-          <div>
-            <dt className="mono-label">{tp("client")}</dt>
-            <dd className="mt-1.5 text-base">{project.client}</dd>
-          </div>
-          <div>
-            <dt className="mono-label">{tp("role")}</dt>
-            <dd className="mt-1.5 max-w-[16rem] text-base">
-              {t(project.role, locale)}
-            </dd>
-          </div>
-          <div>
-            <dt className="mono-label">{tp("year")}</dt>
-            <dd className="mt-1.5 text-base">{project.year}</dd>
-          </div>
-          <div className="min-w-0">
-            <dt className="mono-label">Tags</dt>
-            <dd className="mt-1.5 flex flex-wrap gap-2">
-              {project.tags.map((tag) => (
-                <span
-                  key={tag.en}
-                  className="rounded-sm bg-grey-200 px-2 py-0.5 font-mono text-[11px] uppercase tracking-wide"
-                >
-                  {t(tag, locale)}
-                </span>
-              ))}
-            </dd>
-          </div>
+      <header>
+        <h1 className="text-[40px] font-medium leading-[1.05] tracking-[-0.04em] text-[#1f1f1f] md:text-[52px]">
+          {t(project.title, locale)}
+        </h1>
+        <dl className="mt-8 grid grid-cols-2 gap-x-8 gap-y-8 border-t border-black/10! pt-8 md:grid-cols-4">
+          <Fact label={tp("role")} lines={[t(project.role, locale), project.year]} />
+          <Fact label="Scope" lines={lines(project.scope)} />
+          <Fact label="Industry" lines={lines(project.industry)} />
+          <Fact label="Type" lines={lines(project.kind)} />
         </dl>
       </header>
 
-      {/* ---------------- COVER ---------------- */}
-      <div className="px-5 md:px-10">
-        {project.ready ? (
-          <MediaBlock media={project.cover} priority sizes="100vw" />
-        ) : (
-          <div
-            className="mm-grid flex items-center justify-center border border-hairline"
-            style={{ aspectRatio: "16 / 9" }}
-          >
-            <span className="select-none font-display text-[28vw] leading-none text-grey-200 md:text-[16vw]">
-              {project.index}
-            </span>
-          </div>
-        )}
+      {/* ---------------- HERO ---------------- */}
+      <div className="mt-10 md:mt-14">
+        <MediaBlock
+          media={{ ...(project.hero ?? project.cover), ratio: (project.hero ?? project.cover).ratio ?? "16/9" }}
+          priority
+          sizes="100vw"
+          className="rounded-[12px]"
+        />
       </div>
 
-      {/* ---------------- STORY ---------------- */}
-      {story.length > 0 && (
-        <div className="px-5 pt-12 md:px-10 md:pt-16">
-          <StorySections sections={story} />
+      {/* ---------------- OVERVIEW ---------------- */}
+      <section className="grid grid-cols-1 gap-4 py-14 md:grid-cols-[1fr_2fr] md:gap-8 md:py-20">
+        <h2 className={LABEL}>{tp("overview")}</h2>
+        <div className="max-w-[640px]">
+          <p className="text-[28px] font-medium leading-[1.15] tracking-[-0.03em] text-[#1f1f1f] md:text-[36px]">
+            {t(project.overview.headline, locale)}
+          </p>
+          <Paragraphs className="mt-6" paras={project.overview.body.map((b) => t(b, locale))} />
         </div>
-      )}
+      </section>
 
       {/* ---------------- STATS ---------------- */}
       {project.stats && (
-        <Reveal className="mx-5 mt-6 border-y border-hairline md:mx-10">
-          <dl className="grid grid-cols-2 md:grid-cols-4">
+        <Reveal className="border-t border-black/10! py-12 md:py-16">
+          <dl className="grid grid-cols-2 gap-y-10 md:grid-cols-4">
             {project.stats.map((s, i) => (
-              <div
-                key={i}
-                className="border-hairline p-6 [&:nth-child(odd)]:border-r md:border-r md:last:border-r-0 md:[&:nth-child(2)]:border-r"
-              >
-                <dt className="font-display text-4xl md:text-6xl">{s.value}</dt>
-                <dd className="mono-label mt-2">{t(s.label, locale)}</dd>
+              <div key={i}>
+                <dt className="text-[40px] font-medium leading-none tracking-[-0.04em] text-[#1f1f1f] md:text-[56px]">
+                  {s.value}
+                </dt>
+                <dd className="mt-3 text-[14px] text-[#999]">{t(s.label, locale)}</dd>
               </div>
             ))}
           </dl>
         </Reveal>
       )}
 
+      {/* ---------------- STORY ---------------- */}
+      {story.length > 0 && <StorySections sections={story} />}
+
       {/* ---------------- GALLERY ---------------- */}
       {project.gallery.length > 0 && (
-        <div className="px-5 py-16 md:px-10 md:py-24">
+        <div className="py-16">
           <MediaGrid media={project.gallery} />
         </div>
       )}
 
       {/* ---------------- BACKSTAGE (long read on Medium) ---------------- */}
       {project.medium && (
-        <div className="px-5 pb-16 md:px-10">
-          <a
-            href={project.medium}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="group flex items-center justify-between gap-6 rounded-xl border border-hairline px-6 py-5 transition-colors duration-80 hover:bg-hover active:bg-active md:px-8 md:py-6"
-          >
-            <span>
-              <span className="mono-label block">The backstage</span>
-              <span className="mt-1 block font-display text-2xl md:text-3xl">
-                The full story, on Medium
-              </span>
+        <a
+          href={project.medium}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="mb-16 flex items-center justify-between gap-6 rounded-[12px] bg-[var(--ui-chip)] px-6 py-5 transition-colors duration-300 hover:bg-[#dcdcdc] md:px-8 md:py-6"
+        >
+          <span>
+            <span className={`${LABEL} block`}>The backstage</span>
+            <span className="mt-1 block text-[22px] font-medium tracking-[-0.03em] md:text-[28px]">
+              The full story, on Medium
             </span>
-            <ExportSquare aria-hidden color="currentColor" className="size-7 shrink-0 md:size-8" />
-          </a>
-        </div>
+          </span>
+          <ExportSquare aria-hidden color="currentColor" className="size-7 shrink-0" />
+        </a>
       )}
 
       {/* ---------------- NEXT ---------------- */}
       <Link
         href={`/work/${next.slug}`}
-        className="group flex items-center justify-between border-t border-hairline px-5 py-10 md:px-10 md:py-16"
+        className="group flex items-center justify-between border-t border-black/10! py-12 md:py-16"
       >
         <div>
-          <div className="mono-label">{tp("next")}</div>
-          <div className="font-display text-3xl transition-opacity group-hover:opacity-50 md:text-5xl">
+          <div className={LABEL}>{tp("next")}</div>
+          <div className="mt-2 text-[32px] font-medium tracking-[-0.04em] text-[#1f1f1f] transition-opacity duration-300 group-hover:opacity-50 md:text-[48px]">
             {t(next.title, locale)}
           </div>
         </div>
-        <ArrowRight aria-hidden color="currentColor" className="size-8 shrink-0 md:size-12" />
+        <ArrowRight aria-hidden color="currentColor" className="size-8 shrink-0 transition-transform duration-300 group-hover:translate-x-1 md:size-10" />
       </Link>
     </article>
   );

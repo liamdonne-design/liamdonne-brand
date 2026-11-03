@@ -14,11 +14,8 @@ const v = (n: number, ratio: string, span?: Media["span"]): Media => ({
 
 export const motionStory: StorySection[] = [
   {
-    title: p("Overview"),
-    body: [
-      p("The Synapse Medicine Motion Identity System is a foundational layer of the brand, designed to bring clarity, consistency, and meaning to every animated interaction. Built at the crossroads of healthcare, technology, and AI, the system transforms motion into a functional language—one that supports understanding, guides attention, and reinforces trust in high-stakes medical environments."),
-      p("Rather than treating animation as a decorative element, this project positions motion as a strategic tool. Each movement is designed to simplify complexity, reduce cognitive load, and express Synapse’s vision of a modern, reliable, and human-centered healthcare ecosystem."),
-    ],
+    title: p("The system"),
+    body: [],
     media: [
       v(1, "16/9"),
       v(2, "1/1", "third"),

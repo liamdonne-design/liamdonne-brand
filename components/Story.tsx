@@ -6,26 +6,31 @@ import { MediaBlock } from "./Media";
 export type ResolvedSection = { title: string; paras: string[]; media: Media[] };
 
 const SPAN = {
-  full: "md:col-span-6",
-  half: "md:col-span-3",
-  third: "md:col-span-2",
+  full: "md:col-span-12",
+  half: "md:col-span-6",
+  third: "md:col-span-4",
+  quarter: "md:col-span-3",
 } as const;
 
 const SIZES = {
   full: "(max-width: 768px) 100vw, 1400px",
   half: "(max-width: 768px) 100vw, 700px",
   third: "(max-width: 768px) 100vw, 470px",
+  quarter: "(max-width: 768px) 100vw, 350px",
 } as const;
 
-/** Visuals on a 6-column grid: full / half / third width on desktop, stacked on mobile. */
+/** Visuals on a 12-column grid: full / half / third / quarter width on desktop, stacked on mobile. */
 export function MediaGrid({ media }: { media: Media[] }) {
   return (
-    <div className="grid grid-cols-1 gap-3 md:grid-cols-6">
+    <div className="grid grid-cols-1 gap-3 md:grid-cols-12">
       {media.map((m, i) => {
         const span = m.span ?? "full";
         return (
           <div key={`${m.src}-${i}`} className={SPAN[span]}>
             <MediaBlock media={m} sizes={SIZES[span]} className="rounded-lg" />
+            {m.caption && (
+              <p className="mt-2 font-mono text-[11px] uppercase tracking-[0.14em] text-[#999]">{m.caption.en}</p>
+            )}
           </div>
         );
       })}
@@ -58,9 +63,16 @@ function inline(text: string): ReactNode {
 function Block({ text }: { text: string }) {
   if (text.startsWith("> "))
     return (
-      <blockquote className="my-2 border-l-2 border-ink pl-5 font-display text-2xl leading-snug text-ink md:text-[1.7rem]">
+      <blockquote className="my-2 font-display text-[26px] leading-[1.2] text-[#1f1f1f] md:text-[32px]">
         {inline(text.slice(2))}
       </blockquote>
+    );
+  // "[Liam — …]": copy still to write, shown as a note until it is
+  if (text.startsWith("[") && text.endsWith("]"))
+    return (
+      <p className="rounded-[8px] bg-[#ebebeb] px-4 py-3 font-mono text-[12px] leading-[1.5] text-[#6b6b68]">
+        {text.slice(1, -1)}
+      </p>
     );
   const lines = text.split("\n");
   const parts: ReactNode[] = [];
@@ -106,23 +118,30 @@ function Block({ text }: { text: string }) {
   return <div>{parts}</div>;
 }
 
-/** Sections as in Liam's layouts: short label on the left, text on the right, then the visuals. */
+/** A run of story blocks in the case-study body style. */
+export function Paragraphs({ paras, className = "" }: { paras: string[]; className?: string }) {
+  return (
+    <div className={`max-w-[640px] space-y-5 text-[17px] leading-[1.6] text-[#1f1f1f] ${className}`}>
+      {paras.map((para, i) => (
+        <Block key={i} text={para} />
+      ))}
+    </div>
+  );
+}
+
+/** Sections as on the case-study page: mono label on the left, text on the right, then the visuals. */
 export function StorySections({ sections }: { sections: ResolvedSection[] }) {
   return (
     <>
       {sections.map((s, idx) => (
-        <section key={`${s.title}-${idx}`} className="border-t border-hairline py-10 md:py-14">
-          <div className="grid grid-cols-1 gap-3 md:grid-cols-[200px_1fr] md:gap-8">
+        <section key={`${s.title}-${idx}`} className="border-t border-black/10! py-12 md:py-16">
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-[1fr_2fr] md:gap-8">
             {s.title ? (
-              <h3 className="font-display text-xl leading-tight text-grey-600">{s.title}</h3>
+              <h3 className="font-mono text-[11px] uppercase tracking-[0.14em] text-[#999]">{s.title}</h3>
             ) : (
               <div aria-hidden />
             )}
-            <div className="max-w-2xl space-y-5 text-lg leading-relaxed text-grey-900">
-              {s.paras.map((para, i) => (
-                <Block key={i} text={para} />
-              ))}
-            </div>
+            {s.paras.length > 0 && <Paragraphs paras={s.paras} />}
           </div>
           {s.media.length > 0 && (
             <div className="mt-10">
