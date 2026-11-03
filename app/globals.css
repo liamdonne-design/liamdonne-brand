@@ -1177,3 +1177,8 @@ body {
   background: var(--ui-bg);
   filter: blur(10px);
 }
+
+/* A still that turns on itself (the UBB badge on the Playground story). */
+@keyframes ui-spin {
+  to { transform: rotate(360deg); }
+}

@@ -17,7 +17,6 @@ export const motionStory: StorySection[] = [
     title: p("The system"),
     body: [],
     media: [
-      v(1, "16/9"),
       v(2, "1/1", "third"),
       v(3, "1/1", "third"),
       v(4, "1/1", "third"),

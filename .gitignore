@@ -53,3 +53,6 @@ next-env.d.ts
 /Vocca
 /Ann*e du cheval 2026 chinois.mp4
 /exports
+
+# agent skills installed locally (stageshow) and their node_modules
+/.agents

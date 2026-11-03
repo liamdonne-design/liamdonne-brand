@@ -13,13 +13,22 @@ export const refreshStory: StorySection[] = [
   {
     title: p("My role"),
     body: [
-      p("Sole brand designer, from May 2024 to the official launch in March 2025.\nI wrote the brief, ran the research, designed the identity, the brand book and the website (content and copy by Victoire, Product Marketing Manager)."),
+      p("Sole brand designer, from May 2024 to the official launch in March 2025.\nI wrote the brief, ran the research, designed the identity, the brand book and the website (content and copy by the product marketing manager)."),
     ],
+    media: [{ type: "image", src: `${R}/laptop.jpg`, ratio: "2000/1500" }],
   },
   {
     title: p("Research"),
     body: [
       p("- **Brand audit:** three surveys (employees in France and the US, clients and partners, end users). 40+ colleagues answered in two days; clients rated the brand 8.25/10 but still saw a start-up.\n- **Workshops** to define the brand core: purpose, values, personality.\n- **Three creative routes**, presented as a short video and a feedback form. *The Shapes of Life* took 6 of 7 votes; the CEO chose it."),
+    ],
+    media: [
+      {
+        type: "placeholder",
+        src: "",
+        ratio: "16/9",
+        note: "The research: a few survey results, the brand-persona workshop boards, and the three creative routes side by side.",
+      },
     ],
   },
   {

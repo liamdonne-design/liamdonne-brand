@@ -1,5 +1,5 @@
 import { Fragment, type ReactNode } from "react";
-import type { Media } from "@/content/projects";
+import { VISUAL_TO_COME, type Media } from "@/content/projects";
 import { MediaBlock } from "./Media";
 
 /** A case-study section with locale already resolved (plain strings). */
@@ -129,27 +129,49 @@ export function Paragraphs({ paras, className = "" }: { paras: string[]; classNa
   );
 }
 
+const HEADLINE = "block max-w-[320px] text-[22px] font-medium leading-[1.2] tracking-[-0.03em] text-[#1f1f1f]";
+
+/**
+ * Section titles read as small headlines (the Medium article's own titles).
+ * A "Topic—Line" title puts the topic above as a mono label.
+ */
+function SectionTitle({ title }: { title: string }) {
+  const [topic, line] = title.includes("—") ? title.split("—") : [null, title];
+  return (
+    <h3 className="ui-haze-box self-start">
+      {topic && (
+        <span className="mb-2 block font-mono text-[11px] uppercase tracking-[0.14em] text-[#999]">{topic}</span>
+      )}
+      <span className={HEADLINE}>{line}</span>
+    </h3>
+  );
+}
+
 /** Sections as on the case-study page: mono label on the left, text on the right, then the visuals. */
 export function StorySections({ sections }: { sections: ResolvedSection[] }) {
   return (
     <>
-      {sections.map((s, idx) => (
-        <section key={`${s.title}-${idx}`} className="border-t border-black/10! py-12 md:py-16">
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-[1fr_2fr] md:gap-8">
-            {s.title ? (
-              <h3 className="ui-haze w-fit self-start font-mono text-[11px] uppercase tracking-[0.14em] text-[#999]">{s.title}</h3>
-            ) : (
-              <div aria-hidden />
+      {sections.map((s, idx) => {
+        // never two blocks of text in a row: a section without visuals gets a
+        // grey stand-in, except the last one (the page moves on to other things)
+        const media = s.media.length > 0 || idx === sections.length - 1 ? s.media : [VISUAL_TO_COME];
+        return (
+          <section key={`${s.title}-${idx}`} className="border-t border-black/10! py-12 md:py-16">
+            {/* a section with neither title nor text is a run of visuals on its own */}
+            {(s.title || s.paras.length > 0) && (
+              <div className="mb-10 grid grid-cols-1 gap-4 md:grid-cols-[1fr_2fr] md:gap-8">
+                {s.title ? <SectionTitle title={s.title} /> : <div aria-hidden />}
+                {s.paras.length > 0 && <Paragraphs paras={s.paras} />}
+              </div>
             )}
-            {s.paras.length > 0 && <Paragraphs paras={s.paras} />}
-          </div>
-          {s.media.length > 0 && (
-            <div className="mt-10">
-              <MediaGrid media={s.media} />
-            </div>
-          )}
-        </section>
-      ))}
+            {media.length > 0 && (
+              <div>
+                <MediaGrid media={media} />
+              </div>
+            )}
+          </section>
+        );
+      })}
     </>
   );
 }

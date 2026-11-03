@@ -82,8 +82,10 @@ export default async function AboutPage({
   return (
     <div className="mx-auto flex w-full max-w-[775px] flex-col items-center px-5 pb-8 pt-16 text-[#1f1f1f]">
       {/* animated GIF: plain img keeps the animation */}
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src="/home/info.gif" alt="Liam Donne" width={131} height={131} className="size-[110px] mix-blend-multiply sm:size-[131px]" />
+      <div className="ui-haze-box">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="/home/info.gif" alt="Liam Donne" width={131} height={131} className="size-[110px] mix-blend-multiply sm:size-[131px]" />
+      </div>
 
       <LitText
         paragraphs={INTRO}

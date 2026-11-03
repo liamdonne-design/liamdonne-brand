@@ -51,12 +51,20 @@ export const medgptFilmStory: StorySection[] = [
     body: [
       p("“By Synapse Medicine” appears in the film’s outro and in the website footer, and nowhere else prominent. MedGPT stands on its own; the parent brand is there as a credential, not a headline."),
     ],
+    media: [
+      {
+        type: "placeholder",
+        src: "",
+        ratio: "16/9",
+        note: "The film’s outro with “By Synapse Medicine”, next to the website footer: the parent brand as a credential.",
+      },
+    ],
   },
   {
     title: p("Taking it outside"),
     body: [
       p("A medical AI that only exists inside social feeds looks like every other AI in social feeds. So we took it where medicine is read and learned."),
-      p("- **Bookmarks** for specialised medical bookshops, printed with *Ouvrez un nouveau chapitre avec MedGPT*. Clémence’s idea, and the kind I’m slightly annoyed I didn’t have.\n- **Stickers** with large QR codes. I designed them and wrote the lines; Victoire and Clémence put them up across the country themselves."),
+      p("- **Bookmarks** for specialised medical bookshops, printed with *Ouvrez un nouveau chapitre avec MedGPT*. An idea from the marketing team, and the kind I’m slightly annoyed I didn’t have.\n- **Stickers** with large QR codes. I designed them and wrote the lines; the marketing team put them up across the country themselves."),
       p("> You’re not asking to be believed. You’re standing somewhere believable."),
     ],
     media: [
@@ -86,7 +94,6 @@ export const medgptFilmStory: StorySection[] = [
       p("> “I have just one thing to say: this video is the most beautiful thing I’ve seen in my life, after my wife, my son and a Juventus win in the Champions League.”"),
     ],
     media: [
-      { type: "image", src: `${M}/10.jpg`, ratio: "2800/1440" },
       {
         type: "placeholder",
         src: "",
@@ -98,7 +105,7 @@ export const medgptFilmStory: StorySection[] = [
   {
     title: p("Credits"),
     body: [
-      p("**Victoire** (Product Marketing) led the strategy and stuck things to walls. **Clémence** came up with the bookmarks, and also stuck things to walls."),
+      p("The **marketing team**, who led the strategy, came up with the bookmarks and stuck things to walls."),
     ],
   },
 ];

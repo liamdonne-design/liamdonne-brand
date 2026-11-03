@@ -12,6 +12,14 @@ export const cuidamStory: StorySection[] = [
     body: [
       p("Founding designer, from 2021 to 2024. I built Cuidam’s visual identity from zero."),
     ],
+    media: [
+      {
+        type: "placeholder",
+        src: "",
+        ratio: "16/9",
+        note: "Where it started: first logo sketches, the moodboard or an early brand board.",
+      },
+    ],
   },
   {
     title: p("The identity"),

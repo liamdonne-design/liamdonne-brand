@@ -24,6 +24,7 @@ export const medgptMotionStory: StorySection[] = [
       p("Why does MedGPT move at all? Because the product takes something complex and makes it clear, and motion can show that happening. Four traits decide how:"),
       p("- **Intelligent:** elements transform, connect and structure rather than simply move.\n- **Fluid:** transitions feel continuous and alive, never mechanical.\n- **Precise:** every movement has a clear intention and a defined endpoint.\n- **Impactful:** key moments present themselves with confidence, impossible to overlook."),
     ],
+    media: [v("app-complexity-clarity", "16/9", "Complexity → clarity")],
   },
   {
     title: p("Six behaviours"),
@@ -47,6 +48,7 @@ export const medgptMotionStory: StorySection[] = [
       p("- **Motion has meaning:** it communicates a change, a relationship or a state, or it doesn’t happen.\n- **Motion follows the story:** something happens, transforms, and resolves.\n- **Motion is restrained:** the minimum movement needed. Every effect earns its place.\n- **Motion creates relationships:** elements respond to one another.\n- **Motion has rhythm:** timing, repetition, Flow and Pulse.\n- **Motion resolves clearly:** every animation lands on a deliberate final state."),
       p("The last one matters most. In a product that answers clinical questions, ambiguity is exactly what you’re selling against."),
     ],
+    media: [v("app-brand-transition", "16/9", "Something happens, transforms, and resolves")],
   },
   {
     title: p("Physics"),
@@ -78,8 +80,7 @@ export const medgptMotionStory: StorySection[] = [
       p("The logo has two ways in and out, used at the start, the end, or both ends of a video: the **cursor masking the wordmark**, and the **cursor flickering**."),
     ],
     media: [
-      v("gradient-flow", "16/9", "Gradient: flow", "half"),
-      v("gradient-glow", "32/19", "Gradient: glow", "half"),
+      v("gradient-glow", "32/19", "Gradient: glow"),
       v("logo-intro-v1", "16/9", "Logo, version 1: intro", "half"),
       v("logo-outro-v1", "16/9", "Logo, version 1: outro", "half"),
       v("logo-intro-v2", "16/9", "Logo, version 2: intro", "half"),
@@ -97,8 +98,6 @@ export const medgptMotionStory: StorySection[] = [
       v("transition-morph", "16/9", "Morph", "third"),
       v("transition-cut", "16/9", "Cut", "third"),
       v("app-question-answer", "16/9", "Question → answer"),
-      v("app-complexity-clarity", "16/9", "Complexity → clarity", "half"),
-      v("app-brand-transition", "16/9", "Brand transition", "half"),
     ],
   },
   {

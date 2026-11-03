@@ -9,6 +9,7 @@ import {
   resolveStory,
   t,
   type Localized,
+  VISUAL_TO_COME,
 } from "@/content/projects";
 import { MediaBlock } from "@/components/Media";
 import { MediaGrid, Paragraphs, StorySections } from "@/components/Story";
@@ -102,6 +103,9 @@ export default async function ProjectPage({
           <Paragraphs className="mt-6" paras={project.overview.body.map((b) => t(b, locale))} />
         </div>
       </section>
+      <div className="pb-14 md:pb-20">
+        <MediaGrid media={project.overviewMedia ?? [VISUAL_TO_COME]} />
+      </div>
 
       {/* ---------------- STATS ---------------- */}
       {project.stats && (

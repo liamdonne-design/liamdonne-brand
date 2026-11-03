@@ -4,10 +4,14 @@ import { useRef, useState, type CSSProperties } from "react";
 import { motion } from "motion/react";
 import { Heatmap } from "@paper-design/shaders-react";
 import { playgroundIntro, type PlaygroundItem } from "@/content/playground";
-import { Bezier, Brush2, Grid1, Pointer, Shapes1, Text } from "iconsax-react";
-import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
+import { Dialog, DialogClose, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
 import LitText from "./LitText";
-import PlaygroundDecor from "./PlaygroundDecor";
+import { NameCursor } from "./PlaygroundDecor";
+import DesignToolbar from "./DesignToolbar";
+import { Button } from "@/components/ui/button";
+import { iconsaxIcons } from "@/lib/icons-iconsax";
+
+const CloseIcon = iconsaxIcons.x;
 import { BOARD_H, BOARD_W, at, u } from "./playground-layout";
 
 // Same soft ease-in-out as the home cards.
@@ -69,33 +73,58 @@ function Intro() {
         lit={INTRO_LIT}
         className="font-normal leading-[1.25] tracking-[-0.02em]"
         style={{ fontSize: `max(17px, ${u(34)})` }}
+        trail={<NameCursor name="Liam" color="#0D99FF" />}
       />
     </div>
   );
 }
 
-/** The experiment itself: large in the modal, or filling a card's square picture. */
+/** The experiment itself: large in the modal, or filling a card's picture. */
 function Media({ item, big = false }: { item: PlaygroundItem; big?: boolean }) {
   const { media } = item;
-  const cls = big
-    ? "max-h-[60vh] w-auto max-w-full object-contain"
-    : item.bg
-      ? "block size-full object-contain"
-      : "block size-full object-cover";
+  const cls = "block size-full object-cover";
   if (media.type === "heatmap")
     return (
-      <div className="bg-[#05060b]" style={{ width: big ? "min(640px, 80vw)" : "100%" }}>
-        <Heat image={media.src} ratio={big ? `${media.width} / ${media.height}` : "1 / 1"} />
+      <div className="size-full bg-[#05060b]">
+        <Heat image={media.src} ratio={`${media.width} / ${media.height}`} />
+      </div>
+    );
+  if (media.type === "story")
+    // the photo, with the animated stickers laid over it as posted
+    return (
+      <div className="relative size-full">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src={media.src} alt={big ? item.title : ""} className={cls} draggable={false} />
+        {media.layers?.map((l) => (
+          <div
+            key={l.src}
+            className="absolute -translate-x-1/2 -translate-y-1/2"
+            style={{ left: `${l.x}%`, top: `${l.y}%`, width: `${l.w}%`, rotate: `${l.rotate}deg` }}
+          >
+            {/* animated GIF/WebP: a plain img keeps the animation; a still one can spin */}
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={l.src}
+              alt=""
+              draggable={false}
+              className="block w-full"
+              style={l.spin ? { animation: `ui-spin ${l.spin}s linear infinite` } : undefined}
+            />
+          </div>
+        ))}
       </div>
     );
   return media.type === "video" ? (
     <video src={media.src} autoPlay muted loop playsInline className={cls} draggable={false} />
   ) : (
-    // animated GIF/WebP stickers: a plain img keeps the animation
     // eslint-disable-next-line @next/next/no-img-element
     <img src={media.src} alt={big ? item.title : ""} width={media.width} height={media.height} className={cls} draggable={false} />
   );
 }
+
+/** The modal's width for a visual: as big as fits the screen, at the visual's own proportions. */
+const modalWidth = ({ width, height }: PlaygroundItem["media"]) =>
+  `min(720px, calc(100vw - 5rem), calc(68dvh * ${width} / ${height}))`;
 
 function Sticker({
   item,
@@ -140,23 +169,20 @@ function Sticker({
         transition={{ ...ease, delay: index * 0.05 }}
         className="group relative block w-full cursor-pointer touch-none text-left outline-none"
       >
-        {/* card like the home ones: grey (the active-tab grey), square
-            picture, the name below — or above, for variety */}
+        {/* card like the home ones: grey (the active-tab grey), the picture
+            alone at the visual's own proportions; the title shows in the modal */}
         <div
-          className={`flex flex-col items-center gap-[0.572em] rounded-[0.857em] border border-white/15! bg-[var(--ui-chip)] p-[0.572em] ${
-            item.labelTop ? "flex-col-reverse" : ""
-          }`}
-          style={{ fontSize: `max(11px, ${u(item.size * 0.107)})` }}
+          className="rounded-[0.857em] border border-white/15! bg-[var(--ui-chip)] p-[0.572em]"
+          // one size for every card, so the frame (padding, radii) is the same
+          // around every picture, whatever the card's width
+          style={{ fontSize: `max(11px, ${u(19)})` }}
         >
           <div
-            className={`aspect-square w-full overflow-hidden rounded-[0.572em] ${item.bg ? "p-[10%]" : ""}`}
-            style={{ background: item.bg }}
+            className="w-full overflow-hidden rounded-[0.572em]"
+            style={{ aspectRatio: `${item.media.width} / ${item.media.height}` }}
           >
             <Media item={item} />
           </div>
-          <span className="text-center text-[14px] font-medium leading-[1.3] text-[var(--ui-fg)]">
-            {item.title}
-          </span>
         </div>
 
         {/* selection frame on hover / focus */}
@@ -188,7 +214,6 @@ export default function PlaygroundCanvas({ items }: { items: PlaygroundItem[] })
         className="absolute left-1/2 top-1/2"
         style={{ width: BOARD_W, height: BOARD_H, marginLeft: -BOARD_W / 2, marginTop: -BOARD_H / 2 + 60 }}
       >
-        <PlaygroundDecor />
         <Intro />
         {items.map((item, i) => (
           <Sticker
@@ -203,41 +228,48 @@ export default function PlaygroundCanvas({ items }: { items: PlaygroundItem[] })
       </div>
 
       {/* design-tool toolbar (static), doubling as the hint */}
-      <div
-        className="pointer-events-none absolute bottom-16 left-1/2 flex max-w-[calc(100vw-24px)] -translate-x-1/2 items-center gap-1 rounded-[14px] border border-white/10 bg-[#2a2a2a]/90 p-1.5 shadow-[0_16px_40px_-12px_rgba(0,0,0,0.8)] backdrop-blur-md"
-      >
-        {[Pointer, Grid1, Bezier, Text, Shapes1, Brush2].map((Icon, i) => (
-          <span
-            key={i}
-            aria-hidden
-            className={`flex size-8 shrink-0 items-center justify-center rounded-[9px] ${
-              i === 0 ? "bg-[#0D99FF] text-white" : "text-white/70 max-sm:hidden"
-            }`}
-          >
-            <Icon size={16} color="currentColor" />
-          </span>
-        ))}
-        <span aria-hidden className="mx-1 h-5 w-px shrink-0 bg-white/15" />
-        <span className="whitespace-nowrap px-2 font-mono text-[10px] text-white/70">Drag to have fun, click to know more</span>
-      </div>
+      <DesignToolbar hint="Drag to have fun, click to know more" />
 
       <Dialog open={!!open} onOpenChange={(v) => !v && setOpen(null)}>
-        <DialogContent size="xl">
+        {/* hugs the visual: the content sets the width, not a size step */}
+        <DialogContent size="xl" showCloseButton={false} className="w-fit max-w-[calc(100vw-2rem)]">
           {open && (
-            <>
-              <div className="flex justify-center overflow-hidden rounded-[12px] bg-[#1f1f1f] p-6">
+            <div style={{ width: modalWidth(open.media) }}>
+              {/* Fluid ghost icon button, outside the modal's top-right corner (above it on narrow screens) */}
+              <DialogClose asChild>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  aria-label="Close"
+                  className="absolute -top-12 right-0 text-white/80 hover:text-white sm:-right-12 sm:top-0 [&>span:first-child]:group-hover:bg-white/12! [&>span:first-child]:group-hover:shadow-none!"
+                >
+                  <CloseIcon />
+                </Button>
+              </DialogClose>
+              <div
+                className="overflow-hidden rounded-[12px]"
+                style={{ aspectRatio: `${open.media.width} / ${open.media.height}` }}
+              >
                 <Media item={open} big />
               </div>
               <DialogTitle className="mt-5 text-[20px] font-semibold leading-[1.3] tracking-[-0.02em]">
                 {open.title}
               </DialogTitle>
-              <DialogDescription className="font-mono text-[12px] leading-[1.3]">{open.tag}</DialogDescription>
+              {/* the tag stays for screen readers only: title and tools say enough */}
+              <DialogDescription className="sr-only">{open.tag}</DialogDescription>
+              <ul aria-label="Tools" className="mt-2 flex flex-wrap gap-1.5">
+                {open.tools.map((tool) => (
+                  <li key={tool} className="rounded-[6px] bg-[#ebebeb] px-2 py-0.5 font-mono text-[12px] leading-[1.4] text-[#1f1f1f]">
+                    {tool}
+                  </li>
+                ))}
+              </ul>
               {open.text?.map((p, i) => (
                 <p key={i} className="mt-3 max-w-prose text-[15px] leading-relaxed text-grey-600">
                   {p}
                 </p>
               ))}
-            </>
+            </div>
           )}
         </DialogContent>
       </Dialog>

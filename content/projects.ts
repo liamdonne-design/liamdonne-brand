@@ -32,6 +32,17 @@ export type StorySection = {
   media?: Media[];
 };
 
+/**
+ * Stand-in for a missing visual. Case studies never run two blocks of text
+ * back to back: when a section has no visual, this grey frame takes its place.
+ */
+export const VISUAL_TO_COME: Media = {
+  type: "placeholder",
+  src: "",
+  ratio: "16/9",
+  note: "A visual for this part of the story.",
+};
+
 /** A string available in both languages. */
 export type Localized = { en: string; fr: string };
 
@@ -50,6 +61,8 @@ export type Project = {
   summary: Localized; // the one-line hook
   /** the block right after the hero visual: a headline, then a few paragraphs */
   overview: { headline: Localized; body: Localized[] };
+  /** visuals right under the overview: text is never followed straight by more text */
+  overviewMedia?: Media[];
   stats?: { value: string; label: Localized }[];
   /** the case study after the overview */
   story?: StorySection[];
@@ -101,6 +114,7 @@ const rawProjects: Project[] = [
       ],
     },
     cover: { type: "video", src: "/work/synapse-motion-identity/cover.mp4", ratio: "1440/852" },
+    overviewMedia: [{ type: "video", src: "/work/synapse-motion-identity/01.mp4", ratio: "16/9" }],
     story: motionStory,
     gallery: [],
     ready: true,
@@ -123,13 +137,18 @@ const rawProjects: Project[] = [
     overview: {
       headline: L("The blinking heart"),
       body: [
-        L("MedGPT is Synapse Medicine’s AI assistant for healthcare professionals. It started as an internal side project, turned out to be the product, and launched on 12 September 2025."),
-        L("Getting there first mattered more than anything, so the brand had **fourteen days**. One concept, presented once. I led the creative direction and the visual identity; naming and strategy were led by Victoire in Product Marketing."),
+        L("MedGPT started as a side project by one of our AI engineers, an internal tool to help us build our other products. People kept using it, until everyone understood it was *the* product: Synapse Medicine’s AI assistant for healthcare professionals."),
+        L("Nine years earlier, the company’s founder had described exactly this. In 2025 the technology caught up. I led the creative direction and designed the visual identity; the marketing team led the naming and the strategy."),
       ],
     },
-    cover: { type: "image", src: "/work/medgpt/02.jpg", ratio: "1067/1334" },
+    cover: { type: "image", src: "/work/medgpt/cover-app-icon.jpg", ratio: "1/1" },
     hero: { type: "image", src: "/work/medgpt/04.jpg", ratio: "2526/1438" },
+    overviewMedia: [
+      { type: "video", src: "/work/medgpt/05.mp4", ratio: "1/1", span: "half" },
+      { type: "video", src: "/work/medgpt/06.mp4", ratio: "1/1", span: "half" },
+    ],
     story: medgptStory,
+    medium: "https://medium.com/@liamdonne_59272/branding-medgpt-f7994e383a58",
     gallery: [],
     ready: true,
   },
@@ -154,6 +173,7 @@ const rawProjects: Project[] = [
     },
     cover: { type: "video", src: "/work/medgpt-motion-system/lang-pulse.mp4", ratio: "35/16" },
     hero: { type: "video", src: "/work/medgpt-motion-system/app-question-answer.mp4", ratio: "16/9" },
+    overviewMedia: [{ type: "video", src: "/work/medgpt-motion-system/gradient-flow.mp4", ratio: "16/9" }],
     story: medgptMotionStory,
     gallery: [],
     ready: true,
@@ -179,6 +199,7 @@ const rawProjects: Project[] = [
     stats: MEDGPT_STATS,
     cover: { type: "image", src: "/work/medgpt/15.jpg", ratio: "1067/1250" },
     hero: { type: "video", src: "/work/medgpt/cover.mp4", ratio: "16/9" },
+    overviewMedia: [{ type: "image", src: "/work/medgpt/10.jpg", ratio: "2800/1440" }],
     story: medgptFilmStory,
     gallery: [],
     ready: true,
@@ -212,6 +233,7 @@ const rawProjects: Project[] = [
       { value: "50–100", label: L("people using the self-service tools", "personnes utilisant les outils self-service") },
     ],
     cover: { type: "image", src: "/work/synapse-corporate-refresh/cover.jpg", ratio: "1400/720" },
+    overviewMedia: [{ type: "image", src: "/work/synapse-corporate-refresh/posters.jpg", ratio: "2000/1500" }],
     story: refreshStory,
     gallery: [],
     ready: true,
@@ -239,6 +261,14 @@ const rawProjects: Project[] = [
       ],
     },
     cover: { type: "image", src: "/work/cuidam-corporate-branding/cover.jpg", ratio: "1400/720" },
+    overviewMedia: [
+      {
+        type: "placeholder",
+        src: "",
+        ratio: "16/9",
+        note: "Cuidam at a glance: the logo with two or three key applications (social, poster, website).",
+      },
+    ],
     story: cuidamStory,
     gallery: [],
     ready: true,
@@ -271,6 +301,7 @@ const rawProjects: Project[] = [
       poster: "/work/cuidam-hearts-event/poster.jpg",
       ratio: "16/9",
     },
+    overviewMedia: [{ type: "image", src: "/work/cuidam-hearts-event/poster.jpg", ratio: "16/9" }],
     story: heartsStory,
     gallery: [],
     ready: true,
@@ -295,6 +326,14 @@ const rawProjects: Project[] = [
       body: [L("[Liam — context to come: what the event was, where and when, who it was for, and what you designed.]")],
     },
     cover: { type: "video", src: "/work/synapse-manifestation-event/cover.mp4", ratio: "16/9" },
+    overviewMedia: [
+      {
+        type: "placeholder",
+        src: "",
+        ratio: "16/9",
+        note: "The event at a glance: the key visual in place, on a screen, a banner or a poster.",
+      },
+    ],
     story: libertyStory,
     gallery: [],
     ready: true,

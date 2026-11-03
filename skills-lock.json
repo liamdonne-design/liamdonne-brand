@@ -12,6 +12,12 @@
       "sourceType": "github",
       "skillPath": "skills/fluid-functionalism/SKILL.md",
       "computedHash": "8b015acdc88075d25012bc6d004b53d63213f08aa9f32783dd8446b6ce7877af"
+    },
+    "stageshow": {
+      "source": "benjitaylor/skills",
+      "sourceType": "github",
+      "skillPath": "stageshow/SKILL.md",
+      "computedHash": "bf9f07985a62882deae7935b5b1162fb5bf66b248930bb14a75dcaf9d67291b7"
     }
   }
 }

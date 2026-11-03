@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, type CSSProperties } from "react";
+import { useEffect, useRef, type CSSProperties, type ReactNode } from "react";
 
 /** A run of text; `strong` runs keep their own colour and don't light up. */
 export type LitRun = { text: string; strong?: boolean };
@@ -23,6 +23,7 @@ export default function LitText({
   className,
   paragraphClassName,
   style,
+  trail,
 }: {
   paragraphs: LitRun[][];
   base: RGB;
@@ -35,6 +36,8 @@ export default function LitText({
   className?: string;
   paragraphClassName?: string;
   style?: CSSProperties;
+  /** inline content right after the last character (decoration, aria-hidden) */
+  trail?: ReactNode;
 }) {
   const ref = useRef<HTMLElement>(null);
 
@@ -102,6 +105,7 @@ export default function LitText({
               ))
             )
           )}
+          {i === paragraphs.length - 1 && trail}
         </span>
       ))}
     </Tag>
