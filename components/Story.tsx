@@ -29,7 +29,7 @@ export function MediaGrid({ media }: { media: Media[] }) {
           <div key={`${m.src}-${i}`} className={SPAN[span]}>
             <MediaBlock media={m} sizes={SIZES[span]} className="rounded-lg" />
             {m.caption && (
-              <p className="mt-2 font-mono text-[11px] uppercase tracking-[0.14em] text-[#999]">{m.caption.en}</p>
+              <p className="ui-haze mt-2 w-fit font-mono text-[11px] uppercase tracking-[0.14em] text-[#999]">{m.caption.en}</p>
             )}
           </div>
         );
@@ -121,7 +121,7 @@ function Block({ text }: { text: string }) {
 /** A run of story blocks in the case-study body style. */
 export function Paragraphs({ paras, className = "" }: { paras: string[]; className?: string }) {
   return (
-    <div className={`max-w-[640px] space-y-5 text-[17px] leading-[1.6] text-[#1f1f1f] ${className}`}>
+    <div className={`ui-haze-box max-w-[640px] space-y-5 text-[17px] leading-[1.6] text-[#1f1f1f] ${className}`}>
       {paras.map((para, i) => (
         <Block key={i} text={para} />
       ))}
@@ -137,7 +137,7 @@ export function StorySections({ sections }: { sections: ResolvedSection[] }) {
         <section key={`${s.title}-${idx}`} className="border-t border-black/10! py-12 md:py-16">
           <div className="grid grid-cols-1 gap-4 md:grid-cols-[1fr_2fr] md:gap-8">
             {s.title ? (
-              <h3 className="font-mono text-[11px] uppercase tracking-[0.14em] text-[#999]">{s.title}</h3>
+              <h3 className="ui-haze w-fit self-start font-mono text-[11px] uppercase tracking-[0.14em] text-[#999]">{s.title}</h3>
             ) : (
               <div aria-hidden />
             )}

@@ -40,7 +40,8 @@
     "year": "Année",
     "client": "Client",
     "next": "Projet suivant",
-    "index": "Projet"
+    "index": "Projet",
+    "previous": "Projet précédent"
   },
   "About": {
     "title": "À propos",

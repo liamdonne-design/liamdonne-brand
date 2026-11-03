@@ -307,6 +307,48 @@ export const projects: Project[] = [...rawProjects]
   .sort((a, b) => Number(b.year) - Number(a.year))
   .map((p, i) => ({ ...p, index: String(i + 1).padStart(2, "0") }));
 
+/**
+ * The Work page groups projects by company (as on aaronpoeandco.com/projects):
+ * name, role and years on the left, a short note on what Liam did there.
+ */
+export type Company = {
+  name: string;
+  role: Localized;
+  years: string;
+  about: Localized;
+  slugs: string[];
+};
+
+export const companies: Company[] = [
+  {
+    name: "MedGPT",
+    role: L("Brand Designer", "Designer de marque"),
+    years: "2025–2026",
+    about: L(
+      "Synapse Medicine’s AI assistant for healthcare professionals. I built its brand in fourteen days, then everything it needed to go out into the world: a motion system, a launch film, street activations and events."
+    ),
+    slugs: ["synapse-medgpt-branding", "medgpt-motion-system", "medgpt-launch-film", "synapse-manifestation-event"],
+  },
+  {
+    name: "Synapse Medicine",
+    role: L("Brand Designer", "Designer de marque"),
+    years: "2024–now",
+    about: L(
+      "A Bordeaux health-tech company turned AI and data company. Sole brand designer on its refresh: the identity, a family of product brands, a motion language, and self-service tools the whole company uses."
+    ),
+    slugs: ["synapse-corporate-refresh", "synapse-motion-identity"],
+  },
+  {
+    name: "Cuidam",
+    role: L("Founding Designer", "Designer fondateur"),
+    years: "2021–2024",
+    about: L(
+      "A student mental-health support initiative I started after graduating. I built its identity from zero, then took it live with Cuidam Hearts, a 72-hour charity stream on Twitch."
+    ),
+    slugs: ["cuidam-corporate-branding", "cuidam-hearts-event"],
+  },
+];
+
 /** A project's case study as plain, locale-resolved sections. */
 export function resolveStory(
   p: Project,
@@ -323,7 +365,21 @@ export function getProject(slug: string): Project | undefined {
   return projects.find((p) => p.slug === slug);
 }
 
+/** Projects in Work page order: company by company. */
+function workOrder(): Project[] {
+  return companies.flatMap((c) => c.slugs).map((s) => getProject(s)!).filter((p) => p.ready);
+}
+
+/** The project after this one in Work page order, wrapping round to the first. */
 export function getAdjacentProject(slug: string): Project {
-  const i = projects.findIndex((p) => p.slug === slug);
-  return projects[(i + 1) % projects.length];
+  const order = workOrder();
+  const i = order.findIndex((p) => p.slug === slug);
+  return order[(i + 1) % order.length];
+}
+
+/** The project before this one in Work page order, wrapping round to the last. */
+export function getPreviousProject(slug: string): Project {
+  const order = workOrder();
+  const i = order.findIndex((p) => p.slug === slug);
+  return order[(i - 1 + order.length) % order.length];
 }

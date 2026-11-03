@@ -1160,3 +1160,20 @@ body {
   pointer-events: none;
   background: radial-gradient(closest-side, var(--ui-bg) 55%, transparent 100%);
 }
+
+/* Same idea for whole blocks (paragraphs, lists): a page-coloured panel with
+   blurred edges, so it covers the corners the round glow would miss. */
+.ui-haze-box {
+  position: relative;
+  isolation: isolate;
+}
+.ui-haze-box::before {
+  content: "";
+  position: absolute;
+  inset: -16px -20px;
+  z-index: -1;
+  pointer-events: none;
+  border-radius: 24px;
+  background: var(--ui-bg);
+  filter: blur(10px);
+}

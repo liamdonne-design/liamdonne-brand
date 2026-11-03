@@ -1,25 +1,21 @@
 import type { ReactNode } from "react";
 import { setRequestLocale } from "next-intl/server";
-import { clients, experience, skills, tools } from "@/content/about";
+import { experience, skills, tools } from "@/content/about";
 import { t } from "@/content/projects";
 import type { Locale } from "@/i18n/routing";
 import { Link } from "@/i18n/navigation";
 import { ArrowRight } from "iconsax-react";
 import LitText, { type LitRun } from "@/components/LitText";
 
-// Intro (Figma "Info"): grey that darkens near the cursor; the three phrases
-// isolated in Figma stay dark.
+// Intro (Figma "Info"): all grey, letters darken near the cursor (as the
+// Playground intro lights up).
 const GREY: [number, number, number] = [153, 153, 153];
-const INK: [number, number, number] = [31, 31, 31];
+const INK: [number, number, number] = [0, 0, 0];
 const INTRO: LitRun[][] = [
   [
-    { text: "I’m a Franco-British " },
-    { text: "brand designer", strong: true },
-    { text: " working at the intersection of strategy, visual design, and storytelling, with a strong focus on " },
-    { text: "health and tech products", strong: true },
-    { text: ". " },
-    { text: "I design brand identities and visual systems", strong: true },
-    { text: " that help complex platforms feel clear, credible, and human by aligning visual language, tone, and motion across touchpoints." },
+    {
+      text: "I’m a Franco-British brand designer working at the intersection of strategy, visual design, and storytelling, with a strong focus on health and tech products. I design brand identities and visual systems that help complex platforms feel clear, credible, and human by aligning visual language, tone, and motion across touchpoints.",
+    },
   ],
   [
     {
@@ -30,7 +26,7 @@ const INTRO: LitRun[][] = [
 
 // Figures Liam has confirmed — nothing invented.
 const NUMBERS = [
-  { value: "6+", label: "years designing health & tech brands" },
+  { value: "6+", label: "years experience in design" },
   { value: "30+", label: "clients worked with" },
   { value: "70+", label: "projects delivered" },
 ];
@@ -67,8 +63,9 @@ const FOCUS = [
 function Section({ title, children }: { title: string; children: ReactNode }) {
   return (
     <section className="mt-24 w-full">
-      <h2 className="mb-8 text-center font-mono text-[12px] leading-[1.3] text-[#999]">{title}</h2>
-      {children}
+      <h2 className="ui-haze mx-auto mb-8 w-fit text-center font-mono text-[12px] leading-[1.3] text-[#999]">{title}</h2>
+      {/* page-coloured panel: the dot field stays dark behind the text */}
+      <div className="ui-haze-box">{children}</div>
     </section>
   );
 }
@@ -92,8 +89,7 @@ export default async function AboutPage({
         paragraphs={INTRO}
         base={GREY}
         lit={INK}
-        strongColor="#1f1f1f"
-        className="mt-8 text-center text-[19px] font-medium leading-[1.3] tracking-[-0.03em] sm:text-[24px]"
+        className="ui-haze-box mt-8 text-center text-[19px] font-medium leading-[1.3] tracking-[-0.03em] sm:text-[24px]"
         paragraphClassName="[&+&]:mt-[1.3em]"
       />
 
@@ -106,27 +102,6 @@ export default async function AboutPage({
             </div>
           ))}
         </div>
-      </Section>
-
-      <Section title="Brands I’ve worked with">
-        {/* logo wall: grey at rest, the logo's own colours on hover */}
-        <ul className="grid grid-cols-2 border-l border-t border-black/10! sm:grid-cols-4">
-          {clients.map((c) => (
-            <li
-              key={c.name}
-              className="group flex h-[112px] items-center justify-center border-b border-r border-black/10! bg-white px-6 sm:h-[128px]"
-            >
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={c.logo}
-                alt={c.name}
-                className={`max-h-[48px] max-w-[78%] object-contain opacity-60 grayscale transition-[filter,opacity] duration-300 ease-out group-hover:opacity-100 group-hover:grayscale-0 ${
-                  c.invert ? "invert" : ""
-                }`}
-              />
-            </li>
-          ))}
-        </ul>
       </Section>
 
       <Section title="Focus">
@@ -193,7 +168,7 @@ export default async function AboutPage({
         </p>
       </Section>
 
-      <p className="mt-24 text-center text-[19px] font-medium leading-[1.3] tracking-[-0.03em] text-[#999] sm:text-[24px]">
+      <p className="ui-haze-box mt-24 text-center text-[19px] font-medium leading-[1.3] tracking-[-0.03em] text-[#999] sm:text-[24px]">
         Off-screen, <span className="text-[#1f1f1f]">surfboards and sketchbooks</span>.
       </p>
     </div>
