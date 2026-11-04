@@ -6,6 +6,7 @@ import { Heatmap } from "@paper-design/shaders-react";
 import { playgroundIntro, type PlaygroundItem } from "@/content/playground";
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
 import LitText from "./LitText";
+import LoopVideo from "./LoopVideo";
 import { NameCursor } from "./PlaygroundDecor";
 import DesignToolbar from "./DesignToolbar";
 import { Button } from "@/components/ui/button";
@@ -114,7 +115,7 @@ function Media({ item, big = false }: { item: PlaygroundItem; big?: boolean }) {
       </div>
     );
   return media.type === "video" ? (
-    <video src={media.src} autoPlay muted loop playsInline className={cls} draggable={false} />
+    <LoopVideo src={media.src} className={cls} draggable={false} />
   ) : (
     // eslint-disable-next-line @next/next/no-img-element
     <img src={media.src} alt={big ? item.title : ""} width={media.width} height={media.height} className={cls} draggable={false} />

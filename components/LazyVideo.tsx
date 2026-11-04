@@ -20,6 +20,10 @@ export default function LazyVideo({
   useEffect(() => {
     const v = ref.current;
     if (!v) return;
+    // iOS only autoplays a video it knows is muted, and React never writes
+    // the muted attribute into the server HTML: set it before any play()
+    v.defaultMuted = true;
+    v.muted = true;
     const io = new IntersectionObserver(
       ([e]) => {
         if (e.isIntersecting) v.play().catch(() => {});

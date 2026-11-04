@@ -4,6 +4,7 @@ import Image from "next/image";
 import { motion } from "motion/react";
 import type { ReactNode } from "react";
 import { Link } from "@/i18n/navigation";
+import LoopVideo from "./LoopVideo";
 
 const MotionLink = motion.create(Link);
 
@@ -68,15 +69,7 @@ export default function HomeCards() {
         <Image src="/home/work.jpg" alt="" fill sizes="132px" className="scale-[1.06] object-cover object-top" priority />
       </Card>
       <Card href="/playground" label="Playground" tilt={-4.83} labelFirst>
-        <video
-          src="/home/playground.mp4"
-          autoPlay
-          muted
-          loop
-          playsInline
-          aria-hidden
-          className="absolute inset-0 size-full object-cover"
-        />
+        <LoopVideo src="/home/playground.mp4" aria-hidden className="absolute inset-0 size-full object-cover" />
       </Card>
       <Card href="/about" label="Info" tilt={4.22}>
         {/* animated GIF: plain img keeps the animation */}

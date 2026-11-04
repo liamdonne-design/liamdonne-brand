@@ -59,7 +59,7 @@ export const playground: PlaygroundItem[] = [
     },
     size: 170,
     place: { x: -425, y: -80, rotate: -5 },
-    mobile: { x: -118, y: 95, size: 118 },
+    mobile: { x: -116, y: 100, size: 106 },
   },
   {
     id: "ld-monogram",
@@ -70,7 +70,7 @@ export const playground: PlaygroundItem[] = [
     media: { type: "heatmap", src: "/playground/ld-monogram.svg", width: 537, height: 447 },
     size: 190,
     place: { x: -40, y: 150, rotate: -4 },
-    mobile: { x: 18, y: 70, size: 165 },
+    mobile: { x: 14, y: 80, size: 148 },
   },
   {
     id: "club-medgpt",
@@ -80,7 +80,7 @@ export const playground: PlaygroundItem[] = [
     media: { type: "video", src: "/playground/club-medgpt.mp4", width: 1580, height: 1080 },
     size: 190,
     place: { x: -300, y: -255, rotate: 4 },
-    mobile: { x: -70, y: -255, size: 215 },
+    mobile: { x: -66, y: -222, size: 192 },
   },
   {
     id: "j-edgar-hover",
@@ -90,7 +90,7 @@ export const playground: PlaygroundItem[] = [
     media: { type: "video", src: "/playground/j-edgar-hover.mp4", width: 1080, height: 1080 },
     size: 170,
     place: { x: 300, y: -225, rotate: -5 },
-    mobile: { x: 112, y: -205, size: 150 },
+    mobile: { x: 108, y: -180, size: 136 },
   },
   {
     id: "year-of-the-horse",
@@ -100,6 +100,6 @@ export const playground: PlaygroundItem[] = [
     media: { type: "video", src: "/home/playground.mp4", width: 640, height: 282 },
     size: 270,
     place: { x: 190, y: 175, rotate: 5 },
-    mobile: { x: 80, y: 160, size: 230 },
+    mobile: { x: 74, y: 162, size: 206 },
   },
 ];
