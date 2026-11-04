@@ -6,8 +6,10 @@ export const BOARD_H = 2000;
 
 // Layout unit: positions and sizes are authored on a 1440×900 screen and
 // scale with the viewport so the whole composition is on screen at first
-// load (≈1300 units of it span the width, so it still fits on a phone).
-const U = "min(100vw / 1300, 100vh / 900)";
+// load. --pg-u is set in globals.css: ≈1300 units span the width on a
+// desktop; phones get their own, larger unit and their own card layout
+// (PlaygroundItem.mobile), so the cards stay big enough to read.
+const U = "var(--pg-u)";
 export const u = (n: number) => `calc(${n} * ${U})`;
 
 /** Absolute position of a centre point, in layout px from the board centre. */

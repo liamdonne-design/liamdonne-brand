@@ -63,8 +63,8 @@ const INTRO = playgroundIntro.map((line) => [{ text: line }]);
 function Intro() {
   return (
     <div
-      className="pointer-events-none absolute -translate-x-1/2 -translate-y-1/2 select-none text-center"
-      style={{ ...at(0, -50), width: `max(290px, ${u(760)})` }}
+      className="pg-intro pointer-events-none absolute -translate-x-1/2 -translate-y-1/2 select-none text-center"
+      style={{ ...at(0, -50) }}
     >
       <LitText
         as="h1"
@@ -72,7 +72,6 @@ function Intro() {
         base={INTRO_BASE}
         lit={INTRO_LIT}
         className="font-normal leading-[1.25] tracking-[-0.02em]"
-        style={{ fontSize: `max(17px, ${u(34)})` }}
         trail={<NameCursor name="Liam" color="#0D99FF" />}
       />
     </div>
@@ -139,15 +138,26 @@ function Sticker({
   onRaise: () => void;
   onOpen: () => void;
 }) {
-  const { x, y, rotate } = item.place;
+  const { rotate } = item.place;
+  const m = item.mobile ?? { ...item.place, size: item.size };
   const moved = useRef(false);
   return (
     // positioned wrapper (centred on its spot) that drifts gently, as if in
     // orbit around the intro; the button inside drags freely. Experiments
     // sit above every decoration (z ≥ 10) so they always read first.
     <motion.div
-      className="absolute -translate-x-1/2 -translate-y-1/2"
-      style={{ ...at(x, y), width: u(item.size), zIndex: 10 + z }}
+      className="pg-place absolute -translate-x-1/2 -translate-y-1/2"
+      style={
+        {
+          "--x": item.place.x,
+          "--y": item.place.y,
+          "--w": item.size,
+          "--mx": m.x,
+          "--my": m.y,
+          "--mw": m.size,
+          zIndex: 10 + z,
+        } as CSSProperties
+      }
       animate={{ x: [0, 4, 0, -4, 0], y: [0, -7, 0, 5, 0] }}
       transition={{ duration: 7 + index * 1.3, ease: "easeInOut", repeat: Infinity, delay: index * 0.4 }}
     >

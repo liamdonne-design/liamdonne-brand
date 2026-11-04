@@ -1182,3 +1182,33 @@ body {
 @keyframes ui-spin {
   to { transform: rotate(360deg); }
 }
+
+/* Playground layout unit and placement (components/playground-layout.ts):
+   cards are authored in units of a 1440×900 screen; phones get a larger unit
+   and their own positions and widths (--mx, --my, --mw) so cards stay readable. */
+:root {
+  --pg-u: min(100vw / 1300, 100vh / 900);
+}
+.pg-place {
+  left: calc(1500px + var(--x) * var(--pg-u));
+  top: calc(1000px + var(--y) * var(--pg-u));
+  width: calc(var(--w) * var(--pg-u));
+}
+.pg-intro {
+  width: max(290px, calc(760 * var(--pg-u)));
+  font-size: max(17px, calc(34 * var(--pg-u)));
+}
+@media (max-width: 639px) {
+  :root {
+    --pg-u: min(100vw / 430, 100vh / 900);
+  }
+  .pg-place {
+    left: calc(1500px + var(--mx) * var(--pg-u));
+    top: calc(1000px + var(--my) * var(--pg-u));
+    width: calc(var(--mw) * var(--pg-u));
+  }
+  .pg-intro {
+    width: 84vw;
+    font-size: 20px;
+  }
+}
