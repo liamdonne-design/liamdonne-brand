@@ -3,10 +3,10 @@ import { setRequestLocale } from "next-intl/server";
 import { experience } from "@/content/about";
 import { t } from "@/content/projects";
 import type { Locale } from "@/i18n/routing";
-import { Link } from "@/i18n/navigation";
-import { ArrowRight } from "iconsax-react";
 import LitText, { type LitRun } from "@/components/LitText";
 import ToolsDeck from "@/components/ToolsDeck";
+import OffScreenScroller from "@/components/OffScreenScroller";
+import AnimatedNumber from "@/components/AnimatedNumber";
 
 // Intro (Figma "Info"): all grey, letters darken near the cursor (as the
 // Playground intro lights up).
@@ -31,44 +31,29 @@ const INTRO: LitRun[][] = [
 
 // Figures Liam has confirmed — nothing invented.
 const NUMBERS = [
-  { value: "6+", label: "years experience in design" },
-  { value: "30+", label: "clients worked with" },
-  { value: "70+", label: "projects delivered" },
-];
-
-// What I bring, each backed by a case study on the site.
-const FOCUS = [
-  {
-    title: "Health brands people trust",
-    body: "From founding Cuidam’s identity from zero to branding MedGPT, a medical AI assistant, to feel rigorous, sovereign and trustworthy.",
-    href: "/work/synapse-medgpt-branding",
-  },
-  {
-    title: "Systems across every touchpoint",
-    body: "Sole brand designer on the Synapse Medicine refresh: routes, product-brand architecture, one colour per product suite.",
-    href: "/work/synapse-corporate-refresh",
-  },
-  {
-    title: "Motion as part of the brand",
-    body: "A living motion language for a medical AI platform, so the brand moves the same way across video and social.",
-    href: "/work/synapse-motion-identity",
-  },
-  {
-    title: "Design that scales without me",
-    body: "Self-service tools (a slide template built with Claude artifacts, an email-signature generator) so the whole company ships on-brand.",
-    href: "/work/synapse-corporate-refresh",
-  },
-  {
-    title: "From screen to stage",
-    body: "Event identities that carry a brand into the room, from invite to stage.",
-    href: "/work/synapse-manifestation-event",
-  },
+  { value: 6, label: "years experience in design" },
+  { value: 30, label: "clients worked with" },
+  { value: 70, label: "projects delivered" },
 ];
 
 // What I do, then how AI fits into it: a teammate, not a replacement.
 const CAPABILITIES = [
   "Now that anyone can make an image in seconds, the designer’s job is less about making and more about deciding: what’s worth saying, what fits the brand, what earns trust and what quietly breaks it. That judgment is the part of the work I protect.",
   "AI is my everyday sparring partner. I start from my own idea, then I might use Midjourney to explore wider and Claude to challenge my thinking, prototype a tool or turn a brand into a system the whole team can use. It handles the repetitive. I keep the concept.",
+];
+
+// Off-screen gallery: 5 GIFs / photos to come, random placeholders for now.
+const OFF_SCREEN = [
+  {
+    src: "/info/surf-poster.jpg",
+    alt: "Macaronis — A Surfer’s Dream",
+    video: "/info/surf.mp4", // 0:27–0:42 of the film, muted
+    youtube: "tWyjdlYnAKE",
+  },
+  ...[2, 3, 4, 5].map((n) => ({
+    src: `https://picsum.photos/seed/liam-offscreen-${n}/1600/1000`,
+    alt: `Off-screen ${n}`,
+  })),
 ];
 
 function Section({ title, children }: { title: string; children: ReactNode }) {
@@ -81,7 +66,7 @@ function Section({ title, children }: { title: string; children: ReactNode }) {
   );
 }
 
-/** Info (Figma "Info"): portrait + intro, then numbers, focus, experience, capabilities. */
+/** Info (Figma "Info"): portrait + intro, numbers, experience, my job + tools, off-screen. */
 export default async function AboutPage({
   params,
 }: {
@@ -111,49 +96,49 @@ export default async function AboutPage({
         <div className="flex flex-wrap justify-center gap-x-16 gap-y-10">
           {NUMBERS.map((n) => (
             <div key={n.label} className="text-center">
-              <p className="font-mono text-[80px] leading-none tracking-[-0.04em] sm:text-[96px]">{n.value}</p>
+              <p className="font-mono text-[80px] leading-none tracking-[-0.04em] sm:text-[96px]">
+                <AnimatedNumber end={n.value} suffix="+" />
+              </p>
               <p className="mx-auto mt-3 max-w-[18ch] font-mono text-[12px] leading-[1.3] text-[#999]">{n.label}</p>
             </div>
           ))}
         </div>
       </Section>
 
-      <Section title="Focus">
-        <ul className="border-t border-black/10!">
-          {FOCUS.map((f) => (
-            <li key={f.title} className="border-b border-black/10!">
-              <Link
-                href={f.href}
-                className="group grid gap-1 py-5 sm:grid-cols-[240px_1fr] sm:gap-6"
-              >
-                <span className="text-[17px] font-medium tracking-[-0.02em]">
-                  {f.title}{" "}
-                  <ArrowRight
-                    aria-hidden
-                    size={16}
-                    color="currentColor"
-                    className="inline-block align-[-2px] text-[#999] transition-transform duration-300 group-hover:translate-x-1"
-                  />
-                </span>
-                <span className="text-[15px] leading-[1.45] text-[#999] transition-colors duration-200 group-hover:text-[#1f1f1f]">
-                  {f.body}
-                </span>
-              </Link>
-            </li>
-          ))}
-        </ul>
-      </Section>
-
       <Section title="Experience">
         <ul className="border-t border-black/10!">
           {experience.map((e) => (
-            <li
-              key={e.company}
-              className="grid grid-cols-[1fr_auto] items-baseline gap-x-4 gap-y-0.5 border-b border-black/10! py-4 sm:grid-cols-[1fr_1fr_120px]"
-            >
-              <span className="text-[17px] font-medium tracking-[-0.02em]">{e.company}</span>
-              <span className="order-3 text-left text-[15px] text-[#999] sm:order-none">{t(e.role, locale)}</span>
-              <span className="text-right font-mono text-[12px] text-[#999]">
+            <li key={e.company} className="flex items-center gap-4 border-b border-black/10! py-4">
+              {/* logo in a rounded square, as tall as the name + role */}
+              <span
+                className="flex size-[44px] shrink-0 items-center justify-center overflow-hidden rounded-[6px] bg-[#f2f2f2]"
+                style={e.logo ? { background: e.logo.bg } : undefined}
+              >
+                {e.logo ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src={e.logo.src}
+                    alt=""
+                    className={e.logo.cover ? "size-full object-cover" : "object-contain"}
+                    style={
+                      e.logo.cover
+                        ? undefined
+                        : {
+                            width: e.logo.size ?? "60%",
+                            height: e.logo.size ?? "60%",
+                            filter: e.logo.whiten ? "brightness(0) invert(1)" : undefined,
+                          }
+                    }
+                  />
+                ) : (
+                  <span className="font-mono text-[11px] text-[#999]">{e.company.slice(0, 2).toUpperCase()}</span>
+                )}
+              </span>
+              <span className="flex min-w-0 flex-1 flex-col gap-0.5">
+                <span className="text-[17px] font-medium leading-[1.25] tracking-[-0.02em]">{e.company}</span>
+                <span className="text-[15px] leading-[1.25] text-[#999]">{t(e.role, locale)}</span>
+              </span>
+              <span className="shrink-0 text-right font-mono text-[12px] text-[#999]">
                 {e.start} — {e.end ? t(e.end, locale) : "Present"}
               </span>
             </li>
@@ -177,9 +162,18 @@ export default async function AboutPage({
         </div>
       </section>
 
-      <p className="ui-haze-box mt-24 text-center text-[19px] font-medium leading-[1.3] tracking-[-0.03em] text-[#999] sm:text-[24px]">
-        Off-screen, <span className="text-[#1f1f1f]">surfboards and sketchbooks</span>.
-      </p>
+      {/* the title stays pinned above the pictures while they scroll;
+          placeholders until the real GIFs / photos land */}
+      <div className="mt-24 flex w-full justify-center">
+        <OffScreenScroller
+          items={OFF_SCREEN}
+          title={
+            <p className="ui-haze-box mx-auto w-fit text-center text-[19px] font-medium leading-[1.3] tracking-[-0.03em] text-[#999] sm:text-[24px]">
+              Off-screen, <span className="text-[#1f1f1f]">I ride surfboards and draw in sketchbooks</span>.
+            </p>
+          }
+        />
+      </div>
     </div>
   );
 }

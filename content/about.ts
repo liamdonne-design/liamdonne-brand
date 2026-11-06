@@ -24,14 +24,18 @@ export type Experience = {
   role: Localized;
   start: string;
   end: Localized | null; // null => "Present"
+  /** Experience list: white logo on a square of the brand's colour.
+   *  `whiten` turns a dark logo file white; `cover` = the file is already the
+   *  whole square (logo and background). */
+  logo?: { src: string; bg: string; whiten?: boolean; cover?: boolean; size?: string };
 };
 
 export const experience: Experience[] = [
-  { company: "Synapse Medicine", role: L("Brand Designer", "Designer de marque"), start: "03/24", end: null },
-  { company: "TEDxBordeaux", role: L("Brand Designer", "Designer de marque"), start: "11/22", end: L("03/24") },
-  { company: "Cuidam", role: L("Founding Designer", "Designer fondateur"), start: "01/21", end: L("03/24") },
-  { company: "Wellputt", role: L("Art Director", "Directeur artistique"), start: "09/19", end: L("03/21") },
-  { company: "UBB Rugby", role: L("Design Intern", "Stagiaire design"), start: "09/18", end: L("06/19") },
+  { company: "Synapse Medicine", role: L("Brand Designer", "Designer de marque"), start: "03/24", end: null, logo: { src: "/clients/synapse-icon.png", bg: "linear-gradient(135deg, #00A0FF 0%, #0031FF 100%)", whiten: true, size: "50%" } },
+  { company: "TEDxBordeaux", role: L("Brand Designer", "Designer de marque"), start: "11/22", end: L("03/24"), logo: { src: "/clients/tedx-white.png", bg: "#000000", size: "80%" } },
+  { company: "Cuidam", role: L("Founding Designer", "Designer fondateur"), start: "01/21", end: L("03/24"), logo: { src: "/clients/cuidam.png", bg: "#8071D2", cover: true } },
+  { company: "Wellputt", role: L("Art Director", "Directeur artistique"), start: "09/19", end: L("03/21"), logo: { src: "/clients/wellputt.svg", bg: "#111111", cover: true } },
+  { company: "UBB Rugby", role: L("Design Intern", "Stagiaire design"), start: "09/18", end: L("06/19"), logo: { src: "/clients/ubb-white.svg", bg: "#6D2139", size: "84%" } },
 ];
 
 export const tools = [
