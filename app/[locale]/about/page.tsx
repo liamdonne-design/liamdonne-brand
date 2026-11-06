@@ -1,11 +1,12 @@
 import type { ReactNode } from "react";
 import { setRequestLocale } from "next-intl/server";
-import { experience, skills, tools } from "@/content/about";
+import { experience } from "@/content/about";
 import { t } from "@/content/projects";
 import type { Locale } from "@/i18n/routing";
 import { Link } from "@/i18n/navigation";
 import { ArrowRight } from "iconsax-react";
 import LitText, { type LitRun } from "@/components/LitText";
+import ToolsDeck from "@/components/ToolsDeck";
 
 // Intro (Figma "Info"): all grey, letters darken near the cursor (as the
 // Playground intro lights up).
@@ -14,7 +15,11 @@ const INK: [number, number, number] = [0, 0, 0];
 const INTRO: LitRun[][] = [
   [
     {
-      text: "I’m a Franco-British brand designer working at the intersection of strategy, visual design, and storytelling, with a strong focus on health and tech products. I design brand identities and visual systems that help complex platforms feel clear, credible, and human by aligning visual language, tone, and motion across touchpoints.",
+      text: "I’m a Franco-British brand designer working at the intersection of strategy, visual design, and storytelling, with a strong focus on health and tech products. ",
+      strong: true,
+    },
+    {
+      text: "I design brand identities and visual systems that help complex platforms feel clear, credible, and human by aligning visual language, tone, and motion across touchpoints.",
     },
   ],
   [
@@ -60,6 +65,12 @@ const FOCUS = [
   },
 ];
 
+// What I do, then how AI fits into it: a teammate, not a replacement.
+const CAPABILITIES = [
+  "Now that anyone can make an image in seconds, the designer’s job is less about making and more about deciding: what’s worth saying, what fits the brand, what earns trust and what quietly breaks it. That judgment is the part of the work I protect.",
+  "AI is my everyday sparring partner. I start from my own idea, then I might use Midjourney to explore wider and Claude to challenge my thinking, prototype a tool or turn a brand into a system the whole team can use. It handles the repetitive. I keep the concept.",
+];
+
 function Section({ title, children }: { title: string; children: ReactNode }) {
   return (
     <section className="mt-24 w-full">
@@ -91,6 +102,7 @@ export default async function AboutPage({
         paragraphs={INTRO}
         base={GREY}
         lit={INK}
+        strongColor="#1f1f1f"
         className="ui-haze-box mt-8 text-center text-[19px] font-medium leading-[1.3] tracking-[-0.03em] sm:text-[24px]"
         paragraphClassName="[&+&]:mt-[1.3em]"
       />
@@ -99,7 +111,7 @@ export default async function AboutPage({
         <div className="flex flex-wrap justify-center gap-x-16 gap-y-10">
           {NUMBERS.map((n) => (
             <div key={n.label} className="text-center">
-              <p className="text-[40px] font-medium leading-none tracking-[-0.04em] sm:text-[48px]">{n.value}</p>
+              <p className="font-mono text-[80px] leading-none tracking-[-0.04em] sm:text-[96px]">{n.value}</p>
               <p className="mx-auto mt-3 max-w-[18ch] font-mono text-[12px] leading-[1.3] text-[#999]">{n.label}</p>
             </div>
           ))}
@@ -149,26 +161,21 @@ export default async function AboutPage({
         </ul>
       </Section>
 
-      <Section title="Capabilities">
-        <ul className="flex flex-wrap justify-center gap-2">
-          {skills.map((s) => (
-            <li key={s.en} className="rounded-[6px] bg-[#ebebeb] px-2.5 py-1 text-[14px] leading-[1.3]">
-              {t(s, locale)}
-            </li>
+      {/* Capabilities + Tools, merged (Figma frames 1321316230 / 31): text left,
+          the tools card on the right deals out the tools on click */}
+      <section className="mt-24 grid w-[min(1100px,calc(100vw-40px))] items-center gap-12 md:grid-cols-[minmax(0,480px)_minmax(0,560px)] md:justify-between">
+        <div className="ui-haze-box text-[19px] font-medium leading-[1.3] tracking-[-0.02em] text-[#999] sm:text-[22px]">
+          <h2 className="font-semibold text-[#1f1f1f]">My job as a designer.</h2>
+          {CAPABILITIES.map((para) => (
+            <p key={para} className="mt-[1.3em]">
+              {para}
+            </p>
           ))}
-        </ul>
-      </Section>
-
-      <Section title="Tools">
-        <p className="text-center text-[17px] leading-[1.6] tracking-[-0.02em] text-[#999]">
-          {tools.map((tool, i) => (
-            <span key={tool}>
-              <span className="text-[#1f1f1f]">{tool}</span>
-              {i < tools.length - 1 && " · "}
-            </span>
-          ))}
-        </p>
-      </Section>
+        </div>
+        <div>
+          <ToolsDeck />
+        </div>
+      </section>
 
       <p className="ui-haze-box mt-24 text-center text-[19px] font-medium leading-[1.3] tracking-[-0.03em] text-[#999] sm:text-[24px]">
         Off-screen, <span className="text-[#1f1f1f]">surfboards and sketchbooks</span>.

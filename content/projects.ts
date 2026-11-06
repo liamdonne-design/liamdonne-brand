@@ -137,8 +137,9 @@ const rawProjects: Project[] = [
     overview: {
       headline: L("The blinking heart"),
       body: [
-        L("MedGPT started as a side project by one of our AI engineers, an internal tool to help us build our other products. People kept using it, until everyone understood it was *the* product: Synapse Medicine’s AI assistant for healthcare professionals."),
-        L("Nine years earlier, the company’s founder had described exactly this. In 2025 the technology caught up. I led the creative direction and designed the visual identity; the marketing team led the naming and the strategy."),
+        L("MedGPT is an AI assistant that helps healthcare professionals make clinical decisions. Synapse Medicine built it as a standalone product, and launched it right where AI, trust and medical rigour collide."),
+        L("The challenge: stand clearly apart from generalist AI, and reassure doctors on what they care about most, **reliability, sovereignty and scientific credibility**."),
+        L("I led the creative direction and the visual identity, worked hand in hand with the product teams to build one brand and product system, and oversaw the launch assets across motion, web, social and print."),
       ],
     },
     cover: { type: "image", src: "/work/medgpt/cover-app-icon.jpg", ratio: "1/1" },
@@ -364,7 +365,7 @@ export const companies: Company[] = [
     role: L("Brand Designer", "Designer de marque"),
     years: "2025–2026",
     about: L(
-      "Synapse Medicine’s AI assistant for healthcare professionals. I built its brand in fourteen days, then everything it needed to go out into the world: a motion system, a launch film, street activations and events."
+      "Synapse Medicine’s AI assistant for healthcare professionals. I built its brand, then everything it needed to go out into the world: a motion system, a launch film, street activations and events."
     ),
     slugs: ["synapse-medgpt-branding", "medgpt-motion-system", "medgpt-launch-film", "synapse-manifestation-event"],
   },
