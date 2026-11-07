@@ -44,7 +44,7 @@ function Fact({ label, lines }: { label: string; lines: string[] }) {
 }
 
 /**
- * Case study: title top-left, then Role / Scope / Industry / Type, one big
+ * Case study: title top-left, then Scope / Year / Industry, one big
  * visual that sums the project up, the overview, and the story section by
  * section (mono label left, text right, visuals under it).
  */
@@ -75,11 +75,10 @@ export default async function ProjectPage({
           {/* the project's article on Medium; the profile until it has one */}
           <MediumButton href={project.medium ?? mediumProfile} />
         </div>
-        <dl className="mt-8 grid grid-cols-2 gap-x-8 gap-y-8 border-t border-black/10! pt-8 md:grid-cols-4">
-          <Fact label={tp("role")} lines={[t(project.role, locale), project.year]} />
+        <dl className="mt-8 grid grid-cols-2 gap-x-8 gap-y-8 border-t border-black/10! pt-8 md:grid-cols-3">
           <Fact label="Scope" lines={lines(project.scope)} />
+          <Fact label="Year" lines={[project.year]} />
           <Fact label="Industry" lines={lines(project.industry)} />
-          <Fact label="Type" lines={lines(project.kind)} />
         </dl>
       </header>
 
@@ -109,7 +108,7 @@ export default async function ProjectPage({
 
       {/* ---------------- STATS ---------------- */}
       {project.stats && (
-        <Reveal className="border-t border-black/10! py-12 md:py-16">
+        <Reveal className="py-12 md:py-16">
           <dl className="ui-haze-box grid grid-cols-2 gap-y-10 md:grid-cols-4">
             {project.stats.map((s, i) => (
               <div key={i}>

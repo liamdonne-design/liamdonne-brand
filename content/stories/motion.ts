@@ -45,4 +45,11 @@ export const motionStory: StorySection[] = [
       v(19, "16/9", "half"),
     ],
   },
+  {
+    title: p("Key results & takeaways"),
+    body: [
+      p("[Liam — key results: where the motion system is used today, by whom, and what it changed.]"),
+      p("[Liam — one takeaway: what you learned, or what you’d do differently.]"),
+    ],
+  },
 ];

@@ -15,13 +15,11 @@ const INK: [number, number, number] = [0, 0, 0];
 const INTRO: LitRun[][] = [
   [
     {
-      text: "I’m a Franco-British brand designer working at the intersection of strategy, visual design, and storytelling, with a strong focus on health and tech products. ",
+      text: "I’m a Franco-British brand designer working at the intersection of strategy, visual design, and storytelling, with a strong focus on health and tech products.",
       strong: true,
     },
-    {
-      text: "I design brand identities and visual systems that help complex platforms feel clear, credible, and human by aligning visual language, tone, and motion across touchpoints.",
-    },
   ],
+  // own paragraph: the spacing between paragraphs separates the two sentences
   [
     {
       text: "My work blends strong conceptual thinking with hands-on execution, from defining brand systems to shipping campaigns, motion assets, and digital content at scale.",
@@ -93,7 +91,7 @@ export default async function AboutPage({
       />
 
       <Section title="By the numbers">
-        <div className="flex flex-wrap justify-center gap-x-16 gap-y-10">
+        <div className="flex flex-col items-center gap-y-10 sm:flex-row sm:flex-wrap sm:justify-center sm:gap-x-16">
           {NUMBERS.map((n) => (
             <div key={n.label} className="text-center">
               <p className="font-mono text-[80px] leading-none tracking-[-0.04em] sm:text-[96px]">

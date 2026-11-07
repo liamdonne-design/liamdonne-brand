@@ -52,7 +52,11 @@ export const heartsStory: StorySection[] = [
     ],
   },
   {
-    title: p("Results"),
-    body: [p("[Liam — what the 72 hours raised or reached: funds, viewers, hours watched, Ulule result, if you have them.]")],
+    title: p("Key results & takeaways"),
+    body: [
+      p("**10 streamers**, live on their own channels for **four days**, from 20 to 23 April."),
+      p("[Liam — what the 72 hours raised or reached: funds, viewers, hours watched, Ulule result, if you have them.]"),
+      p("[Liam — one takeaway: what you learned, or what you’d do differently.]"),
+    ],
   },
 ];

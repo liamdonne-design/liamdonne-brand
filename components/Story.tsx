@@ -58,6 +58,7 @@ function inline(text: string): ReactNode {
  *   "\n" inside a block   → line break, no gap (as in Liam's layouts)
  *   lines starting "- "  → bulleted list, attached to the line above
  *   "> text" block       → pull quote
+ *   "! text" block       → grey takeaway box
  *   **bold** / *italic*  → inline emphasis
  */
 function Block({ text }: { text: string }) {
@@ -66,6 +67,11 @@ function Block({ text }: { text: string }) {
       <blockquote className="my-2 font-display text-[26px] leading-[1.2] text-[#1f1f1f] md:text-[32px]">
         {inline(text.slice(2))}
       </blockquote>
+    );
+  // "! text": a takeaway set apart in a grey box, in the body style
+  if (text.startsWith("! "))
+    return (
+      <p className="rounded-[8px] bg-[#ebebeb] px-5 py-4 text-[#1f1f1f]">{inline(text.slice(2))}</p>
     );
   // "[Liam — …]": copy still to write, shown as a note until it is
   if (text.startsWith("[") && text.endsWith("]"))
@@ -156,7 +162,7 @@ export function StorySections({ sections }: { sections: ResolvedSection[] }) {
         // grey stand-in, except the last one (the page moves on to other things)
         const media = s.media.length > 0 || idx === sections.length - 1 ? s.media : [VISUAL_TO_COME];
         return (
-          <section key={`${s.title}-${idx}`} className="border-t border-black/10! py-12 md:py-16">
+          <section key={`${s.title}-${idx}`} className="py-12 md:py-16">
             {/* a section with neither title nor text is a run of visuals on its own */}
             {(s.title || s.paras.length > 0) && (
               <div className="mb-10 grid grid-cols-1 gap-4 md:grid-cols-[1fr_2fr] md:gap-8">

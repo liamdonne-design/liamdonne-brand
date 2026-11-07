@@ -1,5 +1,5 @@
 import Image from "next/image";
-import type { Media } from "@/content/projects";
+import type { Media, MediaOverlay } from "@/content/projects";
 import LazyVideo from "./LazyVideo";
 
 export function MediaBlock({
@@ -48,6 +48,41 @@ export function MediaBlock({
           className="object-cover"
         />
       )}
+      {media.overlays?.map((o) => (
+        <Overlay key={o.src} overlay={o} />
+      ))}
+    </div>
+  );
+}
+
+/** A clip laid over a board image, positioned in percent so it scales with it. */
+function Overlay({ overlay: o }: { overlay: MediaOverlay }) {
+  const [W, H] = o.frame ?? [1920, 1080];
+  const [cx, cy, cw, ch] = o.clip;
+  const [bx, by, bw, bh] = o.box ?? o.clip;
+  const pct = (n: number) => `${n * 100}%`;
+  return (
+    <div
+      className="absolute overflow-hidden"
+      style={{
+        left: pct(cx / W),
+        top: pct(cy / H),
+        width: pct(cw / W),
+        height: pct(ch / H),
+        // the radius scales with the board: a share of its width
+        borderRadius: `${((o.radius ?? 16) / cw) * 100}% / ${((o.radius ?? 16) / ch) * 100}%`,
+      }}
+    >
+      <LazyVideo
+        className="absolute h-full w-full max-w-none object-cover"
+        style={{
+          left: pct((bx - cx) / cw),
+          top: pct((by - cy) / ch),
+          width: pct(bw / cw),
+          height: pct(bh / ch),
+        }}
+        src={o.src}
+      />
     </div>
   );
 }

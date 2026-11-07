@@ -59,4 +59,11 @@ export const cuidamStory: StorySection[] = [
       },
     ],
   },
+  {
+    title: p("Key results & takeaways"),
+    body: [
+      p("[Liam — key results: reach, community, partners, or what the brand made possible.]"),
+      p("[Liam — one takeaway: what you learned, or what you’d do differently.]"),
+    ],
+  },
 ];

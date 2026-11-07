@@ -14,6 +14,7 @@ const PULL = 7; // max drift of a dot toward the cursor (px)
 /**
  * Site-wide background: a grid of faint grey dots on white. Dots near the
  * cursor (or finger) light up, swell and lean toward it, trailing it softly.
+ * Dots under text and small UI (.ui-haze / .ui-haze-box) stay still.
  * Sits behind all content (z -1) and never takes pointer events.
  */
 export default function DotField() {
@@ -54,7 +55,25 @@ export default function DotField() {
       dot = getComputedStyle(document.documentElement).getPropertyValue("--dot-color").trim() || DOT;
     };
 
+    // text and small UI (.ui-haze / .ui-haze-box): dots under them never move
+    // or light up, fading back in over CALM px around the box
+    const CALM = 14;
+    const calmBoxes = () => {
+      if (energy < 0.002) return [];
+      const out: DOMRect[] = [];
+      for (const el of document.querySelectorAll(".ui-haze, .ui-haze-box")) {
+        const r = el.getBoundingClientRect();
+        if (r.width === 0 || r.bottom < -REACH || r.top > h + REACH) continue;
+        // only boxes the cursor's glow can reach
+        if (cur.x < r.left - REACH - CALM || cur.x > r.right + REACH + CALM) continue;
+        if (cur.y < r.top - REACH - CALM || cur.y > r.bottom + REACH + CALM) continue;
+        out.push(r);
+      }
+      return out;
+    };
+
     const draw = () => {
+      const boxes = calmBoxes();
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       ctx.clearRect(0, 0, w, h);
       const ox = (w % GAP) / 2;
@@ -66,6 +85,14 @@ export default function DotField() {
           const d = Math.sqrt(dx * dx + dy * dy);
           let k = d < REACH ? 1 - d / REACH : 0;
           k = k * k * energy; // eased falloff
+          if (k > 0) {
+            for (const b of boxes) {
+              const ex = Math.max(b.left - x, 0, x - b.right);
+              const ey = Math.max(b.top - y, 0, y - b.bottom);
+              const e = Math.sqrt(ex * ex + ey * ey);
+              if (e < CALM) k *= e / CALM;
+            }
+          }
           const px = d > 0 ? x + (dx / d) * PULL * k : x;
           const py = d > 0 ? y + (dy / d) * PULL * k : y;
           ctx.globalAlpha = BASE_A + (PEAK_A - BASE_A) * k;
@@ -123,6 +150,9 @@ export default function DotField() {
       draw();
     };
     window.addEventListener("resize", resize);
+    // a theme switch changes --dot-color: redraw right away
+    const onTheme = () => redraw.current();
+    window.addEventListener("ui-theme", onTheme);
     if (!reduce) {
       window.addEventListener("pointermove", onMove, { passive: true });
       window.addEventListener("pointerdown", onMove, { passive: true });
@@ -130,6 +160,7 @@ export default function DotField() {
     }
     return () => {
       window.removeEventListener("resize", resize);
+      window.removeEventListener("ui-theme", onTheme);
       window.removeEventListener("pointermove", onMove);
       window.removeEventListener("pointerdown", onMove);
       document.documentElement.removeEventListener("pointerleave", onLeave);

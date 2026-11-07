@@ -36,4 +36,11 @@ export const libertyStory: StorySection[] = [
       },
     ],
   },
+  {
+    title: p("Key results & takeaways"),
+    body: [
+      p("[Liam — key results: what the event achieved.]"),
+      p("[Liam — one takeaway: what you learned, or what you’d do differently.]"),
+    ],
+  },
 ];

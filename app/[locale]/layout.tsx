@@ -57,9 +57,15 @@ export default async function LocaleLayout({
               Light only: no theme provider — the site keeps its own palette. */}
           <FluidRoot>
             <DotField />
-            <ChromeGate nav={<Nav />} footer={<SiteFooter />}>
-              <main className="flex-1">{children}</main>
-            </ChromeGate>
+            {/* the haze halos (::before, wider than their text) and the
+                Playground board reach past the screen edge: clip them so the
+                page never scrolls sideways. `clip`, not `hidden`, so sticky
+                sections keep working (and fixed elements are not clipped). */}
+            <div className="flex flex-1 flex-col overflow-x-clip">
+              <ChromeGate nav={<Nav />} footer={<SiteFooter />}>
+                <main className="flex-1">{children}</main>
+              </ChromeGate>
+            </div>
           </FluidRoot>
         </NextIntlClientProvider>
       </body>

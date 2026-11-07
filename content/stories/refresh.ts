@@ -59,8 +59,9 @@ export const refreshStory: StorySection[] = [
     ],
   },
   {
-    title: p("What I learned"),
+    title: p("Key results & takeaways"),
     body: [
+      p("Synapse got its **first brand book**, **3 product suites** with one colour each, and self-service tools used by the whole company, **50 to 100 people**."),
       p("The AI-generated shapes were hard to animate, and I'm not a 3D animator: I got there with Spline and Midjourney. Next time, motion comes first. A concept called *The Shapes of Life* should move from day one."),
     ],
     media: [

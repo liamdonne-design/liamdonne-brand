@@ -92,7 +92,7 @@ export const chatEntries: ChatEntry[] = [
       en: [
         "MedGPT is Synapse Medicine's AI assistant for healthcare professionals. We had fourteen days to build its brand, so there was room for exactly one concept: the blinking heart. A text cursor blinks, a heart beats: the most recognisable symbol in computing and the most recognisable one in medicine, doing the same thing.",
         "So the symbol is a caret, not a brain, not a sparkle. In the system, the cursor is the healthcare professional: they ask, MedGPT answers. Around it: Instrument Serif for the voice of medical literature, IBM Plex Mono for the register of lab results, a millimetre grid, and Synapse's three colours blended into a gradient used as a signature, not a surface.",
-        "In its first month the launch got 25 press articles, 21,500 visitors, 108,000 social impressions and 20,000 views on the film. The full story, including the part that went wrong, is in the [case study](/work/synapse-medgpt-branding).",
+        "In its first month the launch got +25 press articles, +21,500 visitors, +108,000 social impressions and +20,000 views on the film. The full story, including the part that went wrong, is in the [case study](/work/synapse-medgpt-branding).",
       ],
       fr: [
         "MedGPT, c'est l'assistant d'IA de Synapse Medicine pour les professionnels de santé. On avait quatorze jours pour construire sa marque, donc la place pour un seul concept : le cœur qui clignote. Un curseur clignote, un cœur bat : le symbole le plus reconnaissable de l'informatique et celui de la médecine font exactement la même chose.",

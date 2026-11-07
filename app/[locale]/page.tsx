@@ -21,13 +21,14 @@ export default async function Home({
   setRequestLocale(locale);
 
   return (
-    <div className="flex min-h-[100dvh] w-full flex-col items-center px-4 pb-8 pt-8 text-[#1f1f1f]">
+    // relative z-10: above the Work preview cards, which sit on the page behind it
+    <div data-home className="relative z-10 flex min-h-[100dvh] w-full flex-col items-center px-4 pb-8 pt-8 text-[var(--ui-fg)]">
       <header>
         <SiteMark />
       </header>
 
       <div className="flex flex-1 flex-col items-center justify-center gap-[33px] py-12">
-        <h1 className="ui-haze-box text-center text-[19px] leading-[1.3] tracking-[-0.02em] sm:text-[24px]">
+        <h1 className="ui-haze-box text-[var(--ui-fg)] text-center text-[19px] leading-[1.3] tracking-[-0.02em] sm:text-[24px]">
           <span className="font-medium text-[#999]">Hey, my name is</span>{" "}
           <span className="font-semibold">Liam</span>.
           <br />

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, type CSSProperties } from "react";
 
 /**
  * Muted looping video that only loads and plays while it's on screen —
@@ -10,10 +10,12 @@ export default function LazyVideo({
   src,
   poster,
   className = "",
+  style,
 }: {
   src: string;
   poster?: string;
   className?: string;
+  style?: CSSProperties;
 }) {
   const ref = useRef<HTMLVideoElement>(null);
 
@@ -39,6 +41,7 @@ export default function LazyVideo({
     <video
       ref={ref}
       className={className}
+      style={style}
       src={src}
       poster={poster}
       muted

@@ -87,11 +87,12 @@ export const medgptFilmStory: StorySection[] = [
     ],
   },
   {
-    title: p("Results"),
+    title: p("Key results & takeaways"),
     body: [
-      p("In the first month: **25 press articles**, **21,500 visitors**, **108,000 social impressions** and **20,000 views** on the film."),
+      p("In the first month:\n- **+25** press articles\n- **+21,500** visitors\n- **+108,000** social impressions\n- **+20,000** views on the film"),
       p("And the message I’m keeping forever, from our CEO, about the film:"),
       p("> “I have just one thing to say: this video is the most beautiful thing I’ve seen in my life, after my wife, my son and a Juventus win in the Champions League.”"),
+      p("[Liam — one takeaway: what you learned, or what you’d do differently.]"),
     ],
     media: [
       {

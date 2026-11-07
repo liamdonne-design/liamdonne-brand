@@ -308,6 +308,8 @@ html {
   --ui-invert: 0;
   --ui-bg: #ffffff;
   --dot-color: #9a9a95;
+  --ui-chip-hover: #dcdcdc;
+  --ui-card-edge: #ffffff;
 }
 
 /* A page that renders [data-dark-page] (Playground) turns the whole canvas
@@ -321,6 +323,43 @@ html:has([data-dark-page]) {
   --ui-invert: 1;
   --ui-bg: #1f1f1f;
   --dot-color: #8c8c88;
+  --ui-chip-hover: #474747;
+  --ui-card-edge: #383838;
+}
+
+/* Home: hovering the Playground card turns the page dark like the Playground
+   tab (HomeCards), in a plain cross-fade timed on the card's own hover
+   animation (0.6s, same ease). The theme colours are typed (@property) so
+   they fade once, on <html>, and every element just follows them;
+   [data-home-fade] is only set while it runs. */
+@property --ui-fg { syntax: "<color>"; inherits: true; initial-value: #1f1f1f; }
+@property --ui-chip { syntax: "<color>"; inherits: true; initial-value: #ebebeb; }
+@property --ui-chip-hover { syntax: "<color>"; inherits: true; initial-value: #dcdcdc; }
+@property --ui-card-edge { syntax: "<color>"; inherits: true; initial-value: #ffffff; }
+@property --ui-hl { syntax: "<color>"; inherits: true; initial-value: rgb(0 0 0 / 0.06); }
+@property --ui-bg { syntax: "<color>"; inherits: true; initial-value: #ffffff; }
+@property --ui-invert { syntax: "<number>"; inherits: true; initial-value: 0; }
+html[data-home-fade] {
+  transition-property: background-color, --ui-fg, --ui-chip, --ui-chip-hover, --ui-card-edge, --ui-hl, --ui-bg, --ui-invert;
+  transition-duration: 0.6s;
+  transition-timing-function: cubic-bezier(0.45, 0, 0.25, 1);
+}
+/* elements just follow the fading colours (their own transitions would restart every frame) */
+html[data-home-fade] [data-home],
+html[data-home-fade] [data-home] * {
+  transition-property: none;
+}
+html[data-home-dark] {
+  color-scheme: dark;
+  background: #1f1f1f;
+  --ui-fg: #ffffff;
+  --ui-chip: #383838;
+  --ui-hl: rgb(255 255 255 / 0.08);
+  --ui-invert: 1;
+  --ui-bg: #1f1f1f;
+  --dot-color: #8c8c88;
+  --ui-chip-hover: #474747;
+  --ui-card-edge: #383838;
 }
 
 body {
@@ -1146,36 +1185,12 @@ body {
     display: none;
 }
 
-/* Soft page-coloured glow behind small UI (tabs, links) so the dot field
-   and its cursor highlight don't fight the text. */
-.ui-haze {
-  position: relative;
-  isolation: isolate;
-}
-.ui-haze::before {
-  content: "";
-  position: absolute;
-  inset: -18px -28px;
-  z-index: -1;
-  pointer-events: none;
-  background: radial-gradient(closest-side, var(--ui-bg) 55%, transparent 100%);
-}
-
-/* Same idea for whole blocks (paragraphs, lists): a page-coloured panel with
-   blurred edges, so it covers the corners the round glow would miss. */
+/* .ui-haze / .ui-haze-box mark small UI and text blocks. They used to sit on
+   a page-coloured halo; now the dot field simply stays still under them
+   (DotField skips their boxes), so there is no halo to see. */
+.ui-haze,
 .ui-haze-box {
   position: relative;
-  isolation: isolate;
-}
-.ui-haze-box::before {
-  content: "";
-  position: absolute;
-  inset: -16px -20px;
-  z-index: -1;
-  pointer-events: none;
-  border-radius: 24px;
-  background: var(--ui-bg);
-  filter: blur(10px);
 }
 
 /* A still that turns on itself (the UBB badge on the Playground story). */

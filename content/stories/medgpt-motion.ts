@@ -125,4 +125,11 @@ export const medgptMotionStory: StorySection[] = [
       { type: "image", src: `${D}/jitter.png`, ratio: "1610/1804", span: "half" },
     ],
   },
+  {
+    title: p("Key results & takeaways"),
+    body: [
+      p("[Liam — key results: how many videos or people use the system and the Jitter library, if you have it.]"),
+      p("[Liam — one takeaway: what you learned, or what you’d do differently.]"),
+    ],
+  },
 ];

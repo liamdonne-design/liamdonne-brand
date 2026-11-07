@@ -2,9 +2,10 @@
 
 import Image from "next/image";
 import { motion } from "motion/react";
-import type { ReactNode } from "react";
+import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
 import { Link } from "@/i18n/navigation";
 import LoopVideo from "./LoopVideo";
+import WorkPreview from "./WorkPreview";
 
 const MotionLink = motion.create(Link);
 
@@ -21,29 +22,58 @@ function Card({
   href,
   label,
   tilt,
+  caption,
   labelFirst = false,
+  onHover,
+  id,
+  active,
   children,
 }: {
+  id?: string;
+  /** hover state driven from outside (the Playground card), instead of pointer events */
+  active?: boolean;
+  onHover?: (on: boolean) => void;
   href: string;
   label: string;
   tilt: number;
+  /** a short line that appears centred under the card while it's hovered */
+  caption: string;
   labelFirst?: boolean;
   children: ReactNode;
 }) {
-  const text = <span className="font-medium leading-[1.3] text-[#1f1f1f]">{label}</span>;
+  const text = <span className="font-medium leading-[1.3] text-[var(--ui-fg)]">{label}</span>;
   return (
     <MotionLink
       href={href}
-      initial={{ rotate: tilt, backgroundColor: "#ebebeb" }}
-      whileHover={{ rotate: 0, y: -4, scale: 1.03, backgroundColor: "#dcdcdc" }}
-      whileFocus={{ rotate: 0, y: -4, scale: 1.03, backgroundColor: "#dcdcdc" }}
+      data-home-card={id}
+      initial="rest"
+      animate={active ? "hover" : "rest"}
+      whileHover={active === undefined ? "hover" : undefined}
+      whileFocus="hover"
       whileTap={{ scale: 0.99 }}
+      variants={{ rest: { rotate: tilt, y: 0, scale: 1 }, hover: { rotate: 0, y: -4, scale: 1.03 } }}
       transition={ease}
-      className="relative flex shrink-0 flex-col items-center gap-[0.572em] rounded-[0.857em] border border-white! p-[0.572em] outline-none hover:z-10 focus-visible:z-10"
+      onHoverStart={() => onHover?.(true)}
+      onHoverEnd={() => onHover?.(false)}
+      onFocus={() => onHover?.(true)}
+      onBlur={() => onHover?.(false)}
+      // theme colours (they turn dark with the page); hover darkens the grey
+      data-active={active}
+      className={`relative flex shrink-0 flex-col items-center gap-[0.572em] rounded-[0.857em] border border-[var(--ui-card-edge)]! bg-[var(--ui-chip)] p-[0.572em] outline-none transition-colors duration-300 ease-in-out focus-visible:z-10 focus-visible:bg-[var(--ui-chip-hover)] ${
+        active === undefined ? "hover:z-10 hover:bg-[var(--ui-chip-hover)]" : "data-[active=true]:z-10 data-[active=true]:bg-[var(--ui-chip-hover)]"
+      }`}
     >
       {labelFirst && text}
       <span className="relative block size-[7.5em] overflow-hidden rounded-[0.572em] bg-white">{children}</span>
       {!labelFirst && text}
+      <motion.span
+        aria-hidden
+        className="pointer-events-none absolute left-1/2 top-full mt-[1em] -translate-x-1/2 whitespace-nowrap text-center text-[12px] font-medium leading-[1.3] text-[#999]"
+        variants={{ rest: { opacity: 0, y: -4 }, hover: { opacity: 1, y: 0 } }}
+        transition={{ duration: 0.25, ease: "easeOut" }}
+      >
+        {caption}
+      </motion.span>
     </MotionLink>
   );
 }
@@ -55,23 +85,76 @@ export function CompanyTag() {
       href="https://www.synapse-medicine.com/fr"
       target="_blank"
       rel="noopener noreferrer"
-      className="ml-[0.1em] inline-block rounded-[6px] bg-[#ebebeb] pl-[4px] pr-[5px] font-semibold leading-[1.2] tracking-[-0.03em] transition-colors duration-300 ease-in-out hover:bg-[#dcdcdc] focus-visible:bg-[#dcdcdc]"
+      className="ml-[0.1em] inline-block rounded-[6px] bg-[var(--ui-chip)] text-[var(--ui-fg)] pl-[4px] pr-[5px] font-semibold leading-[1.2] tracking-[-0.03em] transition-colors duration-300 ease-in-out hover:bg-[var(--ui-chip-hover)] focus-visible:bg-[var(--ui-chip-hover)]"
     >
       Synapse Medicine
     </a>
   );
 }
 
+/**
+ * Hovering Playground turns the home page dark like the Playground tab: a
+ * plain cross-fade lasting as long as the card's hover animation (globals.css,
+ * [data-home-fade] / [data-home-dark]).
+ */
+function useHomeDark() {
+  const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    const html = document.documentElement;
+    return () => {
+      if (timer.current) clearTimeout(timer.current);
+      html.removeAttribute("data-home-dark");
+      html.removeAttribute("data-home-fade");
+    };
+  }, []);
+
+  return useCallback((on: boolean) => {
+    const html = document.documentElement;
+    if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      html.setAttribute("data-home-fade", "");
+      if (timer.current) clearTimeout(timer.current);
+      timer.current = setTimeout(() => html.removeAttribute("data-home-fade"), ease.duration * 1000 + 100);
+    }
+    html.toggleAttribute("data-home-dark", on);
+    window.dispatchEvent(new Event("ui-theme")); // the dot field picks up its new colour
+  }, []);
+}
+
 export default function HomeCards() {
+  // hovering Work scatters project visuals around the screen
+  const [work, setWork] = useState(false);
+  // hovering Playground fades the page to dark. Read from the pointer
+  // position, with a few px of slack on the way out so the edge doesn't flicker.
+  const setDark = useHomeDark();
+  const [playground, setPlayground] = useState(false);
+  useEffect(() => {
+    let inside = false;
+    const onMove = (e: PointerEvent) => {
+      if (e.pointerType !== "mouse") return;
+      const r = document.querySelector("[data-home-card=playground]")?.getBoundingClientRect();
+      const m = inside ? 8 : 0;
+      const now =
+        !!r && e.clientX >= r.left - m && e.clientX <= r.right + m && e.clientY >= r.top - m && e.clientY <= r.bottom + m;
+      if (now === inside) return;
+      inside = now;
+      setPlayground(now);
+      setDark(now);
+    };
+    window.addEventListener("pointermove", onMove, { passive: true });
+    return () => window.removeEventListener("pointermove", onMove);
+  }, [setDark]);
+
   return (
     <nav aria-label="Main" className="flex items-center gap-[0.5em] text-[11.5px] sm:text-[17.5px]">
-      <Card href="/work" label="Work" tilt={4.1}>
+      <WorkPreview show={work} />
+      <Card href="/work" label="Work" tilt={4.1} caption="Discover my latest projects" onHover={setWork}>
         <Image src="/home/work.jpg" alt="" fill sizes="132px" className="scale-[1.06] object-cover object-top" priority />
       </Card>
-      <Card href="/playground" label="Playground" tilt={-4.83} labelFirst>
+      <Card href="/playground" label="Playground" tilt={-4.83} caption="Check out my fun experiments" labelFirst id="playground" active={playground}>
         <LoopVideo src="/home/playground.mp4" aria-hidden className="absolute inset-0 size-full object-cover" />
       </Card>
-      <Card href="/about" label="Info" tilt={4.22}>
+      <Card href="/about" label="Info" tilt={4.22} caption="Who am I? Click to know">
         {/* animated GIF: plain img keeps the animation */}
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src="/home/info.gif" alt="" className="absolute inset-0 size-full object-cover" />

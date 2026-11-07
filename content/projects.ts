@@ -23,6 +23,21 @@ export type Media = {
   note?: string;
   /** layout width on desktop grid: "full" (default), "half" or "third" */
   span?: "full" | "half" | "third" | "quarter";
+  /** looping clips laid over an image (a Figma board whose GIFs must keep playing) */
+  overlays?: MediaOverlay[];
+};
+
+/**
+ * A muted looping clip placed over an image, in the image's own pixel
+ * coordinates (`frame`, 1920×1080 by default): `clip` is the visible rounded
+ * window, `box` where the clip sits inside it (defaults to the window).
+ */
+export type MediaOverlay = {
+  src: string;
+  clip: [x: number, y: number, w: number, h: number];
+  box?: [x: number, y: number, w: number, h: number];
+  radius?: number;
+  frame?: [w: number, h: number];
 };
 
 /** One titled part of a long-form case study, with the visuals that follow it. */
@@ -84,10 +99,10 @@ export function t(value: Localized, locale: Locale): string {
 const L = (en: string, fr?: string): Localized => ({ en, fr: fr ?? en });
 
 const MEDGPT_STATS = [
-  { value: "25", label: L("press articles", "articles de presse") },
-  { value: "21.5k", label: L("visitors in month one", "visiteurs le premier mois") },
-  { value: "108k", label: L("social impressions", "impressions social") },
-  { value: "20k", label: L("views on the film", "vues sur le film") },
+  { value: "+25", label: L("press articles", "articles de presse") },
+  { value: "+21.5k", label: L("visitors in month one", "visiteurs le premier mois") },
+  { value: "+108k", label: L("social impressions", "impressions social") },
+  { value: "+20k", label: L("views on the film", "vues sur le film") },
 ];
 
 const rawProjects: Project[] = [
@@ -109,6 +124,7 @@ const rawProjects: Project[] = [
     overview: {
       headline: L("Motion as a language, not a decoration"),
       body: [
+        L("Synapse Medicine is a Bordeaux health-tech company turned AI and data company. As its sole brand designer, I gave the brand a way to move."),
         L("The Synapse Medicine Motion Identity System is a foundational layer of the brand, designed to bring clarity, consistency and meaning to every animated interaction. Built at the crossroads of healthcare, technology and AI, it turns motion into a functional language: one that supports understanding, guides attention and reinforces trust in high-stakes medical environments."),
         L("Each movement is designed to simplify complexity, reduce cognitive load, and express Synapse’s vision of a modern, reliable and human-centred healthcare ecosystem."),
       ],
@@ -143,11 +159,8 @@ const rawProjects: Project[] = [
       ],
     },
     cover: { type: "image", src: "/work/medgpt/cover-app-icon.jpg", ratio: "1/1" },
-    hero: { type: "image", src: "/work/medgpt/04.jpg", ratio: "2526/1438" },
-    overviewMedia: [
-      { type: "video", src: "/work/medgpt/05.mp4", ratio: "1/1", span: "half" },
-      { type: "video", src: "/work/medgpt/06.mp4", ratio: "1/1", span: "half" },
-    ],
+    hero: { type: "image", src: "/work/medgpt/page/00-hero.jpg", ratio: "16/9" },
+    overviewMedia: [{ type: "image", src: "/work/medgpt/page/01-overview.jpg", ratio: "16/9" }],
     story: medgptStory,
     medium: "https://medium.com/@liamdonne_59272/branding-medgpt-f7994e383a58",
     gallery: [],
@@ -168,6 +181,7 @@ const rawProjects: Project[] = [
     overview: {
       headline: L("The pulse"),
       body: [
+        L("MedGPT is Synapse Medicine’s AI assistant for healthcare professionals. After building its brand, I gave it a motion system."),
         L("MedGPT’s concept is a blinking heart: a text cursor blinks, a heart beats. That is already a motion idea, so the motion system isn’t a layer on top of the brand. It’s the concept doing its job."),
         L("MedGPT turns complexity into clarity. The system gives that sentence a body: a philosophy, six behaviours, six principles, timing rules, and a Jitter library so anyone making a MedGPT video starts from the same pieces."),
       ],
@@ -194,7 +208,7 @@ const rawProjects: Project[] = [
     overview: {
       headline: L("Forty seconds, no explaining"),
       body: [
-        L("MedGPT launched on 12 September 2025 with a 40-second film that runs the product instead of describing it, and with two physical activations that took the brand where medicine is read and learned: bookmarks and stickers."),
+        L("MedGPT is Synapse Medicine’s AI assistant for healthcare professionals. It launched on 12 September 2025 with a 40-second film that runs the product instead of describing it, and with two physical activations that took the brand where medicine is read and learned: bookmarks and stickers."),
       ],
     },
     stats: MEDGPT_STATS,
@@ -257,6 +271,7 @@ const rawProjects: Project[] = [
     overview: {
       headline: L("Psychology, without the waiting-room feeling"),
       body: [
+        L("Cuidam is a student mental-health support initiative I started after graduating, and I was its founding designer from 2021 to 2024."),
         L("Cuidam set out to change the norms around mental health and psychology for students. My job was to give a shape to its mission: a welcoming, inclusive place where students feel comfortable asking for the psychological support they need."),
         L("The problem it was up against: healthcare, and psychology in particular, tends to look cold and sound formal. For a twenty-year-old, that reads as *not for me*."),
       ],
