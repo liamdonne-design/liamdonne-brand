@@ -124,9 +124,9 @@ const rawProjects: Project[] = [
     overview: {
       headline: L("Motion as a language, not a decoration"),
       body: [
-        L("Synapse Medicine is a Bordeaux health-tech company turned AI and data company. As its sole brand designer, I gave the brand a way to move."),
-        L("The Synapse Medicine Motion Identity System is a foundational layer of the brand, designed to bring clarity, consistency and meaning to every animated interaction. Built at the crossroads of healthcare, technology and AI, it turns motion into a functional language: one that supports understanding, guides attention and reinforces trust in high-stakes medical environments."),
-        L("Each movement is designed to simplify complexity, reduce cognitive load, and express Synapse’s vision of a modern, reliable and human-centred healthcare ecosystem."),
+        L("The Synapse Medicine Motion Identity System is a foundational layer of the brand, designed to bring clarity, consistency, and meaning to every animated interaction. Built at the crossroads of healthcare, technology, and AI, the system transforms motion into a functional language—one that supports understanding, guides attention, and reinforces trust in high-stakes medical environments."),
+        L("Rather than treating animation as a decorative element, this project positions motion as a strategic tool. Each movement is designed to simplify complexity, reduce cognitive load, and express Synapse’s vision of a modern, reliable, and human-centered healthcare ecosystem."),
+        L("Text animations play a central role within the Motion Identity System. They are directly inspired by dynamic actions already present in Synapse products—such as word-by-word appearances in Copilot Recos or natural scrolling behaviors. This creates a strong link between brand expression and real product interactions, ensuring coherence between marketing, interface, and motion language."),
       ],
     },
     cover: { type: "video", src: "/work/synapse-motion-identity/cover.mp4", ratio: "1440/852" },
@@ -237,8 +237,9 @@ const rawProjects: Project[] = [
     overview: {
       headline: L("The Shapes of Life"),
       body: [
-        L("By 2024, Synapse Medicine had become an AI and data company, with new products, new markets and acquisitions. Its brand still looked like the start-up it used to be, and there were no brand guidelines."),
-        L("The job: make the brand scalable, turn one brand into a family of product brands, and speak to both the software publishers who integrate Synapse and the healthcare professionals who use it."),
+        L("Synapse Medicine is a medical decision-support company founded by physicians and engineers, combining medical expertise and artificial intelligence to help healthcare professionals make safer, more informed decisions."),
+        L("As the company entered a phase of rapid growth, international expansion, and a major shift toward AI-driven products, the existing brand no longer reflected the scale, ambition, or complexity of the ecosystem."),
+        L("I led the corporate brand refresh end-to-end, with leadership, marketing, product and medical teams. The goal: clarify the offer, reinforce credibility, and unify the corporate brand with a growing suite of products."),
       ],
     },
     stats: [
@@ -271,9 +272,8 @@ const rawProjects: Project[] = [
     overview: {
       headline: L("Psychology, without the waiting-room feeling"),
       body: [
-        L("Cuidam is a student mental-health support initiative I started after graduating, and I was its founding designer from 2021 to 2024."),
-        L("Cuidam set out to change the norms around mental health and psychology for students. My job was to give a shape to its mission: a welcoming, inclusive place where students feel comfortable asking for the psychological support they need."),
-        L("The problem it was up against: healthcare, and psychology in particular, tends to look cold and sound formal. For a twenty-year-old, that reads as *not for me*."),
+        L("Cuidam was born to disrupt and revolutionize the norms surrounding mental health and psychology. My role at Cuidam has been to fully express the following mission: to create a welcoming and inclusive environment where students feel comfortable seeking the psychological support they need."),
+        L("The healthcare sector, especially psychology, tends to be visually cold, uninviting, and verbally formal. These aspects make it less appealing and accessible to a younger audience, such as students, due to its lack of personality and charisma."),
       ],
     },
     cover: { type: "image", src: "/work/cuidam-corporate-branding/cover.jpg", ratio: "1400/720" },
@@ -307,8 +307,9 @@ const rawProjects: Project[] = [
     overview: {
       headline: L("72 hours live, one pixel at a time"),
       body: [
-        L("Cuidam Hearts was a charity event on Twitch, part of Cuidam’s crowdfunding campaign on Ulule. The aim: raise awareness of youth mental health through a 72-hour video-game streaming marathon."),
-        L("From Thursday 20 to Sunday 23 April, 10 streamers went live on their own channels and asked their viewers to rally behind Cuidam. I designed the event’s brand universe and the on-screen environment for those four days."),
+        L("Cuidam Hearts was a charity event held on Twitch as part of Cuidam’s crowdfunding campaign on Ulule. The aim was to raise awareness about youth mental health issues through a 72-hour video game streaming marathon."),
+        L("From Thursday, April 20th to Sunday, April 23rd, 10 streamers broadcasted live content on their Twitch channels, encouraging viewers to rally support for Cuidam."),
+        L("As part of this unprecedented event, I was responsible for developing the brand universe and designing the perfect environment for these four days of live streaming. I drew my inspiration from the world of video games and computer science, introducing the pixel as the main pattern."),
       ],
     },
     cover: {
@@ -389,7 +390,7 @@ export const companies: Company[] = [
     role: L("Brand Designer", "Designer de marque"),
     years: "2024–now",
     about: L(
-      "A Bordeaux health-tech company turned AI and data company. Sole brand designer on its refresh: the identity, a family of product brands, a motion language, and self-service tools the whole company uses."
+      "An AI medical decision-support company built on one idea: simplifying medical complexity without losing rigor. As sole brand designer, I gave that idea a shape: a refreshed identity, a family of product brands and a motion language."
     ),
     slugs: ["synapse-corporate-refresh", "synapse-motion-identity"],
   },

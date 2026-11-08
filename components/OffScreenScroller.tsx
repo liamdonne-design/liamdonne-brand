@@ -23,6 +23,8 @@ export type OffScreenItem = {
   alt: string;
   video?: string; // a looping, muted clip shown in the frame
   youtube?: string; // YouTube id: the cursor turns into a play button, a click opens it
+  /** half and half: the `video` loops on the left half, this picture fills the right half */
+  pair?: string;
 };
 
 export default function OffScreenScroller({
@@ -107,7 +109,13 @@ export default function OffScreenScroller({
               animate={{ opacity: active === i ? 1 : 0 }}
               transition={{ duration: 0.6, ease: "easeInOut" }}
             >
-              {it.video ? (
+              {it.pair && it.video ? (
+                <div className="flex size-full">
+                  <LoopVideo src={it.video} preload="metadata" className="h-full w-1/2 object-cover" />
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={it.pair} alt={it.alt} draggable={false} className="h-full w-1/2 select-none object-cover" />
+                </div>
+              ) : it.video ? (
                 <LoopVideo src={it.video} poster={it.src} preload="metadata" className="size-full object-cover" />
               ) : (
                 // eslint-disable-next-line @next/next/no-img-element

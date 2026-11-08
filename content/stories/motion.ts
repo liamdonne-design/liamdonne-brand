@@ -31,9 +31,7 @@ export const motionStory: StorySection[] = [
   },
   {
     title: p("Text in motion"),
-    body: [
-      p("Text animations play a central role within the Motion Identity System. They are directly inspired by dynamic actions already present in Synapse products—such as word-by-word appearances in Copilot Recos or natural scrolling behaviors. This creates a strong link between brand expression and real product interactions, ensuring coherence between marketing, interface, and motion language."),
-    ],
+    body: [], // the text is in the overview
     media: [
       v(12, "16/9"),
       v(13, "16/9", "half"),

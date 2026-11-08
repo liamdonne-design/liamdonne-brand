@@ -40,7 +40,7 @@ const CAPABILITIES = [
   "AI is my everyday sparring partner. I start from my own idea, then I might use Midjourney to explore wider and Claude to challenge my thinking, prototype a tool or turn a brand into a system the whole team can use. It handles the repetitive. I keep the concept.",
 ];
 
-// Off-screen gallery: 5 GIFs / photos to come, random placeholders for now.
+// Off-screen gallery: surf, Truffe, a sketchbook painting, shaping a board.
 const OFF_SCREEN = [
   {
     src: "/info/surf-poster.jpg",
@@ -48,10 +48,19 @@ const OFF_SCREEN = [
     video: "/info/surf.mp4", // 0:27–0:42 of the film, muted
     youtube: "tWyjdlYnAKE",
   },
-  ...[2, 3, 4, 5].map((n) => ({
-    src: `https://picsum.photos/seed/liam-offscreen-${n}/1600/1000`,
-    alt: `Off-screen ${n}`,
-  })),
+  {
+    src: "/info/truffe.jpg",
+    alt: "Truffe, in a sketchbook and in real life",
+    video: "/info/truffe.mp4", // the whole clip, cut at 0:16, muted
+    pair: "/info/truffe.jpg",
+  },
+  { src: "/info/sketchbook-1.jpg", alt: "Sketchbook: a painted portrait of Riles" },
+  {
+    src: "/info/board-poster.jpg",
+    alt: "Liam’s Board",
+    video: "/info/board.mp4", // 0:51–1:08 of the film, muted
+    youtube: "8LqLCdeKbew",
+  },
 ];
 
 function Section({ title, children }: { title: string; children: ReactNode }) {

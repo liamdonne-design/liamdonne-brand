@@ -2,8 +2,8 @@
 
 import Image from "next/image";
 import { motion } from "motion/react";
-import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
-import { Link } from "@/i18n/navigation";
+import { useCallback, useEffect, useRef, useState, type MouseEvent, type ReactNode } from "react";
+import { Link, useRouter } from "@/i18n/navigation";
 import LoopVideo from "./LoopVideo";
 import WorkPreview from "./WorkPreview";
 
@@ -25,14 +25,11 @@ function Card({
   caption,
   labelFirst = false,
   onHover,
-  id,
-  active,
+  onClick,
   children,
 }: {
-  id?: string;
-  /** hover state driven from outside (the Playground card), instead of pointer events */
-  active?: boolean;
   onHover?: (on: boolean) => void;
+  onClick?: (e: MouseEvent<HTMLAnchorElement>) => void;
   href: string;
   label: string;
   tilt: number;
@@ -45,10 +42,9 @@ function Card({
   return (
     <MotionLink
       href={href}
-      data-home-card={id}
+      onClick={onClick}
       initial="rest"
-      animate={active ? "hover" : "rest"}
-      whileHover={active === undefined ? "hover" : undefined}
+      whileHover="hover"
       whileFocus="hover"
       whileTap={{ scale: 0.99 }}
       variants={{ rest: { rotate: tilt, y: 0, scale: 1 }, hover: { rotate: 0, y: -4, scale: 1.03 } }}
@@ -58,10 +54,7 @@ function Card({
       onFocus={() => onHover?.(true)}
       onBlur={() => onHover?.(false)}
       // theme colours (they turn dark with the page); hover darkens the grey
-      data-active={active}
-      className={`relative flex shrink-0 flex-col items-center gap-[0.572em] rounded-[0.857em] border border-[var(--ui-card-edge)]! bg-[var(--ui-chip)] p-[0.572em] outline-none transition-colors duration-300 ease-in-out focus-visible:z-10 focus-visible:bg-[var(--ui-chip-hover)] ${
-        active === undefined ? "hover:z-10 hover:bg-[var(--ui-chip-hover)]" : "data-[active=true]:z-10 data-[active=true]:bg-[var(--ui-chip-hover)]"
-      }`}
+      className="relative flex shrink-0 flex-col items-center gap-[0.572em] rounded-[0.857em] border border-[var(--ui-card-edge)]! bg-[var(--ui-chip)] p-[0.572em] outline-none transition-colors duration-300 ease-in-out hover:z-10 hover:bg-[var(--ui-chip-hover)] focus-visible:z-10 focus-visible:bg-[var(--ui-chip-hover)]"
     >
       {labelFirst && text}
       <span className="relative block size-[7.5em] overflow-hidden rounded-[0.572em] bg-white">{children}</span>
@@ -93,9 +86,9 @@ export function CompanyTag() {
 }
 
 /**
- * Hovering Playground turns the home page dark like the Playground tab: a
- * plain cross-fade lasting as long as the card's hover animation (globals.css,
- * [data-home-fade] / [data-home-dark]).
+ * Clicking Playground turns the home page dark like the Playground tab before
+ * going there: a plain cross-fade as long as the card's hover animation
+ * (globals.css, [data-home-fade] / [data-home-dark]).
  */
 function useHomeDark() {
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -124,26 +117,20 @@ function useHomeDark() {
 export default function HomeCards() {
   // hovering Work scatters project visuals around the screen
   const [work, setWork] = useState(false);
-  // hovering Playground fades the page to dark. Read from the pointer
-  // position, with a few px of slack on the way out so the edge doesn't flicker.
+  // clicking Playground fades the page to dark, then opens the (dark) Playground tab
   const setDark = useHomeDark();
-  const [playground, setPlayground] = useState(false);
+  const router = useRouter();
+  const toPlayground = (e: MouseEvent<HTMLAnchorElement>) => {
+    // new tab / window: leave the link alone
+    if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
+    e.preventDefault();
+    setDark(true);
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    setTimeout(() => router.push("/playground"), reduce ? 0 : ease.duration * 1000);
+  };
   useEffect(() => {
-    let inside = false;
-    const onMove = (e: PointerEvent) => {
-      if (e.pointerType !== "mouse") return;
-      const r = document.querySelector("[data-home-card=playground]")?.getBoundingClientRect();
-      const m = inside ? 8 : 0;
-      const now =
-        !!r && e.clientX >= r.left - m && e.clientX <= r.right + m && e.clientY >= r.top - m && e.clientY <= r.bottom + m;
-      if (now === inside) return;
-      inside = now;
-      setPlayground(now);
-      setDark(now);
-    };
-    window.addEventListener("pointermove", onMove, { passive: true });
-    return () => window.removeEventListener("pointermove", onMove);
-  }, [setDark]);
+    router.prefetch("/playground");
+  }, [router]);
 
   return (
     <nav aria-label="Main" className="flex items-center gap-[0.5em] text-[11.5px] sm:text-[17.5px]">
@@ -151,7 +138,7 @@ export default function HomeCards() {
       <Card href="/work" label="Work" tilt={4.1} caption="Discover my latest projects" onHover={setWork}>
         <Image src="/home/work.jpg" alt="" fill sizes="132px" className="scale-[1.06] object-cover object-top" priority />
       </Card>
-      <Card href="/playground" label="Playground" tilt={-4.83} caption="Check out my fun experiments" labelFirst id="playground" active={playground}>
+      <Card href="/playground" label="Playground" tilt={-4.83} caption="Check out my fun experiments" labelFirst onClick={toPlayground}>
         <LoopVideo src="/home/playground.mp4" aria-hidden className="absolute inset-0 size-full object-cover" />
       </Card>
       <Card href="/about" label="Info" tilt={4.22} caption="Who am I? Click to know">

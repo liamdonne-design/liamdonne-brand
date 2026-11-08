@@ -10,7 +10,6 @@ export const heartsStory: StorySection[] = [
   {
     title: p("The idea"),
     body: [
-      p("A video-game marathon called for the language of video games and computing, so the **pixel** became the main pattern of the event."),
       p("[Liam — how the pixel and the heart work together, and why the red and pink.]"),
     ],
     media: [
