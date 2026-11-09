@@ -3,7 +3,6 @@ import { cuidamStory } from "./stories/cuidam";
 import { heartsStory } from "./stories/hearts";
 import { libertyStory } from "./stories/liberty";
 import { medgptStory } from "./stories/medgpt";
-import { medgptFilmStory } from "./stories/medgpt-film";
 import { medgptMotionStory } from "./stories/medgpt-motion";
 import { motionStory } from "./stories/motion";
 import { refreshStory } from "./stories/refresh";
@@ -84,6 +83,8 @@ export type Project = {
   /** link to the long-form "backstage" article on Medium (shown when set) */
   medium?: string;
   cover: Media;
+  /** Work page: show the cover in its own ratio instead of the staggered tall/short frames */
+  keepCoverRatio?: boolean;
   /** the big visual at the top of the case study (defaults to the cover) */
   hero?: Media;
   gallery: Media[];
@@ -98,48 +99,72 @@ export function t(value: Localized, locale: Locale): string {
 // Helper for placeholder localized strings
 const L = (en: string, fr?: string): Localized => ({ en, fr: fr ?? en });
 
-const MEDGPT_STATS = [
-  { value: "+25", label: L("press articles", "articles de presse") },
-  { value: "+21.5k", label: L("visitors in month one", "visiteurs le premier mois") },
-  { value: "+108k", label: L("social impressions", "impressions social") },
-  { value: "+20k", label: L("views on the film", "vues sur le film") },
-];
-
 const rawProjects: Project[] = [
   {
-    slug: "synapse-motion-identity",
+    slug: "medgpt-motion-system",
     index: "01",
     client: "Synapse Medicine",
-    title: L("Synapse in Motion"),
+    title: L("MedGPT — Motion Design System"),
     role: L("Brand Designer", "Designer de marque"),
-    year: "2025",
-    scope: [L("Motion system"), L("Brand")],
+    year: "2026",
+    scope: [L("Motion system"), L("Guidelines"), L("Jitter library")],
     industry: [L("Healthcare"), L("AI")],
     kind: [L("Motion")],
-    tags: [L("Motion design"), L("Brand system", "Système de marque"), L("Visual identity", "Identité visuelle")],
-    summary: L(
-      "A living motion language for a medical AI platform.",
-      "Un langage de motion vivant pour une plateforme d'IA médicale."
-    ),
+    tags: [L("Motion design"), L("Brand system", "Système de marque")],
+    summary: L("The pulse: a motion system for a medical AI assistant."),
     overview: {
-      headline: L("Motion as a language, not a decoration"),
+      headline: L("The pulse"),
       body: [
-        L("The Synapse Medicine Motion Identity System is a foundational layer of the brand, designed to bring clarity, consistency, and meaning to every animated interaction. Built at the crossroads of healthcare, technology, and AI, the system transforms motion into a functional language—one that supports understanding, guides attention, and reinforces trust in high-stakes medical environments."),
-        L("Rather than treating animation as a decorative element, this project positions motion as a strategic tool. Each movement is designed to simplify complexity, reduce cognitive load, and express Synapse’s vision of a modern, reliable, and human-centered healthcare ecosystem."),
-        L("Text animations play a central role within the Motion Identity System. They are directly inspired by dynamic actions already present in Synapse products—such as word-by-word appearances in Copilot Recos or natural scrolling behaviors. This creates a strong link between brand expression and real product interactions, ensuring coherence between marketing, interface, and motion language."),
+        L("MedGPT is Synapse Medicine’s AI assistant for healthcare professionals. After building its brand, I gave it a motion system."),
+        L("MedGPT’s concept is a blinking heart: a text cursor blinks, a heart beats. That is already a motion idea, so the motion system isn’t a layer on top of the brand. It’s the concept doing its job."),
+        L("MedGPT turns complexity into clarity. The system gives that sentence a body: a philosophy, six behaviours, six principles, timing rules, and a Jitter library so anyone making a MedGPT video starts from the same pieces."),
       ],
     },
-    cover: { type: "video", src: "/work/synapse-motion-identity/cover.mp4", ratio: "1440/852" },
-    overviewMedia: [{ type: "video", src: "/work/synapse-motion-identity/01.mp4", ratio: "16/9" }],
-    story: motionStory,
+    cover: { type: "video", src: "/work/medgpt-motion-system/scribe-ambiant.mp4", ratio: "16/9" },
+    keepCoverRatio: true,
+    hero: { type: "video", src: "/work/medgpt-motion-system/app-question-answer.mp4", ratio: "16/9" },
+    overviewMedia: [{ type: "video", src: "/work/medgpt-motion-system/gradient-flow.mp4", ratio: "16/9" }],
+    story: medgptMotionStory,
+    gallery: [],
+    ready: true,
+  },
+  {
+    slug: "synapse-manifestation-event",
+    index: "02",
+    client: "Synapse Medicine",
+    title: L("MedGPT — Brand Campaign"),
+    role: L("Brand Designer", "Designer de marque"),
+    year: "2026",
+    scope: [L("Event identity"), L("Campaign")],
+    industry: [L("Healthcare"), L("AI")],
+    kind: [L("Event")],
+    tags: [L("Event branding", "Identité d'événement"), L("Visual identity", "Identité visuelle"), L("Campaign", "Campagne")],
+    summary: L(
+      "A bold event identity for a health-tech gathering.",
+      "Une identité d'événement affirmée pour un rassemblement health-tech."
+    ),
+    overview: {
+      headline: L("Liberté, Egalité, MedGPT"),
+      body: [L("[Liam — context to come: what the event was, where and when, who it was for, and what you designed.]")],
+    },
+    cover: { type: "video", src: "/work/synapse-manifestation-event/cover.mp4", ratio: "16/9" },
+    overviewMedia: [
+      {
+        type: "placeholder",
+        src: "",
+        ratio: "16/9",
+        note: "The event at a glance: the key visual in place, on a screen, a banner or a poster.",
+      },
+    ],
+    story: libertyStory,
     gallery: [],
     ready: true,
   },
   {
     slug: "synapse-medgpt-branding",
-    index: "02",
+    index: "03",
     client: "Synapse Medicine",
-    title: L("MedGPT Branding"),
+    title: L("MedGPT — Brand Identity"),
     role: L("Brand Designer", "Designer de marque"),
     year: "2025",
     scope: [L("Concept"), L("Visual identity"), L("Guidelines")],
@@ -167,55 +192,31 @@ const rawProjects: Project[] = [
     ready: true,
   },
   {
-    slug: "medgpt-motion-system",
-    index: "03",
-    client: "Synapse Medicine",
-    title: L("MedGPT Motion System"),
-    role: L("Brand Designer", "Designer de marque"),
-    year: "2025",
-    scope: [L("Motion system"), L("Guidelines"), L("Jitter library")],
-    industry: [L("Healthcare"), L("AI")],
-    kind: [L("Motion")],
-    tags: [L("Motion design"), L("Brand system", "Système de marque")],
-    summary: L("The pulse: a motion system for a medical AI assistant."),
-    overview: {
-      headline: L("The pulse"),
-      body: [
-        L("MedGPT is Synapse Medicine’s AI assistant for healthcare professionals. After building its brand, I gave it a motion system."),
-        L("MedGPT’s concept is a blinking heart: a text cursor blinks, a heart beats. That is already a motion idea, so the motion system isn’t a layer on top of the brand. It’s the concept doing its job."),
-        L("MedGPT turns complexity into clarity. The system gives that sentence a body: a philosophy, six behaviours, six principles, timing rules, and a Jitter library so anyone making a MedGPT video starts from the same pieces."),
-      ],
-    },
-    cover: { type: "video", src: "/work/medgpt-motion-system/lang-pulse.mp4", ratio: "35/16" },
-    hero: { type: "video", src: "/work/medgpt-motion-system/app-question-answer.mp4", ratio: "16/9" },
-    overviewMedia: [{ type: "video", src: "/work/medgpt-motion-system/gradient-flow.mp4", ratio: "16/9" }],
-    story: medgptMotionStory,
-    gallery: [],
-    ready: true,
-  },
-  {
-    slug: "medgpt-launch-film",
+    slug: "synapse-motion-identity",
     index: "04",
     client: "Synapse Medicine",
-    title: L("MedGPT Launch"),
+    title: L("Synapse — Motion Design System"),
     role: L("Brand Designer", "Designer de marque"),
     year: "2025",
-    scope: [L("Launch film"), L("Print"), L("Guerrilla")],
+    scope: [L("Motion system"), L("Brand")],
     industry: [L("Healthcare"), L("AI")],
-    kind: [L("Campaign")],
-    tags: [L("Launch campaign", "Campagne de lancement"), L("Film")],
-    summary: L("Forty seconds of film, then out into the street."),
+    kind: [L("Motion")],
+    tags: [L("Motion design"), L("Brand system", "Système de marque"), L("Visual identity", "Identité visuelle")],
+    summary: L(
+      "A living motion language for a medical AI platform.",
+      "Un langage de motion vivant pour une plateforme d'IA médicale."
+    ),
     overview: {
-      headline: L("Forty seconds, no explaining"),
+      headline: L("Motion as a language, not a decoration"),
       body: [
-        L("MedGPT is Synapse Medicine’s AI assistant for healthcare professionals. It launched on 12 September 2025 with a 40-second film that runs the product instead of describing it, and with two physical activations that took the brand where medicine is read and learned: bookmarks and stickers."),
+        L("The Synapse Medicine Motion Identity System is a foundational layer of the brand, designed to bring clarity, consistency, and meaning to every animated interaction. Built at the crossroads of healthcare, technology, and AI, the system transforms motion into a functional language—one that supports understanding, guides attention, and reinforces trust in high-stakes medical environments."),
+        L("Rather than treating animation as a decorative element, this project positions motion as a strategic tool. Each movement is designed to simplify complexity, reduce cognitive load, and express Synapse’s vision of a modern, reliable, and human-centered healthcare ecosystem."),
+        L("Text animations play a central role within the Motion Identity System. They are directly inspired by dynamic actions already present in Synapse products—such as word-by-word appearances in Copilot Recos or natural scrolling behaviors. This creates a strong link between brand expression and real product interactions, ensuring coherence between marketing, interface, and motion language."),
       ],
     },
-    stats: MEDGPT_STATS,
-    cover: { type: "image", src: "/work/medgpt/15.jpg", ratio: "1067/1250" },
-    hero: { type: "video", src: "/work/medgpt/cover.mp4", ratio: "16/9" },
-    overviewMedia: [{ type: "image", src: "/work/medgpt/10.jpg", ratio: "2800/1440" }],
-    story: medgptFilmStory,
+    cover: { type: "video", src: "/work/synapse-motion-identity/cover.mp4", ratio: "1440/852" },
+    overviewMedia: [{ type: "video", src: "/work/synapse-motion-identity/01.mp4", ratio: "16/9" }],
+    story: motionStory,
     gallery: [],
     ready: true,
   },
@@ -223,7 +224,7 @@ const rawProjects: Project[] = [
     slug: "synapse-corporate-refresh",
     index: "05",
     client: "Synapse Medicine",
-    title: L("Synapse Medicine"),
+    title: L("Synapse — Brand Refresh"),
     role: L("Brand Designer", "Designer de marque"),
     year: "2024",
     scope: [L("Brand refresh"), L("Brand architecture"), L("Web")],
@@ -255,45 +256,10 @@ const rawProjects: Project[] = [
     ready: true,
   },
   {
-    slug: "cuidam-corporate-branding",
+    slug: "cuidam-hearts-event",
     index: "06",
     client: "Cuidam",
-    title: L("Cuidam"),
-    role: L("Founding Designer", "Designer fondateur"),
-    year: "2021",
-    scope: [L("Brand identity"), L("Visual system")],
-    industry: [L("Mental health"), L("Students")],
-    kind: [L("Brand")],
-    tags: [L("Brand identity", "Identité de marque"), L("Visual system", "Système visuel"), L("Creative direction", "Direction créative")],
-    summary: L(
-      "Founding the visual identity of a healthcare startup from zero.",
-      "Fonder l'identité visuelle d'une startup santé à partir de zéro."
-    ),
-    overview: {
-      headline: L("Psychology, without the waiting-room feeling"),
-      body: [
-        L("Cuidam was born to disrupt and revolutionize the norms surrounding mental health and psychology. My role at Cuidam has been to fully express the following mission: to create a welcoming and inclusive environment where students feel comfortable seeking the psychological support they need."),
-        L("The healthcare sector, especially psychology, tends to be visually cold, uninviting, and verbally formal. These aspects make it less appealing and accessible to a younger audience, such as students, due to its lack of personality and charisma."),
-      ],
-    },
-    cover: { type: "image", src: "/work/cuidam-corporate-branding/cover.jpg", ratio: "1400/720" },
-    overviewMedia: [
-      {
-        type: "placeholder",
-        src: "",
-        ratio: "16/9",
-        note: "Cuidam at a glance: the logo with two or three key applications (social, poster, website).",
-      },
-    ],
-    story: cuidamStory,
-    gallery: [],
-    ready: true,
-  },
-  {
-    slug: "cuidam-hearts-event",
-    index: "07",
-    client: "Cuidam",
-    title: L("Cuidam Hearts"),
+    title: L("Cuidam — Event Branding"),
     role: L("Founding Designer", "Designer fondateur"),
     year: "2023",
     scope: [L("Event identity"), L("Live-stream design")],
@@ -324,34 +290,37 @@ const rawProjects: Project[] = [
     ready: true,
   },
   {
-    slug: "synapse-manifestation-event",
-    index: "08",
-    client: "Synapse Medicine",
-    title: L("Liberté, Egalité, MedGPT"),
-    role: L("Brand Designer", "Designer de marque"),
-    year: "2026",
-    scope: [L("Event identity"), L("Campaign")],
-    industry: [L("Healthcare"), L("AI")],
-    kind: [L("Event")],
-    tags: [L("Event branding", "Identité d'événement"), L("Visual identity", "Identité visuelle"), L("Campaign", "Campagne")],
+    slug: "cuidam-corporate-branding",
+    index: "07",
+    client: "Cuidam",
+    title: L("Cuidam — Brand Identity"),
+    role: L("Founding Designer", "Designer fondateur"),
+    year: "2021",
+    scope: [L("Brand identity"), L("Visual system")],
+    industry: [L("Mental health"), L("Students")],
+    kind: [L("Brand")],
+    tags: [L("Brand identity", "Identité de marque"), L("Visual system", "Système visuel"), L("Creative direction", "Direction créative")],
     summary: L(
-      "A bold event identity for a health-tech gathering.",
-      "Une identité d'événement affirmée pour un rassemblement health-tech."
+      "Founding the visual identity of a healthcare startup from zero.",
+      "Fonder l'identité visuelle d'une startup santé à partir de zéro."
     ),
     overview: {
-      headline: L("Liberté, Egalité, MedGPT"),
-      body: [L("[Liam — context to come: what the event was, where and when, who it was for, and what you designed.]")],
+      headline: L("Psychology, without the waiting-room feeling"),
+      body: [
+        L("Cuidam was born to disrupt and revolutionize the norms surrounding mental health and psychology. My role at Cuidam has been to fully express the following mission: to create a welcoming and inclusive environment where students feel comfortable seeking the psychological support they need."),
+        L("The healthcare sector, especially psychology, tends to be visually cold, uninviting, and verbally formal. These aspects make it less appealing and accessible to a younger audience, such as students, due to its lack of personality and charisma."),
+      ],
     },
-    cover: { type: "video", src: "/work/synapse-manifestation-event/cover.mp4", ratio: "16/9" },
+    cover: { type: "image", src: "/work/cuidam-corporate-branding/cover.jpg", ratio: "1400/720" },
     overviewMedia: [
       {
         type: "placeholder",
         src: "",
         ratio: "16/9",
-        note: "The event at a glance: the key visual in place, on a screen, a banner or a poster.",
+        note: "Cuidam at a glance: the logo with two or three key applications (social, poster, website).",
       },
     ],
-    story: libertyStory,
+    story: cuidamStory,
     gallery: [],
     ready: true,
   },
@@ -379,11 +348,11 @@ export const companies: Company[] = [
   {
     name: "MedGPT",
     role: L("Brand Designer", "Designer de marque"),
-    years: "2025–2026",
+    years: "2024–now",
     about: L(
       "Synapse Medicine’s AI assistant for healthcare professionals. I built its brand, then everything it needed to go out into the world: a motion system, a launch film, street activations and events."
     ),
-    slugs: ["synapse-medgpt-branding", "medgpt-motion-system", "medgpt-launch-film", "synapse-manifestation-event"],
+    slugs: ["medgpt-motion-system", "synapse-manifestation-event", "synapse-medgpt-branding"],
   },
   {
     name: "Synapse Medicine",
@@ -392,7 +361,7 @@ export const companies: Company[] = [
     about: L(
       "An AI medical decision-support company built on one idea: simplifying medical complexity without losing rigor. As sole brand designer, I gave that idea a shape: a refreshed identity, a family of product brands and a motion language."
     ),
-    slugs: ["synapse-corporate-refresh", "synapse-motion-identity"],
+    slugs: ["synapse-motion-identity", "synapse-corporate-refresh"],
   },
   {
     name: "Cuidam",
@@ -401,7 +370,7 @@ export const companies: Company[] = [
     about: L(
       "A student mental-health support initiative I started after graduating. I built its identity from zero, then took it live with Cuidam Hearts, a 72-hour charity stream on Twitch."
     ),
-    slugs: ["cuidam-corporate-branding", "cuidam-hearts-event"],
+    slugs: ["cuidam-hearts-event", "cuidam-corporate-branding"],
   },
 ];
 

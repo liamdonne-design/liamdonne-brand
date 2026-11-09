@@ -6,7 +6,7 @@ import { AnimatePresence, motion } from "motion/react";
 import LoopVideo from "./LoopVideo";
 
 /**
- * Hovering the home "Work" card scatters the 8 project covers around the screen
+ * Hovering the home "Work" card scatters the 7 project covers around the screen
  * (after Telescope's landing): different sizes, some cropped by the edges,
  * rounded and slowly drifting like the "My tools" cards on Info.
  * Kept to a light hand-picked list so the home page doesn't load every case study.
@@ -19,8 +19,7 @@ const PIECES = [
   { src: "/work/synapse-motion-identity/cover.mp4", x: 6, y: 31, w: 12, rot: 5 },
   // MedGPT, top right and down the right side
   { src: "/work/medgpt/cover-app-icon.jpg", x: 64, y: -5, w: 12, rot: 4 },
-  { src: "/work/medgpt-motion-system/lang-pulse.mp4", x: 74, y: 8, w: 11, rot: -5 },
-  { src: "/work/medgpt/15.jpg", x: 85, y: -4, w: 13, rot: 6 },
+  { src: "/work/medgpt-motion-system/scribe-ambiant.mp4", x: 74, y: 8, w: 11, rot: -5 },
   { src: "/work/synapse-manifestation-event/cover.mp4", x: 87, y: 27, w: 12, rot: -4 },
   // Cuidam, bottom left
   { src: "/work/cuidam-corporate-branding/cover.jpg", x: 13, y: 74, w: 13, rot: -5 },

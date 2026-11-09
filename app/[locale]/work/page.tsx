@@ -68,7 +68,7 @@ export default async function Work({
                             <MediaBlock
                               media={{
                                 ...p.cover,
-                                ratio: (c + r) % 2 === 0 ? TALL : SHORT,
+                                ratio: p.keepCoverRatio ? p.cover.ratio : (c + r) % 2 === 0 ? TALL : SHORT,
                               }}
                               sizes="(min-width: 768px) 30vw, 100vw"
                               priority={g === 0 && r === 0}
@@ -80,7 +80,7 @@ export default async function Work({
                             {t(p.title, locale)}
                           </h3>
                           <p className="font-mono text-[12px] leading-[1.3] text-[#1f1f1f]">
-                            {t(p.tags[0], locale)}, {p.year}
+                            {p.year}
                           </p>
                         </div>
                       </Link>
