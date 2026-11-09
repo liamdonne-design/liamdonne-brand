@@ -149,7 +149,7 @@ export default function ProjectModal({
           </header>
 
           <div className="px-5 md:px-10">
-            <MediaBlock media={project.cover} sizes="(max-width: 1080px) 100vw, 1000px" className="rounded-lg" />
+            <MediaBlock media={project.cover} sizes="(max-width: 1080px) 100vw, 1000px" className="rounded-[12px]" />
           </div>
 
           {project.story.length > 0 && (

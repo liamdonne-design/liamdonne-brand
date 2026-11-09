@@ -18,10 +18,18 @@ export type Media = {
   /** aspect ratio "w/h" used to reserve layout space */
   ratio?: string;
   caption?: Localized;
+  /** a short line under the caption, explaining the visual */
+  description?: Localized;
   /** for placeholders: what the visual should show */
   note?: string;
   /** layout width on desktop grid: "full" (default), "half" or "third" */
   span?: "full" | "half" | "third" | "quarter";
+  /** a thin light-grey outline, for white visuals that would melt into the page */
+  outline?: boolean;
+  /** crossed out: an example of what not to do */
+  struck?: boolean;
+  /** in a Do’s & don’ts pair: the Do or Don’t icon and label under the visual */
+  verdict?: "do" | "dont";
   /** looping clips laid over an image (a Figma board whose GIFs must keep playing) */
   overlays?: MediaOverlay[];
 };
@@ -44,6 +52,13 @@ export type StorySection = {
   title: Localized;
   body: Localized[]; // paragraphs
   media?: Media[];
+  /** a chapter heading whose sub-sections follow straight away: no stand-in visual */
+  lead?: boolean;
+  /** laid out as a guideline board (Figma "Physics"): text card left with a
+   *  "Guideline" at its foot, the visuals stacked on the right */
+  board?: { guideline: Localized[] };
+  /** visuals shown two by two on grey boards (Do’s & don’ts) */
+  pairs?: boolean;
 };
 
 /**
@@ -107,23 +122,22 @@ const rawProjects: Project[] = [
     title: L("MedGPT — Motion Design System"),
     role: L("Brand Designer", "Designer de marque"),
     year: "2026",
-    scope: [L("Motion system"), L("Guidelines"), L("Jitter library")],
+    scope: [L("Motion system"), L("Guidelines")],
     industry: [L("Healthcare"), L("AI")],
     kind: [L("Motion")],
     tags: [L("Motion design"), L("Brand system", "Système de marque")],
     summary: L("The pulse: a motion system for a medical AI assistant."),
     overview: {
-      headline: L("The pulse"),
+      headline: L("Turning complexity into clarity"),
       body: [
-        L("MedGPT is Synapse Medicine’s AI assistant for healthcare professionals. After building its brand, I gave it a motion system."),
-        L("MedGPT’s concept is a blinking heart: a text cursor blinks, a heart beats. That is already a motion idea, so the motion system isn’t a layer on top of the brand. It’s the concept doing its job."),
-        L("MedGPT turns complexity into clarity. The system gives that sentence a body: a philosophy, six behaviours, six principles, timing rules, and a Jitter library so anyone making a MedGPT video starts from the same pieces."),
+        L("MedGPT is Synapse Medicine’s AI assistant for healthcare professionals. After building its brand, I led the strategy and concept of its motion design system, to create a cohesive, expressive motion language that carries the brand across every touchpoint: product, social, presentations and brand films."),
+        L("The system gives every MedGPT video a unified, consistent feel, built on the brand’s promise: turning complexity into clarity. A Jitter library makes it usable by anyone, so every video starts from the same pieces."),
       ],
     },
     cover: { type: "video", src: "/work/medgpt-motion-system/scribe-ambiant.mp4", ratio: "16/9" },
     keepCoverRatio: true,
-    hero: { type: "video", src: "/work/medgpt-motion-system/app-question-answer.mp4", ratio: "16/9" },
-    overviewMedia: [{ type: "video", src: "/work/medgpt-motion-system/gradient-flow.mp4", ratio: "16/9" }],
+    hero: { type: "video", src: "/work/medgpt-motion-system/bento.mp4", ratio: "16/9" },
+    overviewMedia: [{ type: "video", src: "/work/medgpt-motion-system/app-question-answer.mp4", ratio: "16/9", outline: true }],
     story: medgptMotionStory,
     gallery: [],
     ready: true,
@@ -184,6 +198,7 @@ const rawProjects: Project[] = [
       ],
     },
     cover: { type: "image", src: "/work/medgpt/cover-app-icon.jpg", ratio: "1/1" },
+    keepCoverRatio: true,
     hero: { type: "image", src: "/work/medgpt/page/00-hero.jpg", ratio: "16/9" },
     overviewMedia: [{ type: "image", src: "/work/medgpt/page/01-overview.jpg", ratio: "16/9" }],
     story: medgptStory,
@@ -378,11 +393,14 @@ export const companies: Company[] = [
 export function resolveStory(
   p: Project,
   locale: Locale
-): { title: string; paras: string[]; media: Media[] }[] {
+): { title: string; paras: string[]; media: Media[]; lead?: boolean; guideline?: string[]; pairs?: boolean }[] {
   return (p.story ?? []).map((s) => ({
     title: t(s.title, locale),
     paras: s.body.map((b) => t(b, locale)),
     media: s.media ?? [],
+    lead: s.lead,
+    guideline: s.board?.guideline.map((g) => t(g, locale)),
+    pairs: s.pairs,
   }));
 }
 

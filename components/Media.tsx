@@ -1,3 +1,4 @@
+import type React from "react";
 import Image from "next/image";
 import type { Media, MediaOverlay } from "@/content/projects";
 import LazyVideo from "./LazyVideo";
@@ -7,11 +8,14 @@ export function MediaBlock({
   priority = false,
   sizes = "100vw",
   className = "",
+  fill = false,
 }: {
   media: Media;
   priority?: boolean;
   sizes?: string;
   className?: string;
+  /** desktop: fill the parent's height instead of keeping the ratio (mobile keeps it) */
+  fill?: boolean;
 }) {
   const ratio = media.ratio ?? "4/3";
 
@@ -29,8 +33,12 @@ export function MediaBlock({
 
   return (
     <div
-      className={`relative w-full overflow-hidden bg-grey-200 ${className}`}
-      style={{ aspectRatio: ratio.replace("/", " / ") }}
+      className={`relative w-full overflow-hidden bg-grey-200 ${fill ? "aspect-(--ar) md:aspect-auto md:h-full" : ""} ${className}`}
+      style={
+        fill
+          ? ({ "--ar": ratio.replace("/", " / ") } as React.CSSProperties)
+          : { aspectRatio: ratio.replace("/", " / ") }
+      }
     >
       {media.type === "video" ? (
         <LazyVideo
@@ -51,6 +59,15 @@ export function MediaBlock({
       {media.overlays?.map((o) => (
         <Overlay key={o.src} overlay={o} />
       ))}
+      {media.struck && (
+        // a single diagonal line across the frame: what not to do
+        <svg aria-hidden className="pointer-events-none absolute inset-0 size-full" preserveAspectRatio="none" viewBox="0 0 100 100">
+          <line x1="6" y1="6" x2="94" y2="94" stroke="#e5383b" strokeWidth="1" vectorEffect="non-scaling-stroke" />
+        </svg>
+      )}
+      {media.outline && (
+        <span aria-hidden className="pointer-events-none absolute inset-0 rounded-[inherit] border border-[#e5e5e5]!" />
+      )}
     </div>
   );
 }
