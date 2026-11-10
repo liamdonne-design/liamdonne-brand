@@ -8,13 +8,22 @@ import { motionStory } from "./stories/motion";
 import { refreshStory } from "./stories/refresh";
 
 /** "placeholder" = a visual still to come: a grey frame showing `note`. */
-export type MediaType = "image" | "video" | "placeholder";
+export type MediaType = "image" | "video" | "placeholder" | "slideshow" | "audio";
 
 export type Media = {
   type: MediaType;
   src: string;
   /** still image for a video (thumbnails) */
   poster?: string;
+  /** video: a real player with sound and controls instead of a muted loop */
+  controls?: boolean;
+  /** audio: the record label artwork and the track title (src = the sound file) */
+  label?: string;
+  title?: string;
+  /** audio: picture behind the record */
+  background?: string;
+  /** slideshow: the pictures it cycles through, in order */
+  slides?: { src: string; label?: string }[];
   /** aspect ratio "w/h" used to reserve layout space */
   ratio?: string;
   caption?: Localized;
@@ -23,7 +32,7 @@ export type Media = {
   /** for placeholders: what the visual should show */
   note?: string;
   /** layout width on desktop grid: "full" (default), "half" or "third" */
-  span?: "full" | "half" | "third" | "quarter";
+  span?: "full" | "half" | "third" | "quarter" | "twoThirds";
   /** a thin light-grey outline, for white visuals that would melt into the page */
   outline?: boolean;
   /** crossed out: an example of what not to do */
@@ -154,22 +163,18 @@ const rawProjects: Project[] = [
     kind: [L("Event")],
     tags: [L("Event branding", "Identité d'événement"), L("Visual identity", "Identité visuelle"), L("Campaign", "Campagne")],
     summary: L(
-      "A bold event identity for a health-tech gathering.",
-      "Une identité d'événement affirmée pour un rassemblement health-tech."
+      "A street-style campaign for sovereign medical AI.",
+      "Une campagne street pour une IA médicale souveraine."
     ),
     overview: {
       headline: L("Liberté, Egalité, MedGPT"),
-      body: [L("[Liam — context to come: what the event was, where and when, who it was for, and what you designed.]")],
+      body: [
+        L("In May 2026, MedGPT went to Santexpo, the French healthcare trade show in Paris, with one message: medical AI in France should be sovereign."),
+        L("I designed the campaign around it: the event identity, a teaser film, the social media assets, the print, the goodies and the stand."),
+      ],
     },
     cover: { type: "video", src: "/work/synapse-manifestation-event/cover.mp4", ratio: "16/9" },
-    overviewMedia: [
-      {
-        type: "placeholder",
-        src: "",
-        ratio: "16/9",
-        note: "The event at a glance: the key visual in place, on a screen, a banner or a poster.",
-      },
-    ],
+    overviewMedia: [{ type: "image", src: "/work/synapse-manifestation-event/bento-board.jpg", ratio: "16/9" }],
     story: libertyStory,
     gallery: [],
     ready: true,
@@ -365,7 +370,7 @@ export const companies: Company[] = [
     role: L("Brand Designer", "Designer de marque"),
     years: "2024–now",
     about: L(
-      "Synapse Medicine’s AI assistant for healthcare professionals. I built its brand, then everything it needed to go out into the world: a motion system, a launch film, street activations and events."
+      "Synapse Medicine’s AI assistant for healthcare professionals. I built its brand, then everything it needed to go out into the world: a motion system and a brand campaign."
     ),
     slugs: ["medgpt-motion-system", "synapse-manifestation-event", "synapse-medgpt-branding"],
   },

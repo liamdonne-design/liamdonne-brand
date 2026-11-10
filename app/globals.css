@@ -341,8 +341,14 @@ html:has([data-dark-page]) {
 @property --ui-invert { syntax: "<number>"; inherits: true; initial-value: 0; }
 html[data-home-fade] {
   transition-property: background-color, --ui-fg, --ui-chip, --ui-chip-hover, --ui-card-edge, --ui-hl, --ui-bg, --ui-invert;
-  transition-duration: 0.6s;
-  transition-timing-function: cubic-bezier(0.45, 0, 0.25, 1);
+  /* quick and front-loaded: the switch reads as instant on click */
+  transition-duration: 0.25s;
+  transition-timing-function: cubic-bezier(0.2, 0, 0, 1);
+}
+/* the cards' white rim would stay light while everything darkens: it takes
+   the card's own grey for the switch, so the card fades as one piece */
+html[data-home-fade] [data-home-card] {
+  --ui-card-edge: var(--ui-chip-hover) !important;
 }
 /* elements just follow the fading colours (their own transitions would restart every frame) */
 html[data-home-fade] [data-home],

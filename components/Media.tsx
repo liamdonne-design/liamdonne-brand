@@ -2,6 +2,9 @@ import type React from "react";
 import Image from "next/image";
 import type { Media, MediaOverlay } from "@/content/projects";
 import LazyVideo from "./LazyVideo";
+import Slideshow from "./Slideshow";
+import Vinyl from "./Vinyl";
+import FilmPlayer from "./FilmPlayer";
 
 export function MediaBlock({
   media,
@@ -40,7 +43,14 @@ export function MediaBlock({
           : { aspectRatio: ratio.replace("/", " / ") }
       }
     >
-      {media.type === "video" ? (
+      {media.type === "audio" ? (
+        <Vinyl src={media.src} label={media.label} background={media.background} title={media.title ?? ""} />
+      ) : media.type === "slideshow" ? (
+        <Slideshow slides={media.slides ?? []} />
+      ) : media.type === "video" && media.controls ? (
+        // a film with its soundtrack: a big play button, the viewer starts it
+        <FilmPlayer src={media.src} poster={media.poster} title={media.title} />
+      ) : media.type === "video" ? (
         <LazyVideo
           className="absolute inset-0 h-full w-full object-cover"
           src={media.src}

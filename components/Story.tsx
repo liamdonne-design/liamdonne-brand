@@ -10,6 +10,7 @@ const SPAN = {
   half: "md:col-span-6",
   third: "md:col-span-4",
   quarter: "md:col-span-3",
+  twoThirds: "md:col-span-8",
 } as const;
 
 const SIZES = {
@@ -17,6 +18,7 @@ const SIZES = {
   half: "(max-width: 768px) 100vw, 700px",
   third: "(max-width: 768px) 100vw, 470px",
   quarter: "(max-width: 768px) 100vw, 350px",
+  twoThirds: "(max-width: 768px) 100vw, 940px",
 } as const;
 
 /** Visuals on a 12-column grid: full / half / third / quarter width on desktop, stacked on mobile. */

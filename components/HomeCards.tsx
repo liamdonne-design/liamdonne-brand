@@ -11,6 +11,8 @@ const MotionLink = motion.create(Link);
 
 // Soft ease-in-out tween (not a spring): slow start, slow landing, no overshoot.
 const ease = { duration: 0.6, ease: [0.45, 0, 0.25, 1] } as const;
+// the dark switch on clicking Playground (globals.css, [data-home-fade]): near-instant
+const FADE_MS = 250;
 
 /**
  * The three polaroid-style cards on the home page (Work, Playground, Info).
@@ -43,6 +45,7 @@ function Card({
     <MotionLink
       href={href}
       onClick={onClick}
+      data-home-card
       initial="rest"
       whileHover="hover"
       whileFocus="hover"
@@ -87,7 +90,7 @@ export function CompanyTag() {
 
 /**
  * Clicking Playground turns the home page dark like the Playground tab before
- * going there: a plain cross-fade as long as the card's hover animation
+ * going there: a quick cross-fade, FADE_MS long
  * (globals.css, [data-home-fade] / [data-home-dark]).
  */
 function useHomeDark() {
@@ -107,7 +110,7 @@ function useHomeDark() {
     if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       html.setAttribute("data-home-fade", "");
       if (timer.current) clearTimeout(timer.current);
-      timer.current = setTimeout(() => html.removeAttribute("data-home-fade"), ease.duration * 1000 + 100);
+      timer.current = setTimeout(() => html.removeAttribute("data-home-fade"), FADE_MS + 100);
     }
     html.toggleAttribute("data-home-dark", on);
     window.dispatchEvent(new Event("ui-theme")); // the dot field picks up its new colour
@@ -126,7 +129,7 @@ export default function HomeCards() {
     e.preventDefault();
     setDark(true);
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    setTimeout(() => router.push("/playground"), reduce ? 0 : ease.duration * 1000);
+    setTimeout(() => router.push("/playground"), reduce ? 0 : FADE_MS);
   };
   useEffect(() => {
     router.prefetch("/playground");
