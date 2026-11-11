@@ -2,8 +2,8 @@
 
 import Image from "next/image";
 import { motion } from "motion/react";
-import { useCallback, useEffect, useRef, useState, type MouseEvent, type ReactNode } from "react";
-import { Link, useRouter } from "@/i18n/navigation";
+import { useState, type MouseEvent, type ReactNode } from "react";
+import { Link } from "@/i18n/navigation";
 import LoopVideo from "./LoopVideo";
 import WorkPreview from "./WorkPreview";
 
@@ -11,8 +11,6 @@ const MotionLink = motion.create(Link);
 
 // Soft ease-in-out tween (not a spring): slow start, slow landing, no overshoot.
 const ease = { duration: 0.6, ease: [0.45, 0, 0.25, 1] } as const;
-// the dark switch on clicking Playground (globals.css, [data-home-fade]): near-instant
-const FADE_MS = 250;
 
 /**
  * The three polaroid-style cards on the home page (Work, Playground, Info).
@@ -88,60 +86,16 @@ export function CompanyTag() {
   );
 }
 
-/**
- * Clicking Playground turns the home page dark like the Playground tab before
- * going there: a quick cross-fade, FADE_MS long
- * (globals.css, [data-home-fade] / [data-home-dark]).
- */
-function useHomeDark() {
-  const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  useEffect(() => {
-    const html = document.documentElement;
-    return () => {
-      if (timer.current) clearTimeout(timer.current);
-      html.removeAttribute("data-home-dark");
-      html.removeAttribute("data-home-fade");
-    };
-  }, []);
-
-  return useCallback((on: boolean) => {
-    const html = document.documentElement;
-    if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      html.setAttribute("data-home-fade", "");
-      if (timer.current) clearTimeout(timer.current);
-      timer.current = setTimeout(() => html.removeAttribute("data-home-fade"), FADE_MS + 100);
-    }
-    html.toggleAttribute("data-home-dark", on);
-    window.dispatchEvent(new Event("ui-theme")); // the dot field picks up its new colour
-  }, []);
-}
-
 export default function HomeCards() {
   // hovering Work scatters project visuals around the screen
   const [work, setWork] = useState(false);
-  // clicking Playground fades the page to dark, then opens the (dark) Playground tab
-  const setDark = useHomeDark();
-  const router = useRouter();
-  const toPlayground = (e: MouseEvent<HTMLAnchorElement>) => {
-    // new tab / window: leave the link alone
-    if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
-    e.preventDefault();
-    setDark(true);
-    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    setTimeout(() => router.push("/playground"), reduce ? 0 : FADE_MS);
-  };
-  useEffect(() => {
-    router.prefetch("/playground");
-  }, [router]);
-
   return (
     <nav aria-label="Main" className="flex items-center gap-[0.5em] text-[11.5px] sm:text-[17.5px]">
       <WorkPreview show={work} />
       <Card href="/work" label="Work" tilt={4.1} caption="Discover my latest projects" onHover={setWork}>
         <Image src="/home/work.jpg" alt="" fill sizes="132px" className="scale-[1.06] object-cover object-top" priority />
       </Card>
-      <Card href="/playground" label="Playground" tilt={-4.83} caption="Check out my fun experiments" labelFirst onClick={toPlayground}>
+      <Card href="/playground" label="Playground" tilt={-4.83} caption="Check out my fun experiments" labelFirst>
         <LoopVideo src="/home/playground.mp4" aria-hidden className="absolute inset-0 size-full object-cover" />
       </Card>
       <Card href="/about" label="Info" tilt={4.22} caption="Who am I? Click to know">
