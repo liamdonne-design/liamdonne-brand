@@ -48,6 +48,7 @@ export default async function Home({
             { label: "Email", href: `mailto:${contactEmail}` },
             { label: "Linkedin", href: linkedin },
             { label: "Medium", href: mediumProfile },
+            { label: "Resume", href: "/cv/liam-donne-cv.pdf" },
           ]}
         />
       </footer>

@@ -17,6 +17,8 @@ export type Media = {
   poster?: string;
   /** video: a real player with sound and controls instead of a muted loop */
   controls?: boolean;
+  /** video: a YouTube id, played in the same player once clicked (src unused) */
+  youtube?: string;
   /** audio: the record label artwork and the track title (src = the sound file) */
   label?: string;
   title?: string;
@@ -90,6 +92,8 @@ export type Project = {
   client: string;
   title: Localized;
   role: Localized;
+  /** who Liam worked with, as teams (never names) — shown under Role in the header */
+  team?: Localized[];
   year: string;
   /** header facts, as on the case-study page: Scope / Industry / Type */
   scope: Localized[];
@@ -129,7 +133,8 @@ const rawProjects: Project[] = [
     index: "01",
     client: "Synapse Medicine",
     title: L("MedGPT — Motion Design System"),
-    role: L("Brand Designer", "Designer de marque"),
+    role: L("Sole Brand Designer", "Seul designer de marque"),
+    team: [L("Design team"), L("Marketing"), L("Product"), L("Leadership (sign-off)")],
     year: "2026",
     scope: [L("Motion system"), L("Guidelines")],
     industry: [L("Healthcare"), L("AI")],
@@ -156,7 +161,8 @@ const rawProjects: Project[] = [
     index: "02",
     client: "Synapse Medicine",
     title: L("MedGPT — Brand Campaign"),
-    role: L("Brand Designer", "Designer de marque"),
+    role: L("Sole Brand Designer", "Seul designer de marque"),
+    team: [L("Design team"), L("Marketing"), L("Product"), L("Leadership (sign-off)")],
     year: "2026",
     scope: [L("Event identity"), L("Campaign")],
     industry: [L("Healthcare"), L("AI")],
@@ -184,7 +190,8 @@ const rawProjects: Project[] = [
     index: "03",
     client: "Synapse Medicine",
     title: L("MedGPT — Brand Identity"),
-    role: L("Brand Designer", "Designer de marque"),
+    role: L("Sole Brand Designer", "Seul designer de marque"),
+    team: [L("Design team"), L("Marketing"), L("Product"), L("Leadership (sign-off)")],
     year: "2025",
     scope: [L("Concept"), L("Visual identity"), L("Guidelines")],
     industry: [L("Healthcare"), L("AI")],
@@ -216,7 +223,8 @@ const rawProjects: Project[] = [
     index: "04",
     client: "Synapse Medicine",
     title: L("Synapse — Motion Design System"),
-    role: L("Brand Designer", "Designer de marque"),
+    role: L("Sole Brand Designer", "Seul designer de marque"),
+    team: [L("Design team"), L("Marketing"), L("Product"), L("Leadership (sign-off)")],
     year: "2025",
     scope: [L("Motion system"), L("Brand")],
     industry: [L("Healthcare"), L("AI")],
@@ -245,7 +253,8 @@ const rawProjects: Project[] = [
     index: "05",
     client: "Synapse Medicine",
     title: L("Synapse — Brand Refresh"),
-    role: L("Brand Designer", "Designer de marque"),
+    role: L("Sole Brand Designer", "Seul designer de marque"),
+    team: [L("Design team"), L("Marketing"), L("Product"), L("Leadership (sign-off)")],
     year: "2024",
     scope: [L("Brand refresh"), L("Brand architecture"), L("Web")],
     industry: [L("Healthcare"), L("AI")],
@@ -281,6 +290,7 @@ const rawProjects: Project[] = [
     client: "Cuidam",
     title: L("Cuidam — Event Branding"),
     role: L("Founding Designer", "Designer fondateur"),
+    team: [L("Three co-founders"), L("Apprentices and an intern"), L("Partner practitioners")],
     year: "2023",
     scope: [L("Event identity"), L("Live-stream design")],
     industry: [L("Mental health"), L("Charity")],
@@ -304,7 +314,7 @@ const rawProjects: Project[] = [
       poster: "/work/cuidam-hearts-event/poster.jpg",
       ratio: "16/9",
     },
-    overviewMedia: [{ type: "image", src: "/work/cuidam-hearts-event/poster.jpg", ratio: "16/9" }],
+    overviewMedia: [{ type: "video", src: "/work/cuidam-hearts-event/cover.mp4", poster: "/work/cuidam-hearts-event/poster.jpg", ratio: "16/9" }],
     story: heartsStory,
     gallery: [],
     ready: true,
@@ -315,6 +325,7 @@ const rawProjects: Project[] = [
     client: "Cuidam",
     title: L("Cuidam — Brand Identity"),
     role: L("Founding Designer", "Designer fondateur"),
+    team: [L("Three co-founders"), L("Apprentices and an intern"), L("Partner practitioners")],
     year: "2021",
     scope: [L("Brand identity"), L("Visual system")],
     industry: [L("Mental health"), L("Students")],
@@ -332,14 +343,7 @@ const rawProjects: Project[] = [
       ],
     },
     cover: { type: "image", src: "/work/cuidam-corporate-branding/cover.jpg", ratio: "1400/720" },
-    overviewMedia: [
-      {
-        type: "placeholder",
-        src: "",
-        ratio: "16/9",
-        note: "Cuidam at a glance: the logo with two or three key applications (social, poster, website).",
-      },
-    ],
+    overviewMedia: [{ type: "image", src: "/work/cuidam-corporate-branding/posters.jpg", ratio: "3/2" }],
     story: cuidamStory,
     gallery: [],
     ready: true,

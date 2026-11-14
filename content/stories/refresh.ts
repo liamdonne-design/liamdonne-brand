@@ -72,7 +72,7 @@ export const refreshStory: StorySection[] = [
     title: p("Key results & takeaways"),
     body: [
       p("Synapse got its **first brand book**, **3 product suites** with one colour each, and self-service tools used by the whole company, **50 to 100 people**."),
-      p("[Liam — adoption KPIs: e.g. share of decks and assets made with the new templates, number of signatures generated, brand-book views, partner or event feedback in figures (Santexpo).]"),
+      p("The slide generator alone: **50+ people** have used it, with an average satisfaction of **5/5**, and **100%** of them say it saves time and is easier than starting from Google Slides."),
       p("The AI-generated shapes were hard to animate, and I'm not a 3D animator: I got there with Spline and Midjourney. Next time, motion comes first. A concept called *The Shapes of Life* should move from day one."),
       p("! Even in highly regulated sectors, bold and thoughtful brand systems can create trust, differentiation and momentum."),
     ],

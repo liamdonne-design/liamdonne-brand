@@ -1,9 +1,12 @@
+import type { Metadata } from "next";
 import { setRequestLocale } from "next-intl/server";
 import { companies, getProject, t, type Project } from "@/content/projects";
 import type { Locale } from "@/i18n/routing";
 import { Link } from "@/i18n/navigation";
 import { MediaBlock } from "@/components/Media";
 import CursorTooltip from "@/components/CursorTooltip";
+
+export const metadata: Metadata = { title: "Work", alternates: { canonical: "/work" } };
 
 // Covers alternate tall (415×366) and short (415×279) so the two columns stagger.
 const TALL = "415/366";

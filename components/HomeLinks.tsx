@@ -3,7 +3,8 @@ export default function HomeLinks({ links }: { links: { label: string; href: str
   return (
     <div className="ui-haze flex">
       {links.map((l) => {
-        const external = l.href.startsWith("http");
+        // other sites and the PDF CV open in a new tab
+        const external = l.href.startsWith("http") || l.href.endsWith(".pdf");
         return (
           <a
             key={l.label}

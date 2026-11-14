@@ -46,6 +46,7 @@ export const medgptStory: StorySection[] = [
   {
     title: p("Key results & takeaways"),
     body: [
+      p("**300,000+ users** in MedGPT’s first year (September 2025 – September 2026)."),
       p("MedGPT launched on 12 September 2025. First month:\n- **+25** press articles\n- **+21,500** visitors\n- **+108,000** social impressions\n- **+20,000** views on the launch film"),
       p("! The brand came before the product, then had to find its place in it: info cards, marketing modules, micro-animations. The lesson: design the brand and the product together from the start, not one after the other."),    ],
     // the one section with no visual after it: it closes the page

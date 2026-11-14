@@ -1,13 +1,12 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { motion } from "motion/react";
+import DotSpinner from "./DotSpinner";
 
 /**
  * Auto-advancing photo panel, after Framer's "Showcase Slideshow" (hero
- * slideshow): slides cross-fade (0.9s), a bottom scrim, the slide's label on
- * the left, and on the right a thin ring that fills over each slide's time
- * next to an "n / total" counter. Advances only while it's on screen.
+ * slideshow): slides cross-fade (0.9s), a bottom scrim, small thumbnails on
+ * the left (the current one outlined, a click jumps to it), and on the right the site's dot spinner next to an "n / total" counter in mono. Advances only while it's on screen.
  */
 export default function Slideshow({
   slides,
@@ -34,13 +33,11 @@ export default function Slideshow({
   useEffect(() => {
     if (!visible || len < 2) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    const id = setInterval(() => setCurrent((c) => (c + 1) % len), intervalSec * 1000);
-    return () => clearInterval(id);
-  }, [visible, len, intervalSec]);
+    // one timer per slide: a click on a thumbnail starts the count again
+    const id = setTimeout(() => setCurrent((c) => (c + 1) % len), intervalSec * 1000);
+    return () => clearTimeout(id);
+  }, [visible, len, intervalSec, current]);
 
-  // ring geometry: a 38px viewBox, r = 16
-  const R = 16;
-  const CIRCUM = 2 * Math.PI * R;
   const label = slides[current]?.label;
 
   return (
@@ -58,32 +55,37 @@ export default function Slideshow({
         />
       ))}
       <div aria-hidden className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_top,rgba(0,0,0,0.55)_0%,transparent_50%)]" />
-      {label && (
+      {/* thumbnails, bottom left: where you are, and a click to jump */}
+      {len > 1 && (
+        <div className="absolute bottom-3 left-3 z-10 flex gap-1 sm:bottom-4 sm:left-4 sm:gap-1.5">
+          {slides.map((s, i) => (
+            <button
+              key={s.src}
+              type="button"
+              aria-label={`Show photo ${i + 1} of ${len}`}
+              aria-current={i === current}
+              onClick={() => setCurrent(i)}
+              className={`relative h-6 w-9 cursor-pointer overflow-hidden rounded-[4px] outline-none transition-[opacity,box-shadow] duration-300 focus-visible:ring-2 focus-visible:ring-white sm:h-9 sm:w-14 sm:rounded-[6px] ${
+                i === current ? "opacity-100 ring-[1.5px] ring-white" : "opacity-55 hover:opacity-90"
+              }`}
+            >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={s.src} alt="" loading="lazy" draggable={false} className="size-full select-none object-cover" />
+            </button>
+          ))}
+        </div>
+      )}
+      {label && len < 2 && (
         <div className="absolute bottom-[22px] left-5 whitespace-nowrap font-mono text-[10px] font-semibold uppercase tracking-[1.8px] text-white/60">
           {label}
         </div>
       )}
       {len > 1 && (
-        <div className="absolute bottom-4 right-5 flex items-center gap-2.5">
-          <svg width={38} height={38} viewBox="0 0 38 38" className="-rotate-90 shrink-0" aria-hidden>
-            <circle cx="19" cy="19" r={R} fill="none" stroke="rgba(255,255,255,0.12)" strokeWidth={1.5} />
-            <motion.circle
-              key={`${current}-${visible}`}
-              cx="19"
-              cy="19"
-              r={R}
-              fill="none"
-              stroke="rgba(255,255,255,0.85)"
-              strokeWidth={1.5}
-              strokeLinecap="round"
-              strokeDasharray={CIRCUM}
-              initial={{ strokeDashoffset: CIRCUM }}
-              animate={{ strokeDashoffset: visible ? 0 : CIRCUM }}
-              transition={{ duration: intervalSec, ease: "linear" }}
-            />
-          </svg>
-          <div className="text-[12px] font-semibold leading-none tracking-[0.3px] text-white/50" aria-live="off">
-            <strong className="font-semibold text-white/90">{current + 1}</strong> / {len}
+        <div className="absolute bottom-4 right-5 flex items-center gap-2">
+          {/* one full turn per slide, starting over with each new picture */}
+          <DotSpinner key={`${current}-${visible}`} cycle={intervalSec} className="text-[15px] text-white/85" />
+          <div className="font-mono text-[12px] leading-none text-white/50" aria-live="off">
+            <strong className="font-medium text-white/90">{current + 1}</strong> / {len}
           </div>
         </div>
       )}

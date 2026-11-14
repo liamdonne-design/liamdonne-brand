@@ -80,7 +80,7 @@ export const socials = [
   { label: "LinkedIn", href: "https://www.linkedin.com/in/liam-donne/" },
 ];
 
-export const contactEmail = "liam@synapse-medicine.com";
+export const contactEmail = "liamdonne@gmail.com";
 
 /** Medium profile — shown on the home footer. */
 export const mediumProfile = "https://medium.com/@liamdonne_59272";

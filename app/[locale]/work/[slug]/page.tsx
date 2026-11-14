@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { routing, type Locale } from "@/i18n/routing";
@@ -34,7 +35,8 @@ function Fact({ label, lines }: { label: string; lines: string[] }) {
       <dt className={LABEL}>{label}</dt>
       <dd className="mt-3 text-[15px] leading-[1.45] text-[#1f1f1f]">
         {lines.map((l) => (
-          <span key={l} className="block">
+          // figures (years, dates) in mono, like every number on the site
+          <span key={l} className={/^[\d\s–—\-/]+(now)?$/.test(l) ? "block font-mono text-[14px]" : "block"}>
             {l}
           </span>
         ))}
@@ -48,6 +50,27 @@ function Fact({ label, lines }: { label: string; lines: string[] }) {
  * visual that sums the project up, the overview, and the story section by
  * section (mono label left, text right, visuals under it).
  */
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: Locale; slug: string }>;
+}): Promise<Metadata> {
+  const { locale, slug } = await params;
+  const project = getProject(slug);
+  if (!project) return {};
+  const title = t(project.title, locale);
+  const description = t(project.summary, locale);
+  // 1200×630, cropped from the project's header visual (public/og)
+  const image = { url: `/og/${slug}.jpg`, width: 1200, height: 630, alt: title };
+  return {
+    title,
+    description,
+    alternates: { canonical: `/work/${slug}` },
+    openGraph: { type: "article", title: `${title} — Liam Donne`, description, url: `/work/${slug}`, images: [image] },
+    twitter: { card: "summary_large_image", title: `${title} — Liam Donne`, description, images: [image.url] },
+  };
+}
+
 export default async function ProjectPage({
   params,
 }: {
@@ -75,7 +98,10 @@ export default async function ProjectPage({
           {/* the project's article on Medium; the profile until it has one */}
           <MediumButton href={project.medium ?? mediumProfile} />
         </div>
-        <dl className="mt-8 grid grid-cols-2 gap-x-8 gap-y-8 border-t border-black/10! pt-8 md:grid-cols-3">
+        <dl className="mt-8 grid grid-cols-2 gap-x-8 gap-y-8 border-t border-black/10! pt-8 md:grid-cols-5">
+          {/* who did what first: what a recruiter scans for */}
+          <Fact label="Role" lines={[t(project.role, locale)]} />
+          {project.team && <Fact label="Team" lines={lines(project.team)} />}
           <Fact label="Scope" lines={lines(project.scope)} />
           <Fact label="Year" lines={[project.year]} />
           <Fact label="Industry" lines={lines(project.industry)} />

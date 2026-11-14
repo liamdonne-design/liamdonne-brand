@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { setRequestLocale } from "next-intl/server";
 import { experience } from "@/content/about";
@@ -7,6 +8,8 @@ import LitText, { type LitRun } from "@/components/LitText";
 import ToolsDeck from "@/components/ToolsDeck";
 import OffScreenScroller from "@/components/OffScreenScroller";
 import AnimatedNumber from "@/components/AnimatedNumber";
+
+export const metadata: Metadata = { title: "Info", alternates: { canonical: "/about" } };
 
 // Intro (Figma "Info"): all grey, letters darken near the cursor (as the
 // Playground intro lights up).

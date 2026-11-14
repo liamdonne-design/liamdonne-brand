@@ -49,7 +49,7 @@ export function MediaBlock({
         <Slideshow slides={media.slides ?? []} />
       ) : media.type === "video" && media.controls ? (
         // a film with its soundtrack: a big play button, the viewer starts it
-        <FilmPlayer src={media.src} poster={media.poster} title={media.title} />
+        <FilmPlayer src={media.src} poster={media.poster} title={media.title} youtube={media.youtube} />
       ) : media.type === "video" ? (
         <LazyVideo
           className="absolute inset-0 h-full w-full object-cover"

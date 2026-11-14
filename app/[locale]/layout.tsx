@@ -15,6 +15,8 @@ import "../globals.css";
 const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
 const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
 
+export const SITE_URL = "https://www.liamdonne.com";
+
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
 }
@@ -26,9 +28,22 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "Meta" });
+  // shared links (LinkedIn, Slack, mail…) get a title, a line and a picture;
+  // pages set their own title ("Work — Liam Donne"), projects their own image
   return {
-    title: t("title"),
+    metadataBase: new URL(SITE_URL),
+    title: { default: t("title"), template: "%s — Liam Donne" },
     description: t("description"),
+    alternates: { canonical: "/" },
+    openGraph: {
+      type: "website",
+      siteName: "Liam Donne",
+      title: t("title"),
+      description: t("description"),
+      url: "/",
+      images: [{ url: "/og/default.jpg", width: 1200, height: 630, alt: "Liam Donne — Brand & Visual Designer" }],
+    },
+    twitter: { card: "summary_large_image", title: t("title"), description: t("description"), images: ["/og/default.jpg"] },
   };
 }
 
@@ -53,16 +68,17 @@ export default async function LocaleLayout({
       suppressHydrationWarning
     >
       <head>
-        {/* first visit: hide the page until the preloader is done (components/Preloader).
-            Set before the first paint, so returning visitors never see a flash;
-            skipped on the (dark) Playground */}
+        {/* home: hide the page until the preloader is done (components/Preloader),
+            set before the first paint so nothing flashes */}
         <script
           dangerouslySetInnerHTML={{
-            __html: `try{if(!localStorage.getItem("ld-intro-seen")&&location.pathname.indexOf("/playground")<0)document.documentElement.classList.add("intro-on")}catch(e){}`,
+            __html: `try{if(/^\\/(en\\/?)?$/.test(location.pathname)&&!sessionStorage.getItem("ld-intro-seen"))document.documentElement.classList.add("intro-on")}catch(e){}`,
+
+
 
           }}
         />
-        <style>{`html.intro-on [data-site]{opacity:0}[data-site]{transition:opacity .5s ease}`}</style>
+        <style>{`[data-site]{transition:opacity .5s ease}html.intro-on [data-site]{opacity:0;transition:none}`}</style>
       </head>
       <body className="flex min-h-full flex-col">
         <NextIntlClientProvider messages={messages}>

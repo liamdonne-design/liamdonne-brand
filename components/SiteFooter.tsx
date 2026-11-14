@@ -11,10 +11,12 @@ const LINKS = [
   { label: "Email", href: `mailto:${contactEmail}` },
   { label: "Linkedin", href: linkedin },
   { label: "Medium", href: mediumProfile },
+  // the PDF CV (public/cv), to be updated by Liam later
+  { label: "Resume", href: "/cv/liam-donne-cv.pdf" },
 ];
 
 /**
- * The signature and ©2026 over Email · Linkedin · Medium, bottom-centre: a
+ * The signature and ©2026 over Email · Linkedin · Medium · Resume, bottom-centre: a
  * real footer at the end of scrolling pages (Work, Info, case studies). On the
  * Playground, which doesn't scroll, only the links, pinned to the screen.
  */

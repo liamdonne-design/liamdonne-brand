@@ -33,7 +33,7 @@ function Card({
   href: string;
   label: string;
   tilt: number;
-  /** a short line that appears centred under the card while it's hovered */
+  /** a short line that appears centred under the card while it's hovered, never wider than the card */
   caption: string;
   labelFirst?: boolean;
   children: ReactNode;
@@ -62,7 +62,7 @@ function Card({
       {!labelFirst && text}
       <motion.span
         aria-hidden
-        className="pointer-events-none absolute left-1/2 top-full mt-[1em] -translate-x-1/2 whitespace-nowrap text-center text-[12px] font-medium leading-[1.3] text-[#999]"
+        className="pointer-events-none absolute inset-x-0 top-full mt-[1em] text-balance text-center text-[12px] font-medium leading-[1.3] text-[#999]"
         variants={{ rest: { opacity: 0, y: -4 }, hover: { opacity: 1, y: 0 } }}
         transition={{ duration: 0.25, ease: "easeOut" }}
       >

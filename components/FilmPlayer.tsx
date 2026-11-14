@@ -9,9 +9,51 @@ import { AnimatePresence, motion } from "motion/react";
  * the picture pauses (the button comes back) or resumes; at the end it rewinds
  * to the poster.
  */
-export default function FilmPlayer({ src, poster, title }: { src: string; poster?: string; title?: string }) {
+export default function FilmPlayer({
+  src,
+  poster,
+  title,
+  youtube,
+}: {
+  src: string;
+  poster?: string;
+  title?: string;
+  /** a YouTube id: the same poster and play button, then the YouTube player (no-cookie) */
+  youtube?: string;
+}) {
   const ref = useRef<HTMLVideoElement>(null);
   const [playing, setPlaying] = useState(false);
+  const [embed, setEmbed] = useState(false);
+
+  if (youtube)
+    return (
+      <div className="absolute inset-0 bg-black">
+        {embed ? (
+          <iframe
+            src={`https://www.youtube-nocookie.com/embed/${youtube}?autoplay=1&rel=0&playsinline=1`}
+            title={title ?? "Video"}
+            allow="autoplay; encrypted-media; picture-in-picture; fullscreen"
+            allowFullScreen
+            className="absolute inset-0 size-full"
+          />
+        ) : (
+          <button
+            type="button"
+            aria-label={title ? `Play ${title}` : "Play the film"}
+            onClick={() => setEmbed(true)}
+            className="group absolute inset-0 cursor-pointer outline-none"
+          >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            {poster && <img src={poster} alt="" className="absolute inset-0 size-full object-cover" draggable={false} />}
+            <span className="absolute left-1/2 top-1/2 flex size-20 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-white shadow-[0_12px_40px_-8px_rgba(0,0,0,0.5)] transition-transform duration-300 group-hover:scale-[1.08] group-focus-visible:ring-4 group-focus-visible:ring-white/50 sm:size-24">
+              <svg viewBox="0 0 24 24" className="ml-1 size-8 text-[#1f1f1f] sm:size-9" aria-hidden>
+                <path d="M7 4.5v15l12.5-7.5z" fill="currentColor" />
+              </svg>
+            </span>
+          </button>
+        )}
+      </div>
+    );
 
   const toggle = () => {
     const v = ref.current;

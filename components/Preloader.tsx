@@ -1,56 +1,83 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
+import { usePathname } from "@/i18n/navigation";
+import DotSpinner from "./DotSpinner";
 
 /**
- * First-visit preloader, after Framer's "Sequential page preloader": project
- * cards drop in one after another into a loose stack (
- * the bare visuals, rounded) over a small Loading pill, then everything lifts away
- * and the page fades in, 2s in all. It sits on the site's own white page and dot
- * field, which stay interactive the whole time.
+ * Home preloader, after Framer's "Sequential page preloader": project visuals
+ * drop in one after another into a loose stack (bare, rounded) over a small
+ * Loading line, then everything lifts away and the page fades in, 2s in all;
+ * a click or a key skips it.
+ * It sits on the site's own white page and dot field, which stay interactive.
  *
- * Shown once per browser: an inline script in the layout's <head> adds
- * `intro-on` to <html> (hiding the page) only on a first visit, so returning
- * visitors never see a flash.
+ * It plays once per visit (browser session), the first time the home page
+ * comes up: on a load of the home (an inline script in the layout's <head>
+ * hides the page before the first paint, so nothing flashes) or on the way
+ * back to it in the site, like a click on the L.Donne logo.
  */
 const CARDS = [
-  { src: "/intro/1.jpg", w: 1, h: 1, rotate: -6, x: -14, y: 6 },
-  { src: "/intro/2.jpg", w: 5, h: 7, rotate: 5, x: 16, y: -8 },
-  { src: "/intro/3.jpg", w: 1400, h: 720, rotate: -3, x: -6, y: -4 },
-  { src: "/intro/4.jpg", w: 16, h: 9, rotate: 4, x: 8, y: 10 },
+  { src: "/intro/2.jpg", w: 5, h: 7, rotate: 5, x: 14, y: -10 }, // MedGPT campaign poster
+  { src: "/intro/1.jpg", w: 1, h: 1, rotate: -6, x: -16, y: 4 }, // MedGPT brand identity, iPhone
+  { src: "/intro/4.jpg", w: 16, h: 9, rotate: 4, x: 10, y: 12 }, // Cuidam Hearts
+  { src: "/intro/synapse-profile.jpg", w: 786, h: 614, rotate: -3, x: -8, y: -6 }, // Synapse, clinical profile
+  { src: "/intro/synapse-posters.jpg", w: 774, h: 570, rotate: 3, x: 6, y: 6 }, // Synapse, three posters
 ];
-const STEP = 0.18; // s between cards
+const STEP = 0.16; // s between cards
 const HOLD = 1550; // ms before the cards lift away (the whole intro runs 2s)
 const OUT = 450; // ms for the lift-away and the page fade-in
 const spring = { type: "spring", damping: 50, stiffness: 320, mass: 1 } as const;
-// also read by the inline script in app/[locale]/layout.tsx
-const INTRO_KEY = "ld-intro-seen";
+const SEEN = "ld-intro-seen"; // sessionStorage, also read in app/[locale]/layout.tsx
+
+// before paint on client navigation, after it on the server (never runs there)
+const useIsoLayoutEffect = typeof window === "undefined" ? useEffect : useLayoutEffect;
 
 export default function Preloader() {
+  const pathname = usePathname();
   const [phase, setPhase] = useState<"off" | "in" | "out">("off");
 
-  useEffect(() => {
+  useIsoLayoutEffect(() => {
+    if (pathname !== "/") return;
+    // once per visit (browser session): the inline script in the layout's
+    // <head> reads the same flag on a load or refresh
+    try {
+      if (sessionStorage.getItem(SEEN)) return;
+    } catch {}
     const html = document.documentElement;
-    if (!html.classList.contains("intro-on")) return;
+    html.classList.add("intro-on"); // hide the page before it paints
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const t0 = setTimeout(() => setPhase("in"), 0);
     const hold = reduce ? 900 : HOLD;
+    const t0 = setTimeout(() => setPhase("in"), 0);
     const t1 = setTimeout(() => setPhase("out"), hold);
-    const t2 = setTimeout(() => {
+    const finish = () => {
       try {
-        localStorage.setItem(INTRO_KEY, "1");
+        sessionStorage.setItem(SEEN, "1");
       } catch {}
       html.classList.remove("intro-on"); // the page fades in (layout <style>)
       setPhase("off");
-    }, hold + OUT);
+    };
+    const t2 = setTimeout(finish, hold + OUT);
+    // a click (or a key) skips the intro
+    const skip = () => {
+      clearTimeout(t0);
+      clearTimeout(t1);
+      clearTimeout(t2);
+      setPhase("out");
+      setTimeout(finish, 250);
+    };
+    window.addEventListener("pointerdown", skip, { once: true });
+    window.addEventListener("keydown", skip, { once: true });
     return () => {
+      window.removeEventListener("pointerdown", skip);
+      window.removeEventListener("keydown", skip);
       clearTimeout(t0);
       clearTimeout(t1);
       clearTimeout(t2);
       html.classList.remove("intro-on");
+      setTimeout(() => setPhase("off"), 0);
     };
-  }, []);
+  }, [pathname]);
 
   return (
     <AnimatePresence>
@@ -100,22 +127,13 @@ export default function Preloader() {
   );
 }
 
-// A small grey pill (the home cards' grey), in mono: Framer's "Arc Spinner" component in its "box" style (a square
-// of braille dots turning, one frame every 80ms), then "Loading" with a light
-// sweep across the letters
-const BOX = ["⣼", "⣹", "⢻", "⠿", "⡟", "⣏", "⣧", "⣶"];
+// In mono, no background: the site's DotSpinner
+// (Framer "Arc Spinner", box style), then "Loading" with a light sweep
 function ArcSpinner() {
-  const [i, setI] = useState(0);
-  useEffect(() => {
-    const id = setInterval(() => setI((n) => n + 1), 80);
-    return () => clearInterval(id);
-  }, []);
   return (
-    <span className="flex h-7 items-center gap-2 rounded-[8px] bg-[#ebebeb] px-2.5">
-      {/* both on the same 12px line box, centred on the pill's middle */}
-      <span className="flex h-3 w-3 items-center justify-center font-mono text-[12px] leading-none text-[#999]">
-        {BOX[i % BOX.length]}
-      </span>
+    <span className="flex h-7 items-center gap-2">
+      {/* both on the same 12px line box, centred on one line */}
+      <DotSpinner className="h-3 w-3 text-[12px] text-[#999]" />
       <motion.span
         className="flex h-3 items-center bg-clip-text font-mono text-[12px] font-medium leading-none text-transparent"
         style={{
