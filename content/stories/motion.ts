@@ -44,10 +44,11 @@ export const motionStory: StorySection[] = [
     ],
   },
   {
-    title: p("Key results & takeaways"),
+    // no figures to show (Liam, 2026-11-16): a takeaway only, built from his own
+    // words (the refresh lesson "motion comes first" + this project's overview)
+    title: p("Takeaway"),
     body: [
-      p("[Liam — key results: where the motion system is used today, by whom, and what it changed.]"),
-      p("[Liam — one takeaway: what you learned, or what you’d do differently.]"),
+      p("! The brand refresh taught me that motion should come first, not as an afterthought. This system is that lesson applied: motion built into the brand from the start, a language rather than a decoration."),
     ],
   },
 ];

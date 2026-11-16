@@ -13,7 +13,7 @@ export const cuidamStory: StorySection[] = [
   {
     title: p("My role"),
     body: [
-      p("Founding designer, from 2021 to 2024, alongside two co-founders. Everything that touched design, marketing and communication was mine: the brand identity and its design system, the app’s UI mockups, video, photography, social media and events."),
+      p("Founding designer, from 2021 to 2024, one of three co-founders. Everything that touched design, marketing and communication was mine: the brand identity and its design system, the app’s UI mockups, video, photography, social media and events."),
     ],
     media: [img("logo", "16/9")],
   },
@@ -21,7 +21,7 @@ export const cuidamStory: StorySection[] = [
     title: p("The identity"),
     body: [
       p("A lavender purple with four bright companions (pink, green, yellow, red), and two typefaces, Spectral and Raleway: an editorial serif that can speak softly, and a clean sans for everything else."),
-      p("[Liam — the concept: the idea behind the logo and its exclamation mark, the purple, and why it speaks to students.]"),
+      p("The logo hides an exclamation mark in the **M**. Cuidam isn’t afraid to speak up: mental health stayed a taboo for too long, and we wanted to stand at the front of the stage, to raise awareness and to support students in distress."),
     ],
     media: [
       img("colours", "3/4", "half"),
@@ -54,7 +54,7 @@ export const cuidamStory: StorySection[] = [
     title: p("Key results & takeaways"),
     body: [
       p("- **7,000+ students** made aware of mental health\n- **10+ mental-health professionals** working alongside us\n- Present in France’s biggest student cities: Paris, Bordeaux, Lyon…\n- **10+ national and European awards**, among them BNP Paribas’ Act for Impact, French Tech Tremplin, the Trophée Gustave and the ECEC Award"),
-      p("[Liam — one takeaway: what you learned, or what you’d do differently.]"),
+      p("! Building a start-up is extremely hard, and extremely formative. You have to be a Swiss army knife, and curious enough to catch every opportunity that comes. I handled design, product and marketing, but still had to understand finance, business and strategy. You learn fast and grow fast, and I was lucky to have committed, talented partners at my side."),
     ],
   },
 ];

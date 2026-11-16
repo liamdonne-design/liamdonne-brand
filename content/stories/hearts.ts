@@ -24,7 +24,8 @@ export const heartsStory: StorySection[] = [
   {
     title: p("The idea"),
     body: [
-      p("[Liam — how the pixel and the heart work together, and why the red and pink.]"),
+      p("The **pixel** points to gaming: the event lived on Twitch, with streamers and their viewers. The **heart** speaks of care, support and charity, which suits a fundraiser for mental health."),
+      p("And a third layer: the money raised would bring the Cuidam project, and its app, to life."),
     ],
     media: [v("pixel-heart", "half"), v("pixel-coins", "half")],
   },
@@ -33,16 +34,8 @@ export const heartsStory: StorySection[] = [
     body: [
       p("Four days of live streaming meant designing the environment the viewers actually watched."),
       p("The waiting screen, the overlay around each streamer’s camera and chat, the donation alerts, and a pixel heart counting the money as it came in."),
-      p("[Liam — anything else you designed for the streams: streamer kits, line-up announcement, social posts?]"),
     ],
     media: [v("stream-overlay"), v("donation-alert", "half"), v("donation-counter", "half")],
-  },
-  {
-    title: p("The recap"),
-    body: [p("Seventy-two hours squeezed into a few minutes: the streamers’ reactions as the donations came in.")],
-    media: [
-      { type: "video", src: "", youtube: "-74tTi1HL_k", poster: `${D}/recap-poster.jpg`, ratio: "16/9", controls: true, title: "the Cuidam Hearts recap" },
-    ],
   },
   {
     title: p("Key results & takeaways"),
@@ -50,7 +43,7 @@ export const heartsStory: StorySection[] = [
       p("**10 streamers**, live on their own channels for **four days**, from 20 to 23 April."),
       p("**€2,030 raised in 72 hours** during the live: a third of a Ulule campaign that closed at **€6,340, 105% of its €6,000 goal**, with **186 contributions**. The money went into building a proper Cuidam app."),
       p("During the campaign, Cuidam also won two contests: Ulule’s **Pitch Pitch** (+€250) and BNP Paribas’ **Act for Impact**."),
-      p("[Liam — one takeaway: what you learned, or what you’d do differently.]"),
+      p("! An event is always better built with others. Our intern at the time explained how Twitch works and saw what a charity live could do for us. I knew Z Event, which inspired us, but how it was organised was a mystery to me. Without that knowledge, no Cuidam Hearts."),
     ],
   },
 ];

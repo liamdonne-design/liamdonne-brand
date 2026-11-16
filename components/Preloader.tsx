@@ -133,9 +133,9 @@ function ArcSpinner() {
   return (
     <span className="flex h-7 items-center gap-2">
       {/* both on the same 12px line box, centred on one line */}
-      <DotSpinner className="h-3 w-3 text-[12px] text-[#999]" />
+      <DotSpinner className="h-3 w-3 text-[10px] text-[#999]" />
       <motion.span
-        className="flex h-3 items-center bg-clip-text font-mono text-[12px] font-medium leading-none text-transparent"
+        className="flex h-3 items-center bg-clip-text font-mono text-[10px] leading-[1.3] text-transparent"
         style={{
           backgroundImage: "linear-gradient(90deg, #999 0%, #999 35%, #d6d6d6 50%, #999 65%, #999 100%)",
           backgroundSize: "250% 100%",
