@@ -72,12 +72,14 @@ export default function OffScreenScroller({
       className="relative w-[min(1100px,calc(100vw-40px))] shrink-0"
       style={{ height: `${items.length * 100}vh` }}
     >
-      {/* the title and the 16:9 frame, held in the middle of the screen together
+      {/* (from sm up) the title and the 16:9 frame, held in the middle of the screen together
           while the pictures change (title ~31px + 32px gap above the frame) */}
-      <div className="sticky top-[max(20px,calc(50vh-min(1100px,100vw-40px)*9/32-32px))]">
-        {title && <div className="mb-8">{title}</div>}
+      {/* phones: the whole screen, the title at the very top and the frame
+          filling the rest down to a 16px margin */}
+      <div className="sticky top-0 flex h-[100svh] flex-col py-4 sm:top-[max(20px,calc(50vh-min(1100px,100vw-40px)*9/32-32px))] sm:block sm:h-auto sm:py-0">
+        {title && <div className="mb-4 shrink-0 sm:mb-8">{title}</div>}
         <div
-          className={`relative aspect-video w-full overflow-hidden rounded-[15px] bg-[#ddd] ${video && hoverPlay ? "cursor-none" : ""}`}
+          className={`relative min-h-0 w-full flex-1 overflow-hidden rounded-[15px] bg-[#ddd] sm:aspect-video ${video && hoverPlay ? "cursor-none" : ""}`}
           onPointerMove={(e) => {
             const r = e.currentTarget.getBoundingClientRect();
             const x = e.clientX - r.left;
@@ -145,8 +147,8 @@ export default function OffScreenScroller({
             )}
           </AnimatePresence>
 
-          {/* thumbnail dock, on the right so the picture stays clear */}
-          <div data-dock className="absolute right-2 top-1/2 z-30 flex -translate-y-1/2 flex-col gap-1 rounded-[9px] bg-white p-1 sm:right-4 sm:gap-2 sm:rounded-[12px] sm:p-2 backdrop-blur-[5px]">
+          {/* thumbnail dock at 0.8×, on the right, centred top to bottom */}
+          <div data-dock className="absolute right-2 top-1/2 z-30 flex origin-right -translate-y-1/2 scale-[0.8] flex-col gap-1 rounded-[9px] bg-white p-1 sm:right-4 sm:gap-2 sm:rounded-[12px] sm:p-2 backdrop-blur-[5px]">
             {items.map((it, i) => (
               <button
                 key={it.src}
