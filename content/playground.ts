@@ -59,7 +59,7 @@ export const playground: PlaygroundItem[] = [
     },
     size: 170,
     place: { x: -425, y: -80, rotate: -5 },
-    mobile: { x: -116, y: 100, size: 106 },
+    mobile: { x: 168, y: -220, size: 106 },
   },
   {
     id: "compressor",
@@ -73,7 +73,7 @@ export const playground: PlaygroundItem[] = [
     media: { type: "video", src: "/playground/compressor.mp4", width: 1120, height: 848 },
     size: 250,
     place: { x: 127, y: 168, rotate: 4 },
-    mobile: { x: -100, y: 255, size: 168 },
+    mobile: { x: -109, y: 163, size: 168 },
   },
   {
     id: "shader",
@@ -87,17 +87,7 @@ export const playground: PlaygroundItem[] = [
     media: { type: "video", src: "/playground/shader.mp4", width: 1120, height: 642 },
     size: 250,
     place: { x: -104, y: 117, rotate: -4 },
-    mobile: { x: 14, y: 80, size: 178 },
-  },
-  {
-    id: "club-medgpt",
-    title: "Club MedGPT",
-    tag: "MedGPT · Motion",
-    tools: ["Midjourney", "Figma", "Jitter"],
-    media: { type: "video", src: "/playground/club-medgpt.mp4", width: 1580, height: 1080 },
-    size: 190,
-    place: { x: -300, y: -255, rotate: 4 },
-    mobile: { x: -66, y: -222, size: 192 },
+    mobile: { x: 12, y: 67, size: 178 },
   },
   {
     id: "j-edgar-hover",
@@ -107,7 +97,17 @@ export const playground: PlaygroundItem[] = [
     media: { type: "video", src: "/playground/j-edgar-hover.mp4", width: 1080, height: 1080 },
     size: 170,
     place: { x: 295, y: -262, rotate: -4 },
-    mobile: { x: 108, y: -180, size: 136 },
+    mobile: { x: 6, y: -172, size: 136 },
+  },
+  {
+    id: "club-medgpt",
+    title: "Club MedGPT",
+    tag: "MedGPT · Motion",
+    tools: ["Midjourney", "Figma", "Jitter"],
+    media: { type: "video", src: "/playground/club-medgpt.mp4", width: 1580, height: 1080 },
+    size: 190,
+    place: { x: -300, y: -255, rotate: 4 },
+    mobile: { x: -114, y: -229, size: 192 },
   },
   {
     id: "year-of-the-horse",
@@ -117,6 +117,6 @@ export const playground: PlaygroundItem[] = [
     media: { type: "video", src: "/home/playground.mp4", width: 640, height: 282 },
     size: 270,
     place: { x: 473, y: -178, rotate: 3 },
-    mobile: { x: 74, y: 162, size: 206 },
+    mobile: { x: 104, y: 205, size: 206 },
   },
 ];
