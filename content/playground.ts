@@ -62,6 +62,20 @@ export const playground: PlaygroundItem[] = [
     mobile: { x: -116, y: 100, size: 106 },
   },
   {
+    id: "compressor",
+    title: "Compressor",
+    tag: "In-house tool",
+    tools: ["Claude Artifact"],
+    text: [
+      "Compressor flips the usual logic of file optimization. Instead of asking how small a file can get, you choose where it’s going: blog, newsletter, email, LinkedIn. The tool applies that destination’s guidelines and compresses just enough to meet them, with no visible loss of quality.",
+    ],
+    // screen recording, 1920×1452 at the source
+    media: { type: "video", src: "/playground/compressor.mp4", width: 1120, height: 848 },
+    size: 250,
+    place: { x: 127, y: 168, rotate: 4 },
+    mobile: { x: -100, y: 255, size: 168 },
+  },
+  {
     id: "shader",
     title: "Shader",
     tag: "Synapse · In-house tool",
@@ -71,9 +85,9 @@ export const playground: PlaygroundItem[] = [
     ],
     // screen recording, 1920×1102 at the source
     media: { type: "video", src: "/playground/shader.mp4", width: 1120, height: 642 },
-    size: 190,
-    place: { x: -40, y: 150, rotate: -4 },
-    mobile: { x: 14, y: 80, size: 148 },
+    size: 250,
+    place: { x: -104, y: 117, rotate: -4 },
+    mobile: { x: 14, y: 80, size: 178 },
   },
   {
     id: "club-medgpt",
@@ -92,7 +106,7 @@ export const playground: PlaygroundItem[] = [
     tools: ["Midjourney", "Figma", "Jitter"],
     media: { type: "video", src: "/playground/j-edgar-hover.mp4", width: 1080, height: 1080 },
     size: 170,
-    place: { x: 300, y: -225, rotate: -5 },
+    place: { x: 295, y: -262, rotate: -4 },
     mobile: { x: 108, y: -180, size: 136 },
   },
   {
@@ -102,7 +116,7 @@ export const playground: PlaygroundItem[] = [
     tools: ["Midjourney", "Figma", "Jitter"],
     media: { type: "video", src: "/home/playground.mp4", width: 640, height: 282 },
     size: 270,
-    place: { x: 190, y: 175, rotate: 5 },
+    place: { x: 473, y: -178, rotate: 3 },
     mobile: { x: 74, y: 162, size: 206 },
   },
 ];
