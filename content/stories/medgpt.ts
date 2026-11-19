@@ -46,7 +46,9 @@ export const medgptStory: StorySection[] = [
   {
     title: p("Key results & takeaways"),
     body: [
-      p("**300,000+ users** in MedGPT’s first year (September 2025 – September 2026)."),
+      // product figures as published by MedGPT's product designer (ethanthiery.com/work/medgpt)
+      p("**300,000+ users** in MedGPT’s first year: **154,000** verified in April 2026, **200,000+** in June, **300,000+** in September."),
+      p("**4.75** average rating on the stores, and **1st** in the AI Healthcare category of the EU Tech 300 (June 2026). In November 2026, MedGPT opens to **10** European countries, and the brand goes with it."),
       p("MedGPT launched on 12 September 2025. First month:\n- **+25** press articles\n- **+21,500** visitors\n- **+108,000** social impressions\n- **+20,000** views on the launch film"),
       p("! The brand came before the product, then had to find its place in it: info cards, marketing modules, micro-animations. The lesson: design the brand and the product together from the start, not one after the other."),    ],
     // the one section with no visual after it: it closes the page

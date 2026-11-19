@@ -62,12 +62,15 @@ export const playground: PlaygroundItem[] = [
     mobile: { x: -116, y: 100, size: 106 },
   },
   {
-    id: "ld-monogram",
-    title: "LD Monogram",
-    tag: "Monogram · Heatmap effect",
-    tools: ["Claude"],
-    // ld-monogram.svg is padded 150 units around the 237×147 art for the halo
-    media: { type: "heatmap", src: "/playground/ld-monogram.svg", width: 537, height: 447 },
+    id: "shader",
+    title: "Shader",
+    tag: "Synapse · In-house tool",
+    tools: ["Claude Artifact"],
+    text: [
+      "To replace a paid tool and set my own rules, I designed and built Shader, an in-house tool that turns the Synapse visual identity into living, interactive backgrounds. Anyone on the team can explore endless on-brand variations, then export them straight to our website.",
+    ],
+    // screen recording, 1920×1102 at the source
+    media: { type: "video", src: "/playground/shader.mp4", width: 1120, height: 642 },
     size: 190,
     place: { x: -40, y: 150, rotate: -4 },
     mobile: { x: 14, y: 80, size: 148 },

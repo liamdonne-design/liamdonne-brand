@@ -18,6 +18,7 @@ import Reveal from "@/components/Reveal";
 import ProjectNavCard from "@/components/ProjectNavCard";
 import MediumButton from "@/components/MediumButton";
 import { mediumProfile } from "@/content/about";
+import ProjectReactions from "@/components/ProjectReactions";
 
 export function generateStaticParams() {
   return routing.locales.flatMap((locale) =>
@@ -157,6 +158,9 @@ export default async function ProjectPage({
           <MediaGrid media={project.gallery} />
         </div>
       )}
+
+      {/* ---------------- REACTIONS ---------------- */}
+      <ProjectReactions slug={project.slug} />
 
       {/* ---------------- PREVIOUS / NEXT ---------------- */}
       <nav className="flex flex-wrap items-start justify-between gap-6 border-t border-black/10! py-12 text-[11.5px] sm:text-[17.5px] md:py-16">

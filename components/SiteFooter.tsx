@@ -18,7 +18,7 @@ const LINKS = [
 /**
  * The signature and ©2026 over Email · Linkedin · Medium · Resume, bottom-centre: a
  * real footer at the end of scrolling pages (Work, Info, case studies). On the
- * Playground, which doesn't scroll, only the links, pinned to the screen.
+ * Playground, which doesn't scroll, only the links, pinned bottom-centre.
  */
 export default function SiteFooter() {
   const pathname = usePathname();

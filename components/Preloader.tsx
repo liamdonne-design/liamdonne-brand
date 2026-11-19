@@ -18,11 +18,12 @@ import DotSpinner from "./DotSpinner";
  * back to it in the site, like a click on the L.Donne logo.
  */
 const CARDS = [
-  { src: "/intro/2.jpg", w: 5, h: 7, rotate: 5, x: 14, y: -10 }, // MedGPT campaign poster
   { src: "/intro/1.jpg", w: 1, h: 1, rotate: -6, x: -16, y: 4 }, // MedGPT brand identity, iPhone
   { src: "/intro/4.jpg", w: 16, h: 9, rotate: 4, x: 10, y: 12 }, // Cuidam Hearts
   { src: "/intro/synapse-profile.jpg", w: 786, h: 614, rotate: -3, x: -8, y: -6 }, // Synapse, clinical profile
   { src: "/intro/synapse-posters.jpg", w: 774, h: 570, rotate: 3, x: 6, y: 6 }, // Synapse, three posters
+  // last in, on top: the "Liberté Égalité MedGPT" campaign poster
+  { src: "/intro/2.jpg", w: 5, h: 7, rotate: 5, x: 14, y: -10 },
 ];
 const STEP = 0.16; // s between cards
 const HOLD = 1550; // ms before the cards lift away (the whole intro runs 2s)

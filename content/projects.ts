@@ -269,7 +269,7 @@ const rawProjects: Project[] = [
       body: [
         L("Synapse Medicine is a medical decision-support company founded by physicians and engineers, combining medical expertise and artificial intelligence to help healthcare professionals make safer, more informed decisions."),
         L("As the company entered a phase of rapid growth, international expansion, and a major shift toward AI-driven products, the existing brand no longer reflected the scale, ambition, or complexity of the ecosystem."),
-        L("I led the corporate brand refresh end-to-end, with leadership, marketing, product and medical teams. The goal: clarify the offer, reinforce credibility, and unify the corporate brand with a growing suite of products."),
+        L("I led the corporate brand refresh end-to-end, defining the new vision and visual direction in close collaboration with leadership, marketing, product, and medical teams, with the goal of clarifying the offer: reinforcing credibility, and unifying the corporate brand with a growing suite of products."),
       ],
     },
     stats: [
@@ -279,6 +279,7 @@ const rawProjects: Project[] = [
       { value: "50–100", label: L("people using the self-service tools", "personnes utilisant les outils self-service") },
     ],
     cover: { type: "image", src: "/work/synapse-corporate-refresh/cover.jpg", ratio: "1400/720" },
+    hero: { type: "image", src: "/work/synapse-corporate-refresh/hero.jpg", ratio: "16/9" },
     overviewMedia: [{ type: "image", src: "/work/synapse-corporate-refresh/posters.jpg", ratio: "2000/1500" }],
     story: refreshStory,
     gallery: [],

@@ -14,7 +14,8 @@ export function NameCursor({ name, color }: { name: string; color: string }) {
     <span aria-hidden className="pointer-events-none relative inline-block h-0 w-0 select-none align-baseline">
       <motion.span
         className="absolute flex items-start whitespace-nowrap"
-        style={{ left: "calc(-0.17em - 2.75px)", top: "calc(-0.16em - 1.8px)" }}
+        // nudged 3px right, 2px down so it clears the "s" of "studies"
+        style={{ left: "calc(-0.17em + 0.25px)", top: "calc(-0.16em + 0.2px)" }}
         animate={{ x: [0, 3, 0], y: [0, 2, 0] }}
         transition={{ duration: 2.4, ease: "easeInOut", repeat: Infinity }}
       >

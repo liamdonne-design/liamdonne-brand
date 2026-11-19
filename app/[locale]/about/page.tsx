@@ -34,7 +34,7 @@ const INTRO: LitRun[][] = [
 const NUMBERS = [
   { value: 6, label: "years experience in design" },
   { value: 30, label: "clients worked with" },
-  { value: 70, label: "projects delivered" },
+  { value: 250, label: "design tickets shipped in 2026" }, // Notion kanban, "Done" column
 ];
 
 // What I do, then how AI fits into it: a teammate, not a replacement.
@@ -149,7 +149,15 @@ export default async function AboutPage({
                 <span className="text-[15px] leading-[1.25] text-[#999]">{t(e.role, locale)}</span>
               </span>
               <span className="shrink-0 text-right font-mono text-[12px] text-[#999]">
-                {e.start} — {e.end ? t(e.end, locale) : "Present"}
+                {e.start} —{" "}
+                {e.end ? (
+                  t(e.end, locale)
+                ) : (
+                  // grey chip, like the "Synapse Medicine" tag on the home page
+                  <span className="inline-block rounded-[6px] bg-[var(--ui-chip)] px-[5px] py-[1px] text-[var(--ui-fg)]">
+                    Present
+                  </span>
+                )}
               </span>
             </li>
           ))}
