@@ -1,56 +1,54 @@
 import type { Media, StorySection } from "../projects";
 
 /**
- * Synapse Medicine brand refresh — exactly the visuals and the text of Liam's
- * figma.site page (/synapse-medicine-branding, Figma "Liam's Portfolio"
- * 1:3181), in the same order. One sentence of that page is left out on
- * purpose: "strongly embraced… significantly elevated… strong qualitative
- * feedback" — no figures to back it yet (Liam's rule). The key results at the
- * end are his own figures, added on top of the Figma page.
+ * Synapse — Branding: the brand refresh (2024–2025). What came after, the
+ * brand turned into tools with Claude (2026), is its own project
+ * (stories/tooling.ts, split out on Liam's call, 2026-11-20). Laid out like Eric Sin's case-study
+ * pages (ericsin.com/work/VICTORY-PLUS): the overview, then short chapters
+ * (no numbers, Liam's call), each a short text and its visuals. Visuals keep the order of
+ * Liam's figma.site page, with the three routes board for the research.
+ * Facts only from Liam (context, routes, resistance: 2026-11-20); the 8.25/10
+ * client rating stays out (his call), and so does "strongly embraced…
+ * significantly elevated" until there are figures to back it.
  */
 const p = (en: string) => ({ en, fr: en });
 const R = "/work/synapse-corporate-refresh";
-const M = "/work/synapse-motion-identity";
 const img = (name: string, ratio: string, span?: Media["span"]): Media => ({ type: "image", src: `${R}/${name}.jpg`, ratio, span });
 
 export const refreshStory: StorySection[] = [
   {
-    // visuals only, as on the Figma page right after the overview
-    title: p(""),
-    body: [],
-    media: [
-      img("symbol", "1/1", "half"),
-      img("connection", "1/1", "half"),
-      img("website", "2000/1183"),
-      img("slides", "2000/967"),
-    ],
-  },
-  {
-    title: p("The idea"),
+    // after Eric Sin's "Redesigning the Product": the frame, the method, the result
+    title: p("The Shapes of Life"),
     body: [
-      p("The refreshed brand is built around a core idea: simplifying medical complexity without losing rigor."),
-      p("Organic shapes became a central visual language, symbolizing adaptability, personalization, and living systems, while a structured color logic allows the corporate brand and each product line to coexist within a coherent system."),
-      p("A refined typographic pairing balances character and readability, reinforcing both scientific credibility and modernity."),
-      p("The identity was designed as a scalable foundation, capable of supporting AI-driven products, regulated medical content, and diverse audiences—from software partners to healthcare professionals—while remaining unmistakably Synapse."),
+      p("The concept came from what Synapse makes: modules that adapt to whatever software they land in."),
+      p("Before creating anything, I ran a brand audit with employees in France and the US, clients and partners, and end users. Then I built the brand in two layers. What stays constant: the logo and the colours, which the audit showed people liked most. What adapts: the shapes, and one colour per product suite. Blue for Secure, pink for Database, purple for Copilote."),
+      p("The result: a corporate brand and a family of product brands in one system, where a purple shape is Copilote before you’ve read a word."),
     ],
     media: [
+      // the organic shapes, then one colour per product suite, then the family of brands
       img("shapes", "16/9"),
-      { type: "video", src: `${R}/website.mp4`, ratio: "4/3" },
       img("card-database", "2000/1565", "third"),
       img("card-secure", "2000/1565", "third"),
       img("card-copilote", "2000/1565", "third"),
+      img("architecture", "16/9"),
     ],
   },
   {
-    title: p("Rollout"),
+    // after Eric Sin's "Brand Design Informed by Product": keep the equity,
+    // and decide where the brand speaks (Liam, 2026-11-20)
+    title: p("Where the brand speaks"),
     body: [
-      p("The new corporate identity was deployed across all touchpoints, including the website, social media, product environments, events, videos, presentations, and physical assets."),
-      p("This project reinforced Synapse’s position as a modern, independent, and credible health-tech leader, and deepened my conviction that even in highly regulated sectors, bold and thoughtful brand systems can create trust, differentiation, and momentum."),
+      p("Synapse already had equity worth keeping: over 90% of employees liked the logo, and the colours were their favourite part of the brand. So the logo stayed exactly as it was. I only reworked the icon: the small “med” next to the S was barely readable and threw the symbol off balance."),
+      p("Inside the product, the brand steps back. Our widgets run within our clients’ software, some of them white-labelled, so they’re designed to feel native rather than branded. The new identity lives where people meet Synapse: marketing, events, social media and the website."),
     ],
     media: [
+      // the reworked icon first, then where the identity lives: website, social, print, events
+      img("symbol", "1/1", "half"),
+      img("connection", "1/1", "half"),
+      { type: "video", src: `${R}/website.mp4`, ratio: "4/3" },
+      img("website", "2000/1183"),
       img("social", "7/3"),
       img("phone", "35/18"),
-      img("architecture", "16/9"),
       img("laptop", "35/18"),
       img("cards", "668/450", "half"),
       img("bottles", "668/450", "half"),
@@ -60,16 +58,24 @@ export const refreshStory: StorySection[] = [
     ],
   },
   {
-    title: p("Key results & takeaways"),
+    // after Eric Sin's "The Vision" (Liam, 2026-11-20); links to the tooling case study
+    title: p("The Vision"),
     body: [
-      p("Synapse got its **first brand book**, **3 product suites** with one colour each, and self-service tools used by the whole company, **50 to 100 people**."),
-      p("The slide generator alone: **50+ people** have used it, with an average satisfaction of **5/5**, and **100%** of them say it saves time and is easier than starting from Google Slides."),
-      p("The AI-generated shapes were hard to animate, and I'm not a 3D animator: I got there with Spline and Midjourney. Next time, motion comes first. A concept called *The Shapes of Life* should move from day one."),
+      p("Synapse keeps growing in France and the US, and design has become central to it, in the product as much as in the business."),
+      p("In 2026, we started exploring and testing new AI tools to scale the brand more easily, take the most time-consuming tasks off the designer’s plate, and let everyone at Synapse be a designer at their own level: presentations, one-pagers, studies. That work became its own case study: [Synapse — Brand Tooling with AI](/work/synapse-brand-tooling)."),
     ],
     media: [
-      { type: "video", src: `${M}/02.mp4`, ratio: "1/1", span: "third" },
-      { type: "video", src: `${M}/03.mp4`, ratio: "1/1", span: "third" },
-      { type: "video", src: `${M}/04.mp4`, ratio: "1/1", span: "third" },
+      // presentations anyone at Synapse can make: the deck templates
+      img("slides", "2000/967"),
+    ],
+  },
+  {
+    title: p("Learnings & reflection"),
+    body: [
+      // after Eric Sin's closing ("Success showed up in… The lesson—…"), tied to
+      // what the page says: one system, the equity kept, a brand that steps back
+      p("Success showed up in a brand that holds together: one system for the corporate brand and three product suites, loud enough to carry a Santexpo stand, quiet enough to disappear inside our clients’ software."),
+      p("The lesson—a refresh is as much about what you keep, and where the brand stays quiet, as about what you add. Knowing when a brand should step back is part of designing it."),
     ],
   },
 ];

@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { routing, type Locale } from "@/i18n/routing";
 import {
+  companies,
   getAdjacentProject,
   getPreviousProject,
   getProject,
@@ -18,7 +19,7 @@ import Reveal from "@/components/Reveal";
 import ProjectNavCard from "@/components/ProjectNavCard";
 import MediumButton from "@/components/MediumButton";
 import { mediumProfile } from "@/content/about";
-import ProjectReactions from "@/components/ProjectReactions";
+import PrevNextNav from "@/components/PrevNextNav";
 
 export function generateStaticParams() {
   return routing.locales.flatMap((locale) =>
@@ -37,7 +38,7 @@ function Fact({ label, lines }: { label: string; lines: string[] }) {
       <dd className="mt-3 text-[15px] leading-[1.45] text-[#1f1f1f]">
         {lines.map((l) => (
           // figures (years, dates) in mono, like every number on the site
-          <span key={l} className={/^[\d\s–—\-/]+(now)?$/.test(l) ? "block font-mono text-[14px]" : "block"}>
+          <span key={l} className={/^[\d\s–—\-/]+(now|Present)?$/.test(l) ? "block font-mono text-[14px]" : "block"}>
             {l}
           </span>
         ))}
@@ -87,6 +88,8 @@ export default async function ProjectPage({
   const previous = getPreviousProject(slug);
   const story = resolveStory(project, locale);
   const lines = (xs: Localized[]) => xs.map((x) => t(x, locale));
+  // years in the role at that company, e.g. "2024–Present", "2021–2024"
+  const tenure = companies.find((c) => c.slugs.includes(slug))?.years.replace("now", "Present");
 
   return (
     <article className="mx-auto w-full max-w-[1376px] px-4 pt-[64px] sm:px-[71px] md:pt-[88px]">
@@ -99,13 +102,12 @@ export default async function ProjectPage({
           {/* the project's article on Medium; the profile until it has one */}
           <MediumButton href={project.medium ?? mediumProfile} />
         </div>
-        <dl className="mt-8 grid grid-cols-2 gap-x-8 gap-y-8 border-t border-black/10! pt-8 md:grid-cols-5">
-          {/* who did what first: what a recruiter scans for */}
-          <Fact label="Role" lines={[t(project.role, locale)]} />
-          {project.team && <Fact label="Team" lines={lines(project.team)} />}
+        <dl className="mt-8 grid grid-cols-2 gap-x-8 gap-y-8 border-t border-black/10! pt-8 md:grid-cols-4">
+          {/* who did what first: the role, then my years there ("Present" while I still am) */}
+          <Fact label="Role" lines={[t(project.role, locale), ...(tenure ? [tenure] : [])]} />
           <Fact label="Scope" lines={lines(project.scope)} />
-          <Fact label="Year" lines={[project.year]} />
           <Fact label="Industry" lines={lines(project.industry)} />
+          <Fact label="Type" lines={lines(project.kind)} />
         </dl>
       </header>
 
@@ -159,20 +161,22 @@ export default async function ProjectPage({
         </div>
       )}
 
-      {/* ---------------- REACTIONS ---------------- */}
-      <ProjectReactions slug={project.slug} />
-
       {/* ---------------- PREVIOUS / NEXT ---------------- */}
-      <nav className="flex flex-wrap items-start justify-between gap-6 border-t border-black/10! py-12 text-[11.5px] sm:text-[17.5px] md:py-16">
-        <div className="flex flex-col items-start gap-4">
-          <div className={LABEL}>{tp("previous")}</div>
-          <ProjectNavCard href={`/work/${previous.slug}`} title={t(previous.title, locale)} cover={previous.cover} />
-        </div>
-        <div className="flex flex-col items-end gap-4">
-          <div className={LABEL}>{tp("next")}</div>
-          <ProjectNavCard href={`/work/${next.slug}`} title={t(next.title, locale)} cover={next.cover} />
-        </div>
-      </nav>
+      {/* only "Next project" when the two don't fit on one line */}
+      <PrevNextNav
+        previous={
+          <>
+            <div className={LABEL}>{tp("previous")}</div>
+            <ProjectNavCard href={`/work/${previous.slug}`} title={t(previous.title, locale)} cover={previous.cover} />
+          </>
+        }
+        next={
+          <>
+            <div className={LABEL}>{tp("next")}</div>
+            <ProjectNavCard href={`/work/${next.slug}`} title={t(next.title, locale)} cover={next.cover} />
+          </>
+        }
+      />
     </article>
   );
 }

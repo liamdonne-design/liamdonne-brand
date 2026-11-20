@@ -146,7 +146,7 @@ function CoverMedia({
 /* ------------------------------------------------------------- the folder */
 // covers peeking out of the closed folder — picked for colour (some videos open on white)
 const PEEK_SLUGS = [
-  "synapse-corporate-refresh",
+  "synapse-branding",
   "cuidam-hearts-event",
   "cuidam-corporate-branding",
 ];

@@ -54,7 +54,22 @@ export function MediaGrid({ media }: { media: Media[] }) {
 
 /** Inline markdown-ish emphasis: **bold** and *italic*. */
 function inline(text: string): ReactNode {
-  return text.split(/(\*\*[^*]+\*\*|\*[^*]+\*)/g).map((part, i) => {
+  return text.split(/(\[[^\]]+\]\([^)]+\)|\*\*[^*]+\*\*|\*[^*]+\*)/g).map((part, i) => {
+    // [text](/path) → a link: site pages stay in the tab, other sites open a new one
+    const link = part.match(/^\[([^\]]+)\]\(([^)]+)\)$/);
+    if (link) {
+      const external = /^https?:/.test(link[2]);
+      return (
+        <a
+          key={i}
+          href={link[2]}
+          {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+          className="underline decoration-[#c4c4c4] decoration-1 underline-offset-[3px] transition-[text-decoration-color] duration-200 hover:decoration-current"
+        >
+          {inline(link[1])}
+        </a>
+      );
+    }
     if (part.startsWith("**") && part.endsWith("**"))
       return (
         <strong key={i} className="font-semibold text-ink">
@@ -74,6 +89,7 @@ function inline(text: string): ReactNode {
  *   "> text" block       → pull quote
  *   "! text" block       → grey takeaway box
  *   **bold** / *italic*  → inline emphasis
+ *   [text](/work/slug)   → link (another site opens in a new tab)
  */
 function Block({ text }: { text: string }) {
   if (text.startsWith("> "))

@@ -6,6 +6,7 @@ import { medgptStory } from "./stories/medgpt";
 import { medgptMotionStory } from "./stories/medgpt-motion";
 import { motionStory } from "./stories/motion";
 import { refreshStory } from "./stories/refresh";
+import { toolingStory } from "./stories/tooling";
 
 /** "placeholder" = a visual still to come: a grey frame showing `note`. */
 export type MediaType = "image" | "video" | "placeholder" | "slideshow" | "audio";
@@ -137,7 +138,7 @@ const rawProjects: Project[] = [
     team: [L("Design & Product")],
     year: "2026",
     scope: [L("Motion system"), L("Guidelines")],
-    industry: [L("Healthcare"), L("AI")],
+    industry: [L("Healthcare"), L("Technology"), L("AI")],
     kind: [L("Motion")],
     tags: [L("Motion design"), L("Brand system", "Système de marque")],
     summary: L("The pulse: a motion system for a medical AI assistant."),
@@ -165,7 +166,7 @@ const rawProjects: Project[] = [
     team: [L("Design & Product")],
     year: "2026",
     scope: [L("Event identity"), L("Campaign")],
-    industry: [L("Healthcare"), L("AI")],
+    industry: [L("Healthcare"), L("Technology"), L("AI")],
     kind: [L("Event")],
     tags: [L("Event branding", "Identité d'événement"), L("Visual identity", "Identité visuelle"), L("Campaign", "Campagne")],
     summary: L(
@@ -194,7 +195,7 @@ const rawProjects: Project[] = [
     team: [L("Design & Product")],
     year: "2025",
     scope: [L("Concept"), L("Visual identity"), L("Guidelines")],
-    industry: [L("Healthcare"), L("AI")],
+    industry: [L("Healthcare"), L("Technology"), L("AI")],
     kind: [L("Brand")],
     tags: [L("Visual identity", "Identité visuelle"), L("Creative direction", "Direction créative")],
     summary: L(
@@ -219,15 +220,45 @@ const rawProjects: Project[] = [
     ready: true,
   },
   {
-    slug: "synapse-motion-identity",
+    slug: "synapse-brand-tooling",
     index: "04",
+    client: "Synapse Medicine",
+    title: L("Synapse — Brand Tooling with AI"),
+    role: L("Brand Designer", "Designer de marque"),
+    team: [L("Design & Product")],
+    year: "2026",
+    scope: [L("Brand tooling"), L("AI workflows"), L("Brand system")],
+    industry: [L("Healthcare"), L("Technology"), L("AI")],
+    kind: [L("Tooling")],
+    tags: [L("Brand tooling", "Outils de marque"), L("AI workflows", "Workflows IA")],
+    summary: L(
+      "Turning a brand into tools the whole company can use, built with Claude.",
+      "Faire d'une marque des outils pour toute l'entreprise, construits avec Claude."
+    ),
+    overview: {
+      headline: L("A brand that doesn’t wait for a designer"),
+      body: [
+        L("After the Synapse refresh, I was still the only brand designer, for a company of 50 to 100 people who all needed on-brand slides, documents, visuals and signatures. For the first six months, there wasn’t even a marketing team."),
+        L("So rather than making every asset myself, I gave each team the level of freedom it needed. When Claude arrived at Synapse in early 2026, I turned the brand into tools anyone can use: the Synapse brand system in Claude, an email-signature generator, Compressor and Shader."),
+      ],
+    },
+    cover: { type: "video", src: "/playground/shader.mp4", ratio: "1120/642" },
+    // the 2025 deck templates: where the brand stood before the tools
+    overviewMedia: [{ type: "image", src: "/work/synapse-corporate-refresh/slides.jpg", ratio: "2000/967" }],
+    story: toolingStory,
+    gallery: [],
+    ready: true,
+  },
+  {
+    slug: "synapse-motion-identity",
+    index: "05",
     client: "Synapse Medicine",
     title: L("Synapse — Motion Design System"),
     role: L("Brand Designer", "Designer de marque"),
     team: [L("Design & Product")],
     year: "2025",
     scope: [L("Motion system"), L("Brand")],
-    industry: [L("Healthcare"), L("AI")],
+    industry: [L("Healthcare"), L("Technology"), L("AI")],
     kind: [L("Motion")],
     tags: [L("Motion design"), L("Brand system", "Système de marque"), L("Visual identity", "Identité visuelle")],
     summary: L(
@@ -249,45 +280,40 @@ const rawProjects: Project[] = [
     ready: true,
   },
   {
-    slug: "synapse-corporate-refresh",
-    index: "05",
+    slug: "synapse-branding",
+    index: "06",
     client: "Synapse Medicine",
-    title: L("Synapse — Brand Refresh"),
+    title: L("Synapse — Branding"),
     role: L("Brand Designer", "Designer de marque"),
     team: [L("Design & Product")],
     year: "2024",
     scope: [L("Brand refresh"), L("Brand architecture"), L("Web")],
-    industry: [L("Healthcare"), L("AI")],
-    kind: [L("Brand")],
+    industry: [L("Healthcare"), L("Technology"), L("AI")],
+    kind: [L("Brand"), L("Event")],
     tags: [L("Brand refresh", "Refonte de marque"), L("Visual identity", "Identité visuelle"), L("Design system", "Design system")],
     summary: L(
       "Modernizing a health-tech brand for clarity and trust at scale.",
       "Moderniser une marque health-tech pour la clarté et la confiance à grande échelle."
     ),
     overview: {
-      headline: L("The Shapes of Life"),
+      // after Eric Sin's overviews, with a little more story: what Synapse is, the problem, what I did
+      headline: L("Bold enough for AI, safe enough for medicine"),
       body: [
-        L("Synapse Medicine is a medical decision-support company founded by physicians and engineers, combining medical expertise and artificial intelligence to help healthcare professionals make safer, more informed decisions."),
-        L("As the company entered a phase of rapid growth, international expansion, and a major shift toward AI-driven products, the existing brand no longer reflected the scale, ambition, or complexity of the ecosystem."),
-        L("I led the corporate brand refresh end-to-end, defining the new vision and visual direction in close collaboration with leadership, marketing, product, and medical teams, with the goal of clarifying the offer: reinforcing credibility, and unifying the corporate brand with a growing suite of products."),
+        L("Synapse Medicine builds AI tools that help healthcare professionals prescribe more safely, right inside the software they already use. In a few years, it grew from a medication-safety start-up into an AI health company."),
+        L("I took the refresh from the brief to the launch in 2025, in close collaboration with leadership, marketing, product and medical teams, and turned it into a system that carries an AI health company and its family of products: research, identity, product-brand architecture, brand book and website."),
       ],
     },
-    stats: [
-      { value: "40+", label: L("colleagues surveyed in 2 days", "collègues interrogés en 2 jours") },
-      { value: "6/7", label: L("votes for the chosen route", "votes pour la piste retenue") },
-      { value: "3", label: L("product suites, one colour each", "suites produit, une couleur chacune") },
-      { value: "50–100", label: L("people using the self-service tools", "personnes utilisant les outils self-service") },
-    ],
     cover: { type: "image", src: "/work/synapse-corporate-refresh/cover.jpg", ratio: "1400/720" },
     hero: { type: "image", src: "/work/synapse-corporate-refresh/hero.jpg", ratio: "16/9" },
     overviewMedia: [{ type: "image", src: "/work/synapse-corporate-refresh/posters.jpg", ratio: "2000/1500" }],
     story: refreshStory,
+    medium: "https://medium.com/@liamdonne_59272/branding-synapse-medicine-ce539a989aa7",
     gallery: [],
     ready: true,
   },
   {
     slug: "cuidam-hearts-event",
-    index: "06",
+    index: "07",
     client: "Cuidam",
     title: L("Cuidam — Event Branding"),
     role: L("Founding Designer", "Designer fondateur"),
@@ -333,7 +359,7 @@ const rawProjects: Project[] = [
   },
   {
     slug: "cuidam-corporate-branding",
-    index: "07",
+    index: "08",
     client: "Cuidam",
     title: L("Cuidam — Brand Identity"),
     role: L("Founding Designer", "Designer fondateur"),
@@ -397,7 +423,7 @@ export const companies: Company[] = [
     about: L(
       "An AI medical decision-support company built on one idea: simplifying medical complexity without losing rigor. As sole brand designer, I gave that idea a shape: a refreshed identity, a family of product brands and a motion language."
     ),
-    slugs: ["synapse-motion-identity", "synapse-corporate-refresh"],
+    slugs: ["synapse-brand-tooling", "synapse-motion-identity", "synapse-branding"],
   },
   {
     name: "Cuidam",
